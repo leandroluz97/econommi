@@ -1,0 +1,24 @@
+.input__group {
+  label {
+    display: block;
+    color: var(--gray-600);
+    font-size: 1.2rem;
+
+    span {
+      color: var(--red-100);
+    }
+  }
+  input {
+    border: 0;
+    border-bottom: solid 1px var(--gray-300);
+    width: 100%;
+    font-size: 1.6rem;
+    padding: 0.2rem 0.7rem;
+    //outline-color: var(--green);
+    outline: none;
+
+    &:focus {
+      border-bottom: solid 2px var(--green);
+    }
+  }
+}

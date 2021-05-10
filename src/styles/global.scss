@@ -1,0 +1,32 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --white: #fff;
+  --black: #000;
+
+  --green: #41c3a9;
+  --green-100: #def3ef;
+  --green-200: #f7fafb;
+
+  --gray-100: #f7fafb;
+  --gray-200: #dcdcdc;
+  --gray-300: #dadada;
+  --gray-400: #afafaf;
+  --gray-500: #72818d;
+  --gray-550: #959595;
+  --gray-600: #7d7d7d;
+
+  --red-100: #f46f6f;
+}
+
+html {
+  font-size: 62.5%;
+}
+
+body {
+  font-family: "Roboto", sans-serif;
+}
