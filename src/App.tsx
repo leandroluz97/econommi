@@ -2,13 +2,16 @@ import React from "react"
 import "./styles/global.scss"
 import { BrowserRouter as Router } from "react-router-dom"
 import Routes from "./routes"
+import { UiProvider } from "./hooks/useUi"
 
 function App() {
   return (
     <>
-      <Router>
-        <Routes />
-      </Router>
+      <UiProvider>
+        <Router>
+          <Routes />
+        </Router>
+      </UiProvider>
     </>
   )
 }
