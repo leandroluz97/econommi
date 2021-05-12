@@ -15,11 +15,8 @@ const SliderButtons = () => {
   useEffect(() => {
     let localURL = location.pathname.slice(1)
 
-    if (localURL === "signin") {
-      setisActive(true)
-    } else {
-      setisActive(false)
-    }
+    if (localURL === "signin") setisActive(true)
+    if (localURL === "signup") setisActive(false)
   }, [])
 
   const handleSignup = () => {
