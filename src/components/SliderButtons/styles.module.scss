@@ -7,6 +7,8 @@
   justify-content: space-between;
   margin-bottom: 6rem;
 
+  transition: all 0.2s ease;
+
   button {
     width: 50%;
     border: 0;
@@ -20,5 +22,10 @@
   .active {
     background-color: var(--green);
     color: var(--white);
+  }
+
+  transition: all 0.2s ease;
+  &:hover {
+    filter: brightness(0.98);
   }
 }

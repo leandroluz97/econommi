@@ -1,4 +1,4 @@
-import React, { FormEvent, useState } from "react"
+import React, { ChangeEvent, FormEvent, useState } from "react"
 import Input from "../Input"
 import SliderButtons from "../SliderButtons"
 import styles from "./styles.module.scss"
@@ -19,6 +19,8 @@ const Signup = () => {
     handleSubmit,
     formState: { errors },
     watch,
+    getValues,
+    reset,
   } = useForm<SignupState>()
 
   //console.log(watch())
@@ -42,7 +44,13 @@ const Signup = () => {
   }
 */
 
-  const onSubmit = (data: any) => console.log(data)
+  const onSubmit = (data: any) => {
+    console.log(data)
+
+    reset()
+  }
+
+  //
   return (
     <div className={styles.signup}>
       <SliderButtons />
@@ -50,56 +58,76 @@ const Signup = () => {
         <div className={styles.signup__form__inputs}>
           <div className={styles.signup__form__util}>
             <Input
-              teste={register("firstName", {
-                required: "Please. Enter a valid Name!",
-                minLength: 2,
+              property={register("firstName", {
+                required: "Invalid First Name",
+                minLength: {
+                  value: 2,
+                  message: "Must have 8 characters",
+                },
               })}
               label='First Name'
               type='text'
               error={errors.firstName}
+              name='firstName'
             />
             <Input
-              teste={register("lastName", {
-                required: "Please. Enter a valid Name",
-                minLength: 2,
+              property={register("lastName", {
+                required: "Invalid Last Name",
+                minLength: {
+                  value: 2,
+                  message: "Must have 8 characters",
+                },
               })}
               label='Last Name'
               type='text'
-              error={errors.firstName}
+              error={errors.lastName}
+              name='lastName'
             />
           </div>
 
           <Input
-            teste={register("email", {
+            property={register("email", {
               required: "Invalid Email",
               pattern: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
             })}
             label='Email'
             type='email'
             error={errors.email}
+            name='email'
           />
           <Input
-            teste={register("password")}
+            property={register("password", {
+              required: "You must specify a password",
+              minLength: {
+                value: 8,
+                message: "Password must have at least 8 characters",
+              },
+            })}
             label='Password'
             type='password'
+            name='password'
+            error={errors.password}
           />
           <Input
-            teste={register("repeatPassword")}
+            property={register("repeatPassword", {
+              validate: (value) =>
+                value === getValues("password") || "The passwords do not match",
+            })}
             label='Repeat Password'
             type='password'
+            name='password'
+            error={errors.repeatPassword}
           />
         </div>
 
-        {/*<div className={styles.signup__form__buttons}>
-          <button type='button'>Signup!</button>
-  </div>*/}
-
-        <input type='submit' value='submit' />
+        <div className={styles.signup__form__submit}>
+          <input type='submit' value='Signup!' />
+        </div>
       </form>
-      {/* <button type='button'>
+      <button type='button' className={styles.signup__google}>
         <img src={google} alt='Google Logo' />
         Signup With Google
-  </button>*/}
+      </button>
 
       <p className={styles.signup__policy}>
         By clicking on the button above, you agree with our

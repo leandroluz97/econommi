@@ -13,7 +13,7 @@
     justify-content: space-between;
     flex-direction: column;
     align-self: center;
-    min-height: 450px;
+    min-height: 380px;
 
     &__util {
       display: flex;
@@ -44,37 +44,52 @@
       }
     }
 
-    &__buttons {
-      button {
+    &__submit {
+      input {
         border-radius: 6px;
         padding: 1.2rem;
         display: block;
         width: 100%;
         cursor: pointer;
         border: none;
+        background-color: var(--green);
+        color: var(--white);
+        font-weight: 600;
+        font-size: 1.4rem;
+        height: 4.4rem;
+        margin-bottom: 1.5rem;
 
-        &:first-child {
-          background-color: var(--green);
-          color: var(--white);
-          font-weight: 600;
-          font-size: 1.4rem;
-          height: 4.4rem;
-          margin-bottom: 1.5rem;
-        }
+        transition: all 0.2s ease;
 
-        &:last-child {
-          color: var(--gray-550);
-          background-color: transparent;
-          border: solid 1px var(--gray-200);
-          display: flex;
-          align-items: center;
-          justify-content: center;
-
-          img {
-            margin-right: 0.7rem;
-          }
+        &:hover {
+          background-color: #3bb098;
         }
       }
+    }
+  }
+
+  &__google {
+    border-radius: 6px;
+    padding: 1.2rem;
+    display: block;
+    width: 100%;
+    cursor: pointer;
+    border: none;
+    color: var(--gray-550);
+    background-color: transparent;
+    border: solid 1px var(--gray-200);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    transition: all 0.2s ease;
+
+    img {
+      margin-right: 0.7rem;
+    }
+
+    &:hover {
+      background-color: rgb(247, 247, 247);
     }
   }
 
@@ -104,7 +119,7 @@
     background: var(--white);
     width: 100%;
     max-width: 450px;
-    height: 650px;
+    height: 670px;
     border-radius: 1rem;
     box-shadow: 9px 39px 107px rgba(91, 141, 136, 0.2);
     padding: 5rem 2rem;
@@ -115,7 +130,7 @@
       justify-content: space-between;
       flex-direction: column;
       align-self: center;
-      min-height: 470px;
+      min-height: 400px;
 
       &__util {
         display: flex;

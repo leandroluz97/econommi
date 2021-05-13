@@ -18,9 +18,45 @@
 
   &__content {
     width: 50%;
-    img {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 650px;
+
+    > img {
       width: 100%;
-      max-width: 800px;
+      max-width: 600px;
+    }
+  }
+
+  &__title {
+    text-align: right;
+    p {
+      font-size: 1.6rem;
+      margin-top: 1rem;
+      color: var(--gray-600);
+      margin-bottom: 3rem;
+
+      span {
+        color: #1a564f;
+        font-weight: 500;
+        text-decoration: underline;
+      }
+    }
+  }
+  &__quote {
+    text-align: right;
+
+    p {
+      color: var(--gray-600);
+
+      &:first-child {
+        font-size: 1rem;
+        margin-bottom: 1rem;
+      }
+      &:last-child {
+        font-size: 0.9rem;
+      }
     }
   }
 }
