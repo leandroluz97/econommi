@@ -4,6 +4,7 @@ import SliderButtons from "../SliderButtons"
 import styles from "./styles.module.scss"
 import google from "../../assets/google.svg"
 import { useForm } from "react-hook-form"
+import { useUI } from "../../hooks/useUi"
 
 interface SignupState {
   firstName: string
@@ -23,6 +24,7 @@ const Signup = () => {
     reset,
   } = useForm<SignupState>()
 
+  const { passwordEye, repeatEye } = useUI()
   //console.log(watch())
 
   /*
@@ -104,9 +106,10 @@ const Signup = () => {
               },
             })}
             label='Password'
-            type='password'
+            type={passwordEye ? "text" : "password"}
             name='password'
             error={errors.password}
+            visible={passwordEye}
           />
           <Input
             property={register("repeatPassword", {
@@ -114,9 +117,10 @@ const Signup = () => {
                 value === getValues("password") || "The passwords do not match",
             })}
             label='Repeat Password'
-            type='password'
-            name='password'
+            type={repeatEye ? "text" : "password"}
+            name='repeatPassword'
             error={errors.repeatPassword}
+            visible={repeatEye}
           />
         </div>
 

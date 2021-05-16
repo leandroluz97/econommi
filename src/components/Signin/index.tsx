@@ -4,6 +4,7 @@ import SliderButtons from "../SliderButtons"
 import styles from "./styles.module.scss"
 import google from "../../assets/google.svg"
 import { useForm } from "react-hook-form"
+import { useUI } from "../../hooks/useUi"
 
 interface SigninState {
   email: string
@@ -18,6 +19,8 @@ const Signin = () => {
     watch,
     getValues,
   } = useForm<SigninState>()
+
+  const { passwordEye, repeatEye } = useUI()
   /*
   const [inputValues, setInputValues] = useState<SignupState>({
     email: "",
@@ -58,9 +61,10 @@ const Signin = () => {
               },
             })}
             label='Password'
-            type='password'
+            type={passwordEye ? "text" : "password"}
             name='password'
             error={errors.password}
+            visible={passwordEye}
           />
 
           <span className={styles.signin__form__forgot}>
