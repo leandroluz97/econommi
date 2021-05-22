@@ -5,6 +5,7 @@ import styles from "./styles.module.scss"
 import google from "../../assets/google.svg"
 import { useForm } from "react-hook-form"
 import { useUI } from "../../hooks/useUi"
+import { useAuth } from "../../hooks/useAuth"
 
 interface SigninState {
   email: string
@@ -21,22 +22,15 @@ const Signin = () => {
   } = useForm<SigninState>()
 
   const { passwordEye, repeatEye } = useUI()
-  /*
-  const [inputValues, setInputValues] = useState<SignupState>({
-    email: "",
-    password: "",
-  })
+  const { onSignupPassword, onSubmitGmail } = useAuth()
 
-  const handleInputValue = (event: FormEvent<HTMLInputElement>) => {
-    let allInputValues = {
-      ...inputValues,
-      [event.currentTarget.name]: event.currentTarget.value,
+  const onSubmit = async (data: SigninState) => {
+    try {
+      let user = await onSignupPassword(data.email, data.password)
+    } catch (error) {
+      console.log(error)
     }
-
-    setInputValues(allInputValues)
   }
-*/
-  const onSubmit = (data: any) => console.log(data)
   return (
     <div className={styles.signin}>
       <SliderButtons />
@@ -77,7 +71,11 @@ const Signin = () => {
         </div>
       </form>
 
-      <button type='button' className={styles.signin__google}>
+      <button
+        type='button'
+        className={styles.signin__google}
+        onClick={() => onSubmitGmail()}
+      >
         <img src={google} alt='Google Logo' />
         Signin With Google
       </button>

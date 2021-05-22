@@ -1,13 +1,3 @@
-import React, {
-  DetailedHTMLProps,
-  HTMLAttributes,
-  useEffect,
-  useState,
-} from "react"
-import styles from "./styles.module.scss"
-import leftArrow from "../../assets/leftArrow.svg"
-import rightArrow from "../../assets/rightArrow.svg"
-import eLogo from "../../assets/e.svg"
 import home from "../../assets/home.svg"
 import transaction from "../../assets/transactions.svg"
 import category from "../../assets/category.svg"
@@ -15,74 +5,53 @@ import notification from "../../assets/notification.svg"
 import setting from "../../assets/setting.svg"
 import share from "../../assets/share.svg"
 import plus from "../../assets/plus.svg"
-import { Link, useLocation } from "react-router-dom"
+import { Link } from "react-router-dom"
 import { useUI } from "../../hooks/useUi"
 
-const Menu = () => {
-  const [openMenu, setOpenMenu] = useState(true)
+import styles from "./styles.module.scss"
+import { useEffect } from "react"
+import { useLocation } from "react-router-dom"
+
+const MobileMenu = () => {
   const { page, setPage } = useUI()
 
-  const location = useLocation()
-
-  useEffect(() => {
-    const pathname = location.pathname.slice(1)
-    setPage(pathname)
-  }, [])
-
   return (
-    <div
-      className={
-        openMenu ? `${styles.menu}` : ` ${styles.menu} ${styles.menu__closed}`
-      }
-    >
-      <div>
-        <button onClick={() => setOpenMenu(!openMenu)}>
-          {openMenu ? (
-            <img src={leftArrow} alt='Left Arrow' />
-          ) : (
-            <img src={rightArrow} alt='Right Arrow' />
-          )}
-        </button>
-        <div>
-          <img src={eLogo} alt='Logo' />
-        </div>
-      </div>
-
+    <div className={styles.mobileMenu}>
       <ul>
         <li className={page === "dashboard" ? styles.active : undefined}>
-          <Link to='/dashboard' onClick={() => setPage("dashboard")}>
+          <Link to='/' onClick={() => setPage("dashboard")}>
             <img src={home} alt='Dashboard' />
-            <span>Dashboard</span>
+            <span></span>
           </Link>
         </li>
         <li className={page === "transactions" ? styles.active : undefined}>
-          <Link to='/transactions' onClick={() => setPage("transactions")}>
+          <Link to='transactions' onClick={() => setPage("transactions")}>
             <img src={transaction} alt='Transactions' />
-            <span>Transactions</span>
+            <span></span>
           </Link>
         </li>
         <li className={page === "categories" ? styles.active : undefined}>
-          <Link to='/categories' onClick={() => setPage("categories")}>
+          <Link to='categories' onClick={() => setPage("categories")}>
             <img src={category} alt='Category' />
-            <span>Category</span>
+            <span></span>
           </Link>
         </li>
         <li className={page === "notifications" ? styles.active : undefined}>
           <Link to='notifications' onClick={() => setPage("notifications")}>
             <img src={notification} alt='Notification' />
-            <span>Notifications</span>
+            <span></span>
           </Link>
         </li>
         <li className={page === "settings" ? styles.active : undefined}>
           <Link to='settings' onClick={() => setPage("settings")}>
             <img src={setting} alt='Settings' />
-            <span>Setting</span>
+            <span></span>
           </Link>
         </li>
         <li className={page === "share" ? styles.active : undefined}>
           <Link to='share' onClick={() => setPage("share")}>
             <img src={share} alt='Share with friends' />
-            <span>Share with friends</span>
+            <span></span>
           </Link>
         </li>
       </ul>
@@ -94,4 +63,4 @@ const Menu = () => {
   )
 }
 
-export default Menu
+export default MobileMenu

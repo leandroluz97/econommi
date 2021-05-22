@@ -17,6 +17,8 @@ interface UiProps {
   setPasswordEye: (value: boolean) => void
   repeatEye: boolean
   setRepeat: (value: boolean) => void
+  page: string
+  setPage: (value: string) => void
 }
 
 //Context
@@ -27,6 +29,7 @@ export const UiProvider = ({ children }: UiProviderType) => {
   const [isActive, setisActive] = useState<boolean>(false)
   const [passwordEye, setPasswordEye] = useState<boolean>(false)
   const [repeatEye, setRepeat] = useState<boolean>(false)
+  const [page, setPage] = useState<string>("dashboard")
 
   useEffect(() => {}, [])
 
@@ -39,6 +42,8 @@ export const UiProvider = ({ children }: UiProviderType) => {
         setPasswordEye,
         repeatEye,
         setRepeat,
+        page,
+        setPage,
       }}
     >
       {children}

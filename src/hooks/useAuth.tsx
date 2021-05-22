@@ -18,6 +18,7 @@ interface ContextProps {
   setCurrentUser: (value: User | null) => void
   isLoading: boolean
   onSubmitGmail: () => void
+  onSignupPassword: (email: string, password: string) => void
 }
 
 //Context
@@ -26,8 +27,9 @@ const AuthContext = createContext<ContextProps>({} as ContextProps)
 //Provider
 export const AuthProvider = ({ children }: AuthProviderType) => {
   const [currentUser, setCurrentUser] = useState<User | null>(null)
-  const [isLoading, setIsLoading] = useState(true)
+  const [isLoading, setIsLoading] = useState(false)
 
+  //Sign in or Sign up  with google
   function onSubmitGmail() {
     let provider = new firebase.auth.GoogleAuthProvider()
 
@@ -45,21 +47,65 @@ export const AuthProvider = ({ children }: AuthProviderType) => {
         //setCurrentUser(user)
       })
       .catch((error) => {
-        console.log(error)
+        console.log(error.message)
       })
   }
+
+  //Sign up with password and email
+  async function onSignupPassword(email: string, password: string) {
+    firebase
+      .auth()
+      .createUserWithEmailAndPassword(email, password)
+      .then((userCredential) => {
+        // Signed in
+        let user = userCredential.user
+        console.log(user)
+
+        // ...
+      })
+      .catch((error) => {
+        let errorCode = error.code
+        let errorMessage = error.message
+        // ..
+      })
+  }
+
+  //Sign in with password and email
+  async function onSigninPassword(email: string, password: string) {
+    firebase
+      .auth()
+      .signInWithEmailAndPassword(email, password)
+      .then((userCredential) => {
+        // Signed in
+        let user = userCredential.user
+        // ...
+      })
+      .catch((error) => {
+        let errorCode = error.code
+        let errorMessage = error.message
+      })
+  }
+
   useEffect(() => {
+    /*
     const unsubscribe = firebase.auth().onAuthStateChanged((user) => {
       setCurrentUser(user)
       setIsLoading(false)
     })
 
     return unsubscribe
+    */
   }, [])
 
   return (
     <AuthContext.Provider
-      value={{ currentUser, setCurrentUser, isLoading, onSubmitGmail }}
+      value={{
+        currentUser,
+        setCurrentUser,
+        isLoading,
+        onSubmitGmail,
+        onSignupPassword,
+      }}
     >
       {!isLoading && children}
     </AuthContext.Provider>
