@@ -18,6 +18,7 @@
   --gray-200: #dcdcdc;
   --gray-300: #dadada;
   --gray-400: #afafaf;
+  --gray-450: #a4a4a4;
   --gray-500: #72818d;
   --gray-550: #959595;
   --gray-600: #7d7d7d;
@@ -31,4 +32,27 @@ html {
 
 body {
   font-family: "Roboto", sans-serif;
+}
+
+.user__modal {
+  position: absolute;
+  top: 180px;
+  left: auto;
+  right: 0%;
+  bottom: auto;
+  transform: translate(-50%, -50%);
+  border: none;
+  border-radius: 15px;
+  background-color: white;
+  padding: 1.5rem 1rem;
+  box-shadow: 0px 8px 29px -5px #d9e4e2;
+}
+
+.user__overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(255, 255, 255, 0);
 }

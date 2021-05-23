@@ -76,7 +76,7 @@ const Menu = () => {
         <li className={page === "settings" ? styles.active : undefined}>
           <Link to='settings' onClick={() => setPage("settings")}>
             <img src={setting} alt='Settings' />
-            <span>Setting</span>
+            <span>Settings</span>
           </Link>
         </li>
         <li className={page === "share" ? styles.active : undefined}>

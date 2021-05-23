@@ -6,6 +6,7 @@ import Signin from "../pages/SignIn"
 import Menu from "../components/Menu"
 import styles from "./styles.module.scss"
 import MobileMenu from "../components/MobileMenu"
+import User from "../components/User"
 
 const Routes = () => {
   return (
@@ -17,7 +18,7 @@ const Routes = () => {
       <div className={styles.layout}>
         <Menu />
         <MobileMenu />
-
+        <User />
         <Switch>
           <Route exact path='/dashboard' component={Dashboard} />
           {/*<Redirect to='/dashboard' />*/}
