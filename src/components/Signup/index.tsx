@@ -131,7 +131,7 @@ const Signup = () => {
       <button
         type='button'
         className={styles.signup__google}
-        onClick={() => handleGmailSignup()}
+        onClick={handleGmailSignup}
       >
         <img src={google} alt='Google Logo' />
         Signup With Google

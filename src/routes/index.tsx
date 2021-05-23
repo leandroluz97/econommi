@@ -8,6 +8,7 @@ import styles from "./styles.module.scss"
 import MobileMenu from "../components/MobileMenu"
 import User from "../components/User"
 import { useAuth } from "../hooks/useAuth"
+import { ToastContainer } from "react-toastify"
 
 const Routes = () => {
   const { currentUser } = useAuth()
@@ -33,7 +34,12 @@ const Routes = () => {
       </div>
     )
   }
-  return <>{routes}</>
+  return (
+    <>
+      <ToastContainer autoClose={5000} />
+      {routes}
+    </>
+  )
 }
 
 export default Routes

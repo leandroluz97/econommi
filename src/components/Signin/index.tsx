@@ -33,7 +33,7 @@ const Signin = () => {
 
       history.push("/dashboard")
     } catch (error) {
-      console.log(error)
+      console.log(error.message)
     }
   }
 

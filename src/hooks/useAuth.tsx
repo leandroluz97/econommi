@@ -5,6 +5,8 @@ import {
   useEffect,
   useState,
 } from "react"
+import { toast } from "react-toastify"
+import "react-toastify/dist/ReactToastify.css"
 
 import firebase from "../config/firebase-config"
 
@@ -33,7 +35,14 @@ export const AuthProvider = ({ children }: AuthProviderType) => {
   //Sign in or Sign up  with google
   function onSubmitGmail() {
     let provider = new firebase.auth.GoogleAuthProvider()
+    /*
+    let db = firebase.firestore()
 
+    const user = { nome: "leandro", idade: 23, nacionalidade: "cavoverdiano" }
+    const ref = db.collection("users")
+
+    ref.add(user)
+*/
     return firebase
       .auth()
       .signInWithPopup(provider)
@@ -48,7 +57,10 @@ export const AuthProvider = ({ children }: AuthProviderType) => {
         //setCurrentUser(user)
       })
       .catch((error) => {
-        console.log(error.message)
+        toast.error(error.message, {
+          bodyClassName: "toastify__error",
+          className: "toastify",
+        })
       })
   }
 
@@ -60,14 +72,12 @@ export const AuthProvider = ({ children }: AuthProviderType) => {
       .then((userCredential) => {
         // Signed in
         let user = userCredential.user
-        console.log(user)
-
-        // ...
       })
       .catch((error) => {
-        let errorCode = error.code
-        let errorMessage = error.message
-        // ..
+        toast.error(error.message, {
+          bodyClassName: "toastify__error",
+          className: "toastify",
+        })
       })
   }
 
@@ -79,16 +89,50 @@ export const AuthProvider = ({ children }: AuthProviderType) => {
       .then((userCredential) => {
         // Signed in
         let user = userCredential.user
-        // ...
       })
       .catch((error) => {
-        let errorCode = error.code
-        let errorMessage = error.message
+        toast.error(error.message, {
+          bodyClassName: "toastify__error",
+          className: "toastify",
+        })
       })
   }
 
   useEffect(() => {
     const unsubscribe = firebase.auth().onAuthStateChanged((user) => {
+      let db = firebase.firestore()
+
+      async function saveUserToDB() {
+        let docRef = db.collection("users").doc(user?.email as string)
+        try {
+          const doc = await docRef.get()
+
+          if (doc.exists) {
+            console.log("Document data:", doc.data())
+          } else {
+            // doc.data() will be undefined in this case
+            console.log("No such document!")
+
+            const ref = db.collection("users")
+            let userData = {
+              userId: user?.uid,
+              photoURL: user?.photoURL,
+              email: user?.email,
+              displayName: user?.displayName,
+            }
+
+            ref.doc(user?.email as string).set(userData)
+          }
+        } catch (error) {
+          console.log(error)
+        }
+      }
+
+      if (user) {
+        saveUserToDB()
+      }
+      console.log(user)
+
       setCurrentUser(user)
       setIsLoading(false)
     })
