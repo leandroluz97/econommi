@@ -6,6 +6,7 @@ import google from "../../assets/google.svg"
 import { useForm } from "react-hook-form"
 import { useUI } from "../../hooks/useUi"
 import { useAuth } from "../../hooks/useAuth"
+import { useHistory } from "react-router-dom"
 
 interface SigninState {
   email: string
@@ -24,11 +25,25 @@ const Signin = () => {
   const { passwordEye, repeatEye } = useUI()
   const { onSignupPassword, onSubmitGmail } = useAuth()
 
+  let history = useHistory()
+
   const onSubmit = async (data: SigninState) => {
     try {
       let user = await onSignupPassword(data.email, data.password)
+
+      history.push("/dashboard")
     } catch (error) {
       console.log(error)
+    }
+  }
+
+  async function handleGmailSignup() {
+    try {
+      await onSubmitGmail()
+
+      history.push("/dashboard")
+    } catch (error) {
+      console.log(error.message)
     }
   }
   return (
@@ -74,7 +89,7 @@ const Signin = () => {
       <button
         type='button'
         className={styles.signin__google}
-        onClick={() => onSubmitGmail()}
+        onClick={() => handleGmailSignup()}
       >
         <img src={google} alt='Google Logo' />
         Signin With Google

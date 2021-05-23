@@ -7,25 +7,33 @@ import Menu from "../components/Menu"
 import styles from "./styles.module.scss"
 import MobileMenu from "../components/MobileMenu"
 import User from "../components/User"
+import { useAuth } from "../hooks/useAuth"
 
 const Routes = () => {
-  return (
-    <>
-      <Switch>
-        <Route path='/signup' component={Signup} />
-        <Route path='/signin' component={Signin} />
-      </Switch>
+  const { currentUser } = useAuth()
+
+  let routes = (
+    <Switch>
+      <Route path='/signup' component={Signup} />
+      <Route path='/signin' component={Signin} />
+      <Redirect to='/signin' />
+    </Switch>
+  )
+
+  if (currentUser) {
+    routes = (
       <div className={styles.layout}>
         <Menu />
         <MobileMenu />
         <User />
         <Switch>
           <Route exact path='/dashboard' component={Dashboard} />
-          {/*<Redirect to='/dashboard' />*/}
+          *<Redirect to='/dashboard' />
         </Switch>
       </div>
-    </>
-  )
+    )
+  }
+  return <>{routes}</>
 }
 
 export default Routes

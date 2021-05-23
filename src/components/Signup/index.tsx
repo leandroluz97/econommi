@@ -6,6 +6,7 @@ import google from "../../assets/google.svg"
 import { useForm } from "react-hook-form"
 import { useUI } from "../../hooks/useUi"
 import { useAuth } from "../../hooks/useAuth"
+import { useHistory } from "react-router-dom"
 
 interface SignupState {
   firstName: string
@@ -28,11 +29,25 @@ const Signup = () => {
   const { passwordEye, repeatEye } = useUI()
   const { onSubmitGmail, onSignupPassword } = useAuth()
 
+  let history = useHistory()
+
   async function onSubmit(data: SignupState) {
     try {
       const user = await onSignupPassword(data.email, data.password)
 
+      history.push("/dashboard")
+
       reset()
+    } catch (error) {
+      console.log(error.message)
+    }
+  }
+
+  async function handleGmailSignup() {
+    try {
+      await onSubmitGmail()
+
+      history.push("/dashboard")
     } catch (error) {
       console.log(error.message)
     }
@@ -116,7 +131,7 @@ const Signup = () => {
       <button
         type='button'
         className={styles.signup__google}
-        onClick={() => onSubmitGmail()}
+        onClick={() => handleGmailSignup()}
       >
         <img src={google} alt='Google Logo' />
         Signup With Google

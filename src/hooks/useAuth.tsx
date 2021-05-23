@@ -19,6 +19,7 @@ interface ContextProps {
   isLoading: boolean
   onSubmitGmail: () => void
   onSignupPassword: (email: string, password: string) => void
+  onSigninPassword: (email: string, password: string) => void
 }
 
 //Context
@@ -27,7 +28,7 @@ const AuthContext = createContext<ContextProps>({} as ContextProps)
 //Provider
 export const AuthProvider = ({ children }: AuthProviderType) => {
   const [currentUser, setCurrentUser] = useState<User | null>(null)
-  const [isLoading, setIsLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
 
   //Sign in or Sign up  with google
   function onSubmitGmail() {
@@ -87,14 +88,12 @@ export const AuthProvider = ({ children }: AuthProviderType) => {
   }
 
   useEffect(() => {
-    /*
     const unsubscribe = firebase.auth().onAuthStateChanged((user) => {
       setCurrentUser(user)
       setIsLoading(false)
     })
 
     return unsubscribe
-    */
   }, [])
 
   return (
@@ -105,6 +104,7 @@ export const AuthProvider = ({ children }: AuthProviderType) => {
         isLoading,
         onSubmitGmail,
         onSignupPassword,
+        onSigninPassword,
       }}
     >
       {!isLoading && children}

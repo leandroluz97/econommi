@@ -8,17 +8,32 @@ import moonIcon from "../../assets/moon-icon.svg"
 import shareIcon from "../../assets/share-icon.svg"
 import logoutIcon from "../../assets/logout-icon.svg"
 import logo from "../../assets/e.svg"
+import firebase from "../../config/firebase-config"
+import { useAuth } from "../../hooks/useAuth"
+import { useHistory } from "react-router"
 
 const User = () => {
   const [modalIsOpen, setIsOpen] = React.useState(false)
+  const { setCurrentUser } = useAuth()
   function openModal() {
     setIsOpen(true)
   }
+
+  let history = useHistory()
 
   function afterOpenModal() {}
 
   function closeModal() {
     setIsOpen(false)
+  }
+  function handleLogout() {
+    firebase
+      .auth()
+      .signOut()
+      .then(function () {
+        setCurrentUser(null)
+        history.push("/login")
+      })
   }
   return (
     <div className={styles.wrapper}>
@@ -35,7 +50,7 @@ const User = () => {
             onRequestClose={closeModal}
             className='user__modal'
             overlayClassName='user__overlay'
-            contentLabel='Example Modal'
+            contentLabel='Profile Configuration'
           >
             <div className={styles.user__dropdown}>
               <button>
@@ -50,7 +65,7 @@ const User = () => {
                 <img src={shareIcon} alt='my profile icon' />
                 <span>Envite Friends</span>
               </button>
-              <button>
+              <button onClick={handleLogout}>
                 <img src={logoutIcon} alt='my profile icon' />
                 <span>Logout</span>
               </button>
