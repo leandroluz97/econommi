@@ -15,19 +15,19 @@ import notification from "../../assets/notification.svg"
 import setting from "../../assets/setting.svg"
 import share from "../../assets/share.svg"
 import plus from "../../assets/plus.svg"
-import { Link, useLocation } from "react-router-dom"
+import { Link, useHistory, useLocation } from "react-router-dom"
 import { useUI } from "../../hooks/useUi"
 
 const Menu = () => {
-  const [openMenu, setOpenMenu] = useState(true)
-  const { page, setPage } = useUI()
+  const { page, setPage, openMenu, setOpenMenu } = useUI()
 
   const location = useLocation()
 
   useEffect(() => {
     const pathname = location.pathname.slice(1)
+
     setPage(pathname)
-  }, [])
+  }, [location])
 
   return (
     <div
@@ -68,13 +68,13 @@ const Menu = () => {
           </Link>
         </li>
         <li className={page === "notifications" ? styles.active : undefined}>
-          <Link to='notifications' onClick={() => setPage("notifications")}>
+          <Link to='/notifications' onClick={() => setPage("notifications")}>
             <img src={notification} alt='Notification' />
             <span>Notifications</span>
           </Link>
         </li>
         <li className={page === "settings" ? styles.active : undefined}>
-          <Link to='settings' onClick={() => setPage("settings")}>
+          <Link to='/settings' onClick={() => setPage("settings")}>
             <img src={setting} alt='Settings' />
             <span>Settings</span>
           </Link>

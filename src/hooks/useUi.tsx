@@ -19,6 +19,8 @@ interface UiProps {
   setRepeat: (value: boolean) => void
   page: string
   setPage: (value: string) => void
+  openMenu: boolean
+  setOpenMenu: (value: boolean) => void
 }
 
 //Context
@@ -30,6 +32,7 @@ export const UiProvider = ({ children }: UiProviderType) => {
   const [passwordEye, setPasswordEye] = useState<boolean>(false)
   const [repeatEye, setRepeat] = useState<boolean>(false)
   const [page, setPage] = useState<string>("dashboard")
+  const [openMenu, setOpenMenu] = useState(true)
 
   useEffect(() => {}, [])
 
@@ -44,6 +47,8 @@ export const UiProvider = ({ children }: UiProviderType) => {
         setRepeat,
         page,
         setPage,
+        openMenu,
+        setOpenMenu,
       }}
     >
       {children}

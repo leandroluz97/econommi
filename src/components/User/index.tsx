@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useState } from "react"
 import caretdown from "../../assets/caretdown.svg"
 import perfil from "../../assets/Perfil.svg"
 import styles from "./styles.module.scss"
@@ -13,19 +13,19 @@ import { useAuth } from "../../hooks/useAuth"
 import { useHistory } from "react-router"
 
 const User = () => {
-  const [modalIsOpen, setIsOpen] = React.useState(false)
+  const [modalIsOpen, setIsOpen] = useState(false)
   const { setCurrentUser } = useAuth()
+
+  let history = useHistory()
+
   function openModal() {
     setIsOpen(true)
   }
 
-  let history = useHistory()
-
-  function afterOpenModal() {}
-
   function closeModal() {
     setIsOpen(false)
   }
+
   function handleLogout() {
     firebase
       .auth()
@@ -46,7 +46,6 @@ const User = () => {
 
           <Modal
             isOpen={modalIsOpen}
-            onAfterOpen={afterOpenModal}
             onRequestClose={closeModal}
             className='user__modal'
             overlayClassName='user__overlay'

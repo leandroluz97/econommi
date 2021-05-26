@@ -18,18 +18,16 @@ const Signin = () => {
     register,
     handleSubmit,
     formState: { errors },
-    watch,
-    getValues,
   } = useForm<SigninState>()
 
-  const { passwordEye, repeatEye } = useUI()
-  const { onSignupPassword, onSubmitGmail } = useAuth()
+  const { passwordEye } = useUI()
+  const { onSubmitGmail, onSigninPassword } = useAuth()
 
   let history = useHistory()
 
   const onSubmit = async (data: SigninState) => {
     try {
-      let user = await onSignupPassword(data.email, data.password)
+      await onSigninPassword(data.email, data.password)
 
       history.push("/dashboard")
     } catch (error) {
@@ -77,7 +75,7 @@ const Signin = () => {
           />
 
           <span className={styles.signin__form__forgot}>
-            Forgot your password? <a href='#'>Click here</a>.
+            Forgot your password? <a href='/'>Click here</a>.
           </span>
         </div>
 
@@ -97,7 +95,7 @@ const Signin = () => {
 
       <p className={styles.signin__policy}>
         By clicking on the button above, you agree with our
-        <a href='#'> terms of Service</a> and <a href='#'> Privacy Policy</a> .
+        <a href='/'> terms of Service</a> and <a href='/'> Privacy Policy</a> .
       </p>
     </div>
   )

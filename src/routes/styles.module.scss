@@ -2,5 +2,37 @@
   background-color: var(--green-50);
   width: 100vw;
   height: 100vh;
-  position: relative;
+  //position: relative;
+  display: flex;
+
+  &__sidebar {
+    min-width: 120px;
+    transition: all 0.3s ease;
+  }
+  &__routes {
+    margin: 3rem;
+    width: 100%;
+  }
+
+  &__sidebarExpand {
+    min-width: 290px;
+    transition: all 0.3s ease;
+  }
+}
+
+@media (max-width: 768px) {
+  .layout {
+    &__routes {
+      margin: 0;
+      width: 100%;
+    }
+
+    &__sidebar {
+      display: none;
+    }
+
+    &__sidebarExpand {
+      display: none;
+    }
+  }
 }

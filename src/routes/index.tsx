@@ -9,9 +9,16 @@ import MobileMenu from "../components/MobileMenu"
 import User from "../components/User"
 import { useAuth } from "../hooks/useAuth"
 import { ToastContainer } from "react-toastify"
+import Transactions from "../pages/Transactions"
+import Categories from "../pages/Categories"
+import Notifications from "../pages/Notifications"
+import Settings from "../pages/Settings"
+import Share from "../pages/Share"
+import { useUI } from "../hooks/useUi"
 
 const Routes = () => {
   const { currentUser } = useAuth()
+  const { openMenu } = useUI()
 
   let routes = (
     <Switch>
@@ -24,13 +31,28 @@ const Routes = () => {
   if (currentUser) {
     routes = (
       <div className={styles.layout}>
-        <Menu />
-        <MobileMenu />
-        <User />
-        <Switch>
-          <Route exact path='/dashboard' component={Dashboard} />
-          *<Redirect to='/dashboard' />
-        </Switch>
+        <div
+          className={
+            openMenu
+              ? `${styles.layout__sidebarExpand}`
+              : `${styles.layout__sidebar}`
+          }
+        >
+          <Menu />
+        </div>
+        <div className={styles.layout__routes}>
+          <MobileMenu />
+          <User />
+          <Switch>
+            <Route exact path='/dashboard' component={Dashboard} />
+            <Route exact path='/transactions' component={Transactions} />
+            <Route exact path='/categories' component={Categories} />
+            <Route exact path='/notifications' component={Notifications} />
+            <Route exact path='/settings' component={Settings} />
+            <Route exact path='/share' component={Share} />
+            <Redirect to='/dashboard' />
+          </Switch>
+        </div>
       </div>
     )
   }

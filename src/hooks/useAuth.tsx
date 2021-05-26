@@ -33,17 +33,10 @@ export const AuthProvider = ({ children }: AuthProviderType) => {
   const [isLoading, setIsLoading] = useState(true)
 
   //Sign in or Sign up  with google
-  function onSubmitGmail() {
+  async function onSubmitGmail() {
     let provider = new firebase.auth.GoogleAuthProvider()
-    /*
-    let db = firebase.firestore()
 
-    const user = { nome: "leandro", idade: 23, nacionalidade: "cavoverdiano" }
-    const ref = db.collection("users")
-
-    ref.add(user)
-*/
-    return firebase
+    const fire = firebase
       .auth()
       .signInWithPopup(provider)
       .then((result) => {
@@ -62,10 +55,25 @@ export const AuthProvider = ({ children }: AuthProviderType) => {
           className: "toastify",
         })
       })
+    return fire
   }
 
   //Sign up with password and email
   async function onSignupPassword(email: string, password: string) {
+    try {
+      const user = await firebase
+        .auth()
+        .createUserWithEmailAndPassword(email, password)
+      const userCredential = user.credential
+
+      console.log(user)
+    } catch (error) {
+      toast.error(error.message, {
+        bodyClassName: "toastify__error",
+        className: "toastify",
+      })
+    }
+    /*
     firebase
       .auth()
       .createUserWithEmailAndPassword(email, password)
@@ -79,6 +87,7 @@ export const AuthProvider = ({ children }: AuthProviderType) => {
           className: "toastify",
         })
       })
+      */
   }
 
   //Sign in with password and email
@@ -101,37 +110,6 @@ export const AuthProvider = ({ children }: AuthProviderType) => {
   useEffect(() => {
     const unsubscribe = firebase.auth().onAuthStateChanged((user) => {
       let db = firebase.firestore()
-
-      async function saveUserToDB() {
-        let docRef = db.collection("users").doc(user?.email as string)
-        try {
-          const doc = await docRef.get()
-
-          if (doc.exists) {
-            console.log("Document data:", doc.data())
-          } else {
-            // doc.data() will be undefined in this case
-            console.log("No such document!")
-
-            const ref = db.collection("users")
-            let userData = {
-              userId: user?.uid,
-              photoURL: user?.photoURL,
-              email: user?.email,
-              displayName: user?.displayName,
-            }
-
-            ref.doc(user?.email as string).set(userData)
-          }
-        } catch (error) {
-          console.log(error)
-        }
-      }
-
-      if (user) {
-        saveUserToDB()
-      }
-      console.log(user)
 
       setCurrentUser(user)
       setIsLoading(false)
@@ -161,3 +139,45 @@ export function useAuth() {
 
   return context
 }
+
+/*
+    let db = firebase.firestore()
+
+    const user = { nome: "leandro", idade: 23, nacionalidade: "cavoverdiano" }
+    const ref = db.collection("users")
+
+    ref.add(user)
+*/
+
+/*
+      async function saveUserToDB() {
+        let docRef = db.collection("users").doc(user?.email as string)
+        try {
+          const doc = await docRef.get()
+
+          if (doc.exists) {
+            //console.log("Document data:", doc.data())
+          } else {
+            // doc.data() will be undefined in this case
+            //console.log("No such document!")
+
+            const ref = db.collection("users")
+            let userData = {
+              userId: user?.uid,
+              photoURL: user?.photoURL,
+              email: user?.email,
+              displayName: user?.displayName,
+            }
+
+            ref.doc(user?.email as string).set(userData)
+          }
+        } catch (error) {
+          console.log(error)
+        }
+      }
+
+      if (user) {
+        saveUserToDB()
+      }
+      */
+//console.log(user)

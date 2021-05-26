@@ -12,6 +12,7 @@
   --green-50: #ebf5f3;
   --green-100: #def3ef;
   --green-200: #f7fafb;
+  --green-300: #78b653;
   --green-600: #185f50;
 
   --gray-100: #f7fafb;
@@ -24,6 +25,7 @@
   --gray-600: #7d7d7d;
 
   --red-100: #f46f6f;
+  --red-200: #cb4848;
 }
 
 html {
@@ -45,7 +47,7 @@ body {
   border-radius: 15px;
   background-color: white;
   padding: 1.5rem 1rem;
-  box-shadow: 0px 8px 29px -5px #d9e4e2;
+  box-shadow: 0px 8px 29px -5px rgba(0, 0, 0, 0.15);
 }
 
 .user__overlay {
@@ -63,4 +65,29 @@ body {
   &__error {
     font-size: 1.5rem;
   }
+}
+
+.global__modal {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  right: 0;
+  bottom: 0;
+  transform: translate(-50%, -50%);
+  border: none;
+  border-radius: 15px;
+  background-color: white;
+  padding: 1rem;
+
+  max-width: 625px;
+  width: 100%;
+  height: 470px;
+}
+.global__overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.4);
 }
