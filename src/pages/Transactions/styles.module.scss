@@ -21,7 +21,7 @@
         font-family: Roboto;
         font-style: normal;
         font-weight: 500;
-        font-size: 18px;
+        font-size: 1.8rem;
         color: var(--white);
 
         &:first-child {
@@ -77,5 +77,33 @@
 @media (max-width: 768px) {
   .transactions {
     margin: 3rem;
+
+    table {
+    }
+  }
+}
+
+@media (max-width: 649px) {
+  .transactions {
+    table {
+      thead {
+        th {
+          font-size: 1.4rem;
+        }
+
+        th:nth-child(3) {
+          display: none;
+        }
+        th:nth-child(4) {
+          display: none;
+        }
+      }
+      td:nth-child(3) {
+        display: none;
+      }
+      td:nth-child(4) {
+        display: none;
+      }
+    }
   }
 }

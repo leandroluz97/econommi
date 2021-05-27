@@ -78,11 +78,11 @@ const NewTransactionModal = ({
         />
 
         <div className={styles.form__buttons}>
-          <button className={styles.form__income}>
+          <button className={styles.form__buttons__income}>
             <span>Income</span>
             <img src={incomeImg} alt='outcome' />
           </button>
-          <button className={styles.form__outcome}>
+          <button className={styles.form__buttons__outcome}>
             <span>Outcome</span>
             <img src={outcomeImg} alt='outcome' />
           </button>
@@ -103,7 +103,7 @@ const NewTransactionModal = ({
         />
 
         <div className={styles.form__submit}>
-          <input type='submit' value='Signup' />
+          <input type='submit' value='Add New Transactions' />
         </div>
       </form>
     </Modal>
