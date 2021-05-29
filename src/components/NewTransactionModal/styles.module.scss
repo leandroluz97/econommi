@@ -3,7 +3,7 @@
   padding: 5rem;
 
   div {
-    margin: 2rem 0;
+    margin: 1.5rem 0;
   }
   &__close {
     position: absolute;
@@ -12,12 +12,24 @@
     cursor: pointer;
   }
 
+  &__select {
+    label {
+      display: block;
+      color: var(--gray-600);
+      font-size: 1.2rem;
+    }
+    select {
+      margin-top: 1rem;
+      width: 100%;
+      padding: 1rem;
+    }
+  }
+
   &__buttons {
-    padding: 2rem 0;
     display: flex;
     justify-content: space-between;
 
-    button {
+    div {
       padding: 1.5rem;
       width: 45%;
       background-color: transparent;
@@ -36,14 +48,14 @@
       }
     }
 
-    button:first-child {
+    div:first-child {
       border: 1px solid var(--green-300) !important;
 
       span {
         color: var(--green-300);
       }
     }
-    button:last-child {
+    div:last-child {
       border: 1px solid var(--red-200);
 
       span {
@@ -82,5 +94,12 @@
         background-color: #3bb098;
       }
     }
+  }
+
+  .activeIncome {
+    background-color: #eaf5e3;
+  }
+  .activeOutcome {
+    background-color: #f8d8d8;
   }
 }

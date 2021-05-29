@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useState } from "react"
 import { useForm } from "react-hook-form"
 import Modal from "react-modal"
 import Input from "../Input"
@@ -6,6 +6,7 @@ import styles from "./styles.module.scss"
 import closeImg from "../../assets/close.svg"
 import incomeImg from "../../assets/income.svg"
 import outcomeImg from "../../assets/outcome.svg"
+import SelectOptions from "../SelectOptions/"
 
 interface NewTransationTypes {
   amount: string
@@ -23,6 +24,8 @@ const NewTransactionModal = ({
   modalIsOpen,
   closeModal,
 }: NewTransactionModalProps) => {
+  const [type, setType] = useState("income")
+
   const {
     register,
     handleSubmit,
@@ -31,6 +34,26 @@ const NewTransactionModal = ({
     getValues,
     reset,
   } = useForm<NewTransationTypes>()
+  const options = [
+    { name: "Swedish", value: "sv" },
+    { name: "English", value: "en" },
+    { name: "Spanish", value: "es" },
+    { name: "Swedish", value: "sv" },
+    { name: "English", value: "en" },
+    { name: "Spanish", value: "es" },
+  ]
+
+  const [option, setOption] = useState({ name: "Swedish", value: "sv" })
+
+  async function addNewTransaction(data: NewTransationTypes) {
+    try {
+      console.log(data)
+
+      reset()
+    } catch (error) {
+      console.log(error.message)
+    }
+  }
 
   return (
     <Modal
@@ -40,7 +63,7 @@ const NewTransactionModal = ({
       overlayClassName='global__overlay'
       contentLabel='Profile Configuration'
     >
-      <form action='' className={styles.form}>
+      <form className={styles.form} onSubmit={handleSubmit(addNewTransaction)}>
         <img
           src={closeImg}
           alt='close'
@@ -52,40 +75,49 @@ const NewTransactionModal = ({
 
         <Input
           property={register("amount", {
-            required: "Invalid First Name",
+            required: "Invalid amount",
             minLength: {
               value: 2,
               message: "Must have 8 characters",
             },
           })}
           label='Amount'
-          type='text'
+          type='number'
           error={errors.amount}
           name='amount'
         />
-        <Input
-          property={register("description", {
-            required: "Invalid First Name",
-            minLength: {
-              value: 2,
-              message: "Must have 8 characters",
-            },
-          })}
-          label='Category'
-          type='text'
-          error={errors.description}
-          name='firstName'
-        />
+
+        <div>
+          <SelectOptions
+            options={options}
+            option={option}
+            setOption={setOption}
+          />
+        </div>
 
         <div className={styles.form__buttons}>
-          <button className={styles.form__buttons__income}>
+          <div
+            className={
+              type === "income"
+                ? `${styles.form__buttons__income} ${styles.activeIncome}`
+                : `${styles.form__buttons__income}`
+            }
+            onClick={() => setType("income")}
+          >
             <span>Income</span>
-            <img src={incomeImg} alt='outcome' />
-          </button>
-          <button className={styles.form__buttons__outcome}>
+            <img src={incomeImg} alt='income' />
+          </div>
+          <div
+            className={
+              type === "outcome"
+                ? `${styles.form__buttons__outcome} ${styles.activeOutcome}`
+                : `${styles.form__buttons__outcome}`
+            }
+            onClick={() => setType("outcome")}
+          >
             <span>Outcome</span>
             <img src={outcomeImg} alt='outcome' />
-          </button>
+          </div>
         </div>
 
         <Input

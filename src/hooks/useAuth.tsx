@@ -35,82 +35,122 @@ export const AuthProvider = ({ children }: AuthProviderType) => {
   //Sign in or Sign up  with google
   async function onSubmitGmail() {
     let provider = new firebase.auth.GoogleAuthProvider()
+    let db = firebase.firestore()
 
-    const fire = firebase
-      .auth()
-      .signInWithPopup(provider)
-      .then((result) => {
-        let credential = result.credential as firebase.auth.OAuthCredential
-
-        // This gives you a Google Access Token. You can use it to access the Google API.
-        let token = credential.accessToken
-        // The signed-in user info.
-        let user = result.user
-
-        //setCurrentUser(user)
-      })
-      .catch((error) => {
-        toast.error(error.message, {
-          bodyClassName: "toastify__error",
-          className: "toastify",
-        })
-      })
-    return fire
-  }
-
-  //Sign up with password and email
-  async function onSignupPassword(email: string, password: string) {
     try {
-      const user = await firebase
-        .auth()
-        .createUserWithEmailAndPassword(email, password)
-      const userCredential = user.credential
+      const userAuth = await firebase.auth().signInWithPopup(provider)
+      const result = userAuth
 
-      console.log(user)
+      let credential = result.credential as firebase.auth.OAuthCredential
+
+      // This gives you a Google Access Token. You can use it to access the Google API.
+      let token = credential.accessToken
+      // The signed-in user info.
+      let user = result.user
+
+      let docRef = db.collection("users").doc(user?.email as string)
+      let catRef = db.collection("categories").doc("default")
+
+      const doc = await docRef.get()
+      const cat = await catRef.get()
+
+      if (!doc.exists) {
+        // doc.data() will be undefined in this case
+
+        const ref = db.collection("users")
+        let userData = {
+          userId: user?.uid,
+          photoURL: user?.photoURL,
+          email: user?.email,
+          displayName: user?.displayName,
+        }
+
+        const allCategories = { ...cat.data() }
+
+        //create user doc w/ email index
+        ref.doc(user?.email as string).set(userData)
+        ref
+          .doc(user?.email as string)
+          .collection("categories")
+          .doc("userCategory")
+          .set(allCategories)
+      }
+
+      //setCurrentUser(user)
     } catch (error) {
       toast.error(error.message, {
         bodyClassName: "toastify__error",
         className: "toastify",
       })
     }
-    /*
-    firebase
-      .auth()
-      .createUserWithEmailAndPassword(email, password)
-      .then((userCredential) => {
-        // Signed in
-        let user = userCredential.user
+  }
+
+  //Sign up with password and email
+  async function onSignupPassword(email: string, password: string) {
+    let db = firebase.firestore()
+
+    try {
+      let docRef = db.collection("users").doc(email)
+      let catRef = db.collection("categories").doc("default")
+
+      const user = await firebase
+        .auth()
+        .createUserWithEmailAndPassword(email, password)
+      const userCredential = user.credential
+
+      const doc = await docRef.get()
+      const cat = await catRef.get()
+
+      if (!doc.exists) {
+        // doc.data() will be undefined in this case
+
+        const ref = db.collection("users")
+        let userData = {
+          userId: user.user?.uid,
+          photoURL: user.user?.photoURL,
+          email: user.user?.email,
+          displayName: user.user?.displayName,
+        }
+
+        const allCategories = { ...cat.data() }
+
+        //create user doc w/ email index
+        ref.doc(email).set(userData)
+        ref
+          .doc(email)
+          .collection("categories")
+          .doc("userCategory")
+          .set(allCategories)
+      }
+    } catch (error) {
+      console.log(error)
+
+      toast.error(error.message, {
+        bodyClassName: "toastify__error",
+        className: "toastify",
       })
-      .catch((error) => {
-        toast.error(error.message, {
-          bodyClassName: "toastify__error",
-          className: "toastify",
-        })
-      })
-      */
+    }
   }
 
   //Sign in with password and email
   async function onSigninPassword(email: string, password: string) {
-    firebase
-      .auth()
-      .signInWithEmailAndPassword(email, password)
-      .then((userCredential) => {
-        // Signed in
-        let user = userCredential.user
+    try {
+      const userAuth = await firebase
+        .auth()
+        .signInWithEmailAndPassword(email, password)
+
+      // Signed in
+      let userCredential = userAuth.user
+    } catch (error) {
+      toast.error(error.message, {
+        bodyClassName: "toastify__error",
+        className: "toastify",
       })
-      .catch((error) => {
-        toast.error(error.message, {
-          bodyClassName: "toastify__error",
-          className: "toastify",
-        })
-      })
+    }
   }
 
   useEffect(() => {
     const unsubscribe = firebase.auth().onAuthStateChanged((user) => {
-      let db = firebase.firestore()
-
       setCurrentUser(user)
       setIsLoading(false)
     })
@@ -181,3 +221,18 @@ export function useAuth() {
       }
       */
 //console.log(user)
+/*
+    firebase
+      .auth()
+      .createUserWithEmailAndPassword(email, password)
+      .then((userCredential) => {
+        // Signed in
+        let user = userCredential.user
+      })
+      .catch((error) => {
+        toast.error(error.message, {
+          bodyClassName: "toastify__error",
+          className: "toastify",
+        })
+      })
+      */

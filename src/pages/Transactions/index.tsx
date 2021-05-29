@@ -8,9 +8,11 @@ import styles from "./styles.module.scss"
 import RoundedButton from "../../components/RoundedButton"
 import NewTransactionModal from "../../components/NewTransactionModal"
 import { useState } from "react"
+import { useTransactions } from "../../hooks/useTransactions"
 
 const Transactions = () => {
   const [modalIsOpen, setIsOpen] = useState(false)
+  const { transactions } = useTransactions()
 
   function handleNewTransactions() {
     setIsOpen(true)
@@ -55,6 +57,31 @@ const Transactions = () => {
             </tr>
           </thead>
           <tbody>
+            {transactions.length > 0 ? (
+              transactions.map((transaction) => (
+                <tr>
+                  <td>{transaction.icon}</td>
+                  <td>{transaction.category}</td>
+                  <td>{transaction.type}</td>
+                  <td>{transaction.date}</td>
+                  <td>€ {transaction.amount}</td>
+                  <td>
+                    <button>
+                      <img src={edit} alt='edit' />
+                    </button>
+                    <button>
+                      <img src={trash} alt='edit' />
+                    </button>
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <span>ADD TRANSACTIONS</span>
+              </tr>
+            )}
+
+            {/*
             <tr>
               <td></td>
               <td>Viagem</td>
@@ -70,51 +97,7 @@ const Transactions = () => {
                 </button>
               </td>
             </tr>
-            <tr>
-              <td></td>
-              <td>Viagem</td>
-              <td>Outcome</td>
-              <td>02/05/2021</td>
-              <td>€ 183,90</td>
-              <td>
-                <button>
-                  <img src={edit} alt='edit' />
-                </button>
-                <button>
-                  <img src={trash} alt='edit' />
-                </button>
-              </td>
-            </tr>
-            <tr>
-              <td></td>
-              <td>Viagem</td>
-              <td>Outcome</td>
-              <td>02/05/2021</td>
-              <td>€ 183,90</td>
-              <td>
-                <button>
-                  <img src={edit} alt='edit' />
-                </button>
-                <button>
-                  <img src={trash} alt='edit' />
-                </button>
-              </td>
-            </tr>
-            <tr>
-              <td></td>
-              <td>Viagem</td>
-              <td>Outcome</td>
-              <td>02/05/2021</td>
-              <td>€ 183,90</td>
-              <td>
-                <button>
-                  <img src={edit} alt='edit' />
-                </button>
-                <button>
-                  <img src={trash} alt='edit' />
-                </button>
-              </td>
-            </tr>
+           */}
           </tbody>
         </table>
       </div>
