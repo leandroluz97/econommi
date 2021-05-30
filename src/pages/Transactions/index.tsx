@@ -7,12 +7,18 @@ import plusImg from "../../assets/plusComponent.svg"
 import styles from "./styles.module.scss"
 import RoundedButton from "../../components/RoundedButton"
 import NewTransactionModal from "../../components/NewTransactionModal"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useTransactions } from "../../hooks/useTransactions"
+import { useCategories } from "../../hooks/useCategories"
 
 const Transactions = () => {
   const [modalIsOpen, setIsOpen] = useState(false)
   const { transactions } = useTransactions()
+  const { getAllCategories, categories } = useCategories()
+
+  useEffect(() => {
+    getAllCategories()
+  }, [categories])
 
   function handleNewTransactions() {
     setIsOpen(true)
@@ -45,22 +51,22 @@ const Transactions = () => {
           </div>
         </div>
 
-        <table className={styles.transactions__table}>
-          <thead>
-            <tr>
-              <th></th>
-              <th>Category</th>
-              <th>Type</th>
-              <th>Date</th>
-              <th>Value</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {transactions.length > 0 ? (
-              transactions.map((transaction) => (
+        {transactions !== null ? (
+          <table className={styles.transactions__table}>
+            <thead>
+              <tr>
+                <th></th>
+                <th>Category</th>
+                <th>Type</th>
+                <th>Date</th>
+                <th>Value</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {transactions.map((transaction) => (
                 <tr>
-                  <td>{transaction.icon}</td>
+                  <td>{/*transaction.icon*/}</td>
                   <td>{transaction.category}</td>
                   <td>{transaction.type}</td>
                   <td>{transaction.date}</td>
@@ -74,32 +80,14 @@ const Transactions = () => {
                     </button>
                   </td>
                 </tr>
-              ))
-            ) : (
-              <tr>
-                <span>ADD TRANSACTIONS</span>
-              </tr>
-            )}
-
-            {/*
-            <tr>
-              <td></td>
-              <td>Viagem</td>
-              <td>Outcome</td>
-              <td>02/05/2021</td>
-              <td>€ 183,90</td>
-              <td>
-                <button>
-                  <img src={edit} alt='edit' />
-                </button>
-                <button>
-                  <img src={trash} alt='edit' />
-                </button>
-              </td>
-            </tr>
-           */}
-          </tbody>
-        </table>
+              ))}
+            </tbody>
+          </table>
+        ) : (
+          <h2 className={styles.transactions__empty}>
+            You don't have any transactions.
+          </h2>
+        )}
       </div>
       <NewTransactionModal modalIsOpen={modalIsOpen} closeModal={closeModal} />
     </>

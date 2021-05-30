@@ -2,8 +2,8 @@
   position: relative;
   padding: 5rem;
 
-  div {
-    margin: 1.5rem 0;
+  > div {
+    margin: 3rem 0;
   }
   &__close {
     position: absolute;
@@ -101,5 +101,11 @@
   }
   .activeOutcome {
     background-color: #f8d8d8;
+  }
+}
+
+@media (max-width: 768px) {
+  .form {
+    padding: 2rem;
   }
 }

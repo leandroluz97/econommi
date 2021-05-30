@@ -15,6 +15,7 @@ import Notifications from "../pages/Notifications"
 import Settings from "../pages/Settings"
 import Share from "../pages/Share"
 import { useUI } from "../hooks/useUi"
+import { TransactionsProvider } from "../hooks/useTransactions"
 
 const Routes = () => {
   const { currentUser } = useAuth()
@@ -30,30 +31,32 @@ const Routes = () => {
 
   if (currentUser) {
     routes = (
-      <div className={styles.layout}>
-        <div
-          className={
-            openMenu
-              ? `${styles.layout__sidebarExpand}`
-              : `${styles.layout__sidebar}`
-          }
-        >
-          <Menu />
+      <TransactionsProvider>
+        <div className={styles.layout}>
+          <div
+            className={
+              openMenu
+                ? `${styles.layout__sidebarExpand}`
+                : `${styles.layout__sidebar}`
+            }
+          >
+            <Menu />
+          </div>
+          <div className={styles.layout__routes}>
+            <MobileMenu />
+            <User />
+            <Switch>
+              <Route exact path='/dashboard' component={Dashboard} />
+              <Route exact path='/transactions' component={Transactions} />
+              <Route exact path='/categories' component={Categories} />
+              <Route exact path='/notifications' component={Notifications} />
+              <Route exact path='/settings' component={Settings} />
+              <Route exact path='/share' component={Share} />
+              <Redirect to='/dashboard' />
+            </Switch>
+          </div>
         </div>
-        <div className={styles.layout__routes}>
-          <MobileMenu />
-          <User />
-          <Switch>
-            <Route exact path='/dashboard' component={Dashboard} />
-            <Route exact path='/transactions' component={Transactions} />
-            <Route exact path='/categories' component={Categories} />
-            <Route exact path='/notifications' component={Notifications} />
-            <Route exact path='/settings' component={Settings} />
-            <Route exact path='/share' component={Share} />
-            <Redirect to='/dashboard' />
-          </Switch>
-        </div>
-      </div>
+      </TransactionsProvider>
     )
   }
   return (

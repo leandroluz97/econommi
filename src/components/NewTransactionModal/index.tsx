@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
 import Modal from "react-modal"
 import Input from "../Input"
@@ -7,11 +7,20 @@ import closeImg from "../../assets/close.svg"
 import incomeImg from "../../assets/income.svg"
 import outcomeImg from "../../assets/outcome.svg"
 import SelectOptions from "../SelectOptions/"
+import { useTransactions } from "../../hooks/useTransactions"
+import { useCategories } from "../../hooks/useCategories"
 
 interface NewTransationTypes {
   amount: string
   category: string
   type: string
+  description: string
+}
+interface Transaction {
+  category: string
+  type: string
+  date: string
+  amount: number
   description: string
 }
 
@@ -24,7 +33,13 @@ const NewTransactionModal = ({
   modalIsOpen,
   closeModal,
 }: NewTransactionModalProps) => {
+  const { addNewTransactions } = useTransactions()
+  const { getAllCategories, categories, defaultCategory } = useCategories()
+
   const [type, setType] = useState("income")
+  const [option, setOption] = useState(defaultCategory)
+
+  useEffect(() => {}, [])
 
   const {
     register,
@@ -34,21 +49,21 @@ const NewTransactionModal = ({
     getValues,
     reset,
   } = useForm<NewTransationTypes>()
-  const options = [
-    { name: "Swedish", value: "sv" },
-    { name: "English", value: "en" },
-    { name: "Spanish", value: "es" },
-    { name: "Swedish", value: "sv" },
-    { name: "English", value: "en" },
-    { name: "Spanish", value: "es" },
-  ]
-
-  const [option, setOption] = useState({ name: "Swedish", value: "sv" })
 
   async function addNewTransaction(data: NewTransationTypes) {
     try {
-      console.log(data)
+      const date = new Date()
+      /*
+      const newTransactions: Transaction = {
+        amount: Number(data.amount),
+        category: option.value,
+        type: type,
+        description: data.description,
+        date: new Intl.DateTimeFormat("pt-PT").format(date),
+      }
 
+      await addNewTransactions(newTransactions)
+*/
       reset()
     } catch (error) {
       console.log(error.message)
@@ -89,7 +104,7 @@ const NewTransactionModal = ({
 
         <div>
           <SelectOptions
-            options={options}
+            options={categories}
             option={option}
             setOption={setOption}
           />

@@ -1,10 +1,22 @@
 import React, { useState } from "react"
 import styles from "./styles.module.scss"
-import close from "../../assets/close.svg"
+import caretdown from "../../assets/caretdown.svg"
 import Modal from "react-modal"
 
-const SelectOptions = ({ options, option, setOption }: any) => {
-  const [ui, setUi] = useState<Boolean>(false)
+type Categories = {
+  name: string
+  type: string
+  color: string
+  icon: string
+  id: string
+}
+interface SelectOptionsProps {
+  options: Categories[]
+  option: Categories
+  setOption: (data: Categories) => void
+}
+
+const SelectOptions = ({ options, option, setOption }: SelectOptionsProps) => {
   const [modalIsOpen, setIsOpen] = useState(false)
 
   function handleClick(option: any) {
@@ -34,15 +46,21 @@ const SelectOptions = ({ options, option, setOption }: any) => {
           overlayClassName='new__overlay'
           contentLabel='Profile Configuration'
         >
-          <ul style={modalIsOpen ? { display: "block" } : { display: "none" }}>
-            {options.map((option: any, index: number) => (
-              <li key={index} onClick={() => handleClick(option)}>
-                {option.name}
+          <ul className={styles.select__options}>
+            {options.map((option) => (
+              <li key={option.id} onClick={() => handleClick(option)}>
+                <span
+                  className={styles.select__icon}
+                  style={{ backgroundColor: `${option.color}` }}
+                >
+                  <img src={option.icon} alt={option.name} />
+                </span>
+                <span>{option.name}</span>
               </li>
             ))}
           </ul>
         </Modal>
-        <img src={close} alt='' />
+        <img src={caretdown} alt='dropdown' onClick={() => openModal()} />
       </div>
     </div>
   )

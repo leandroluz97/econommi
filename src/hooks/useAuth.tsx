@@ -9,6 +9,7 @@ import { toast } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
 
 import firebase from "../config/firebase-config"
+import Categories from "../pages/Categories"
 
 interface AuthProviderType {
   children: ReactNode
@@ -43,20 +44,17 @@ export const AuthProvider = ({ children }: AuthProviderType) => {
 
       let credential = result.credential as firebase.auth.OAuthCredential
 
-      // This gives you a Google Access Token. You can use it to access the Google API.
-      let token = credential.accessToken
       // The signed-in user info.
       let user = result.user
 
+      //get user by email
       let docRef = db.collection("users").doc(user?.email as string)
-      let catRef = db.collection("categories").doc("default")
-
       const doc = await docRef.get()
-      const cat = await catRef.get()
 
+      let catRef = await db.collection("categories").get()
+
+      //check if user exists
       if (!doc.exists) {
-        // doc.data() will be undefined in this case
-
         const ref = db.collection("users")
         let userData = {
           userId: user?.uid,
@@ -65,15 +63,16 @@ export const AuthProvider = ({ children }: AuthProviderType) => {
           displayName: user?.displayName,
         }
 
-        const allCategories = { ...cat.data() }
-
         //create user doc w/ email index
         ref.doc(user?.email as string).set(userData)
-        ref
-          .doc(user?.email as string)
-          .collection("categories")
-          .doc("userCategory")
-          .set(allCategories)
+
+        //add all category to user
+        catRef.forEach((category) => {
+          ref
+            .doc(user?.email as string)
+            .collection("categories")
+            .add(category.data())
+        })
       }
 
       //setCurrentUser(user)
