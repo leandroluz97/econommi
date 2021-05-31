@@ -16,8 +16,17 @@ interface NewTransationTypes {
   type: string
   description: string
 }
-interface Transaction {
-  category: string
+
+type Categories = {
+  name: string
+  type: string
+  color: string
+  icon: string
+  id: string
+}
+
+interface TransactionAdd {
+  category: Categories[]
   type: string
   date: string
   amount: number
@@ -34,12 +43,19 @@ const NewTransactionModal = ({
   closeModal,
 }: NewTransactionModalProps) => {
   const { addNewTransactions } = useTransactions()
-  const { getAllCategories, categories, defaultCategory } = useCategories()
+  const {
+    getAllCategories,
+    categories,
+    defaultCategory,
+    getDefaultCategories,
+  } = useCategories()
 
   const [type, setType] = useState("income")
   const [option, setOption] = useState(defaultCategory)
 
-  useEffect(() => {}, [])
+  useEffect(() => {
+    console.log("yss")
+  }, [])
 
   const {
     register,
@@ -53,18 +69,19 @@ const NewTransactionModal = ({
   async function addNewTransaction(data: NewTransationTypes) {
     try {
       const date = new Date()
-      /*
-      const newTransactions: Transaction = {
+
+      const newTransactions = {
         amount: Number(data.amount),
-        category: option.value,
+        category: [{ ...option }],
         type: type,
         description: data.description,
         date: new Intl.DateTimeFormat("pt-PT").format(date),
-      }
+      } as TransactionAdd
 
       await addNewTransactions(newTransactions)
-*/
+
       reset()
+      closeModal()
     } catch (error) {
       console.log(error.message)
     }

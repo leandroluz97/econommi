@@ -27,6 +27,7 @@ interface ContextProps {
   categories: Categories[]
   getAllCategories: () => Promise<void>
   defaultCategory: Categories
+  getDefaultCategories: () => Promise<void>
 }
 
 //Context
@@ -43,7 +44,7 @@ export const CategoriesProvider = ({ children }: CategoriesProviderType) => {
     ;(async function () {
       await getDefaultCategories()
     })()
-  }, [])
+  }, [defaultCategory])
 
   async function getAllCategories() {
     let db = firebase.firestore()
@@ -71,13 +72,13 @@ export const CategoriesProvider = ({ children }: CategoriesProviderType) => {
       const user = firebase.auth().currentUser
       const email = user?.email as string
 
-      let defaultCategory = await db
+      let defaultCategoryAsync = await db
         .collection("categories")
         .where("name", "==", "Salary")
         .get()
 
       let catDefault = {} as Categories
-      const dat = defaultCategory.forEach((cat) => {
+      const dat = defaultCategoryAsync.forEach((cat) => {
         catDefault = { id: cat.id, ...cat.data() } as Categories
       })
       setDefaultCategory(catDefault)
@@ -86,7 +87,12 @@ export const CategoriesProvider = ({ children }: CategoriesProviderType) => {
 
   return (
     <CategoriesContext.Provider
-      value={{ categories, getAllCategories, defaultCategory }}
+      value={{
+        categories,
+        getAllCategories,
+        defaultCategory,
+        getDefaultCategories,
+      }}
     >
       {children}
     </CategoriesContext.Provider>

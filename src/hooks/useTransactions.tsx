@@ -25,7 +25,7 @@ type Categories = {
 }
 
 interface Transaction {
-  category: Categories
+  category: Categories[]
   type: string
   date: string
   amount: number
@@ -33,7 +33,7 @@ interface Transaction {
   id: string
 }
 type TransactionAdd = {
-  category: Categories
+  category: Categories[]
   type: string
   date: string
   amount: number
@@ -41,7 +41,7 @@ type TransactionAdd = {
 }
 interface ContextProps {
   transactions: Transaction[]
-  addNewTransactions: (data: Transaction) => Promise<void>
+  addNewTransactions: (data: TransactionAdd) => Promise<void>
 }
 
 //Context
@@ -53,9 +53,13 @@ export const TransactionsProvider = ({
 }: TransactionsProviderType) => {
   const [transactions, setTransactions] = useState<Transaction[]>([])
 
-  useEffect(() => {}, [])
+  useEffect(() => {
+    ;(async function () {
+      await getAllTransactions()
+    })()
+  }, [])
 
-  async function getAllCategories() {
+  async function getAllTransactions() {
     let db = firebase.firestore()
     try {
       const user = firebase.auth().currentUser
@@ -67,10 +71,12 @@ export const TransactionsProvider = ({
         .collection("transactions")
         .get()
 
-      let categoriesArray = [] as Categories[]
+      let transactionsArray = [] as Transaction[]
       userTransactions.forEach((snap) => {
-        categoriesArray.push({ ...snap.data(), id: snap.id } as Categories)
+        transactionsArray.push({ ...snap.data(), id: snap.id } as Transaction)
       })
+
+      setTransactions(transactionsArray)
     } catch (error) {}
   }
 
@@ -86,12 +92,12 @@ export const TransactionsProvider = ({
       const newTransaction = await docRef.collection("transactions").add(data)
 
       const newTransactionId = await newTransaction.onSnapshot((doc) => {
-        const transaction = {
+        let transaction = {
           ...doc.data(),
           id: doc.id,
-        }
-
-        //setTransactions(allTransaction)
+        } as Transaction
+        let allTransaction = [...transactions, transaction]
+        setTransactions(allTransaction)
       })
     } catch (error) {
       console.log(error)

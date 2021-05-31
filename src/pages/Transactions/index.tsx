@@ -14,11 +14,17 @@ import { useCategories } from "../../hooks/useCategories"
 const Transactions = () => {
   const [modalIsOpen, setIsOpen] = useState(false)
   const { transactions } = useTransactions()
-  const { getAllCategories, categories } = useCategories()
+  const { getAllCategories, categories, getDefaultCategories } = useCategories()
 
   useEffect(() => {
-    getAllCategories()
-  }, [categories])
+    /*
+    ;(async function () {
+      await getAllCategories()
+      await getDefaultCategories()
+    })()
+    */
+    console.log("Transf")
+  }, [])
 
   function handleNewTransactions() {
     setIsOpen(true)
@@ -65,9 +71,21 @@ const Transactions = () => {
             </thead>
             <tbody>
               {transactions.map((transaction) => (
-                <tr>
-                  <td>{/*transaction.icon*/}</td>
-                  <td>{transaction.category}</td>
+                <tr key={transaction.id}>
+                  <td>
+                    <span
+                      className={styles.transactions__icon}
+                      style={{
+                        backgroundColor: `${transaction.category[0].color}`,
+                      }}
+                    >
+                      <img
+                        src={transaction.category[0].icon}
+                        alt={transaction.category[0].name}
+                      />
+                    </span>
+                  </td>
+                  <td>{transaction.category[0].name}</td>
                   <td>{transaction.type}</td>
                   <td>{transaction.date}</td>
                   <td>€ {transaction.amount}</td>

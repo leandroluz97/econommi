@@ -80,7 +80,18 @@
     font-size: 2.5rem;
     color: var(--gray-450);
   }
+
+  &__icon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 40px;
+    width: 40px;
+    background-color: red;
+    border-radius: 100px;
+  }
 }
+
 @media (max-width: 768px) {
   .transactions {
     margin: 3rem;
