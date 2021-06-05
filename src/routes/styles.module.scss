@@ -22,6 +22,8 @@
 
 @media (max-width: 768px) {
   .layout {
+ overflow-y: scroll;
+  
     &__routes {
       margin: 0;
       width: 100%;

@@ -1,4 +1,4 @@
-import React, { FormEvent, useState } from "react"
+import React, { FormEvent, useEffect, useState } from "react"
 import Input from "../Input"
 import SliderButtons from "../SliderButtons"
 import styles from "./styles.module.scss"
@@ -19,6 +19,12 @@ const Signin = () => {
     handleSubmit,
     formState: { errors },
   } = useForm<SigninState>()
+
+  useEffect(()=>{
+
+    console.log('signin');
+    
+  },[])
 
   const { passwordEye } = useUI()
   const { onSubmitGmail, onSigninPassword } = useAuth()

@@ -15,6 +15,11 @@ import { useLocation } from "react-router-dom"
 const MobileMenu = () => {
   const { page, setPage } = useUI()
 
+  useEffect(()=> {
+    console.log('mobile');
+    
+  },[])
+
   return (
     <div className={styles.mobileMenu}>
       <ul>

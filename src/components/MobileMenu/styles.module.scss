@@ -9,10 +9,12 @@
     justify-content: space-between;
     align-items: center;
     position: absolute;
+    z-index: 999;
     bottom: 0;
     width: 100%;
     height: 8rem;
     padding: 0 1.5rem;
+    border-top: solid 1px var(--gray-300);
 
     ul {
       display: flex;

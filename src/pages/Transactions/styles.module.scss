@@ -8,12 +8,26 @@
     }
   }
 
+  &__infos{
+    display: flex;
+  }
+
+  &__cards{
+    width: 25%;
+    margin-top: 3rem;
+    margin-left: 2.5rem;
+  }
   table {
     width: 100%;
     border-spacing: 0 1rem;
     margin-top: 2rem;
 
     thead {
+
+      display: table;
+      width: 100%;
+      table-layout: fixed;
+
       th {
         background-color: var(--green);
         padding: 1rem;
@@ -36,7 +50,21 @@
       }
     }
     tbody {
+      display: block;
+      max-height: 450px;
+      overflow-y: scroll;
+      padding: 0.5rem;
+
       tr {
+
+        margin: 1rem 0;
+        
+        display: table;
+        width: 100%;
+        table-layout: fixed;
+
+        border-radius: 10px;
+
         background-color: var(--white);
         filter: drop-shadow(0px 1px 1px rgba(0, 0, 0, 0.15));
         transition: all 0.3s ease;
@@ -47,12 +75,15 @@
       }
 
       td {
-        padding: 1rem 1rem;
+        padding: 0rem 1rem;
         font-family: Roboto;
         font-style: normal;
         font-weight: normal;
         font-size: 1.6rem;
         color: var(--gray-500);
+        min-width: 7.5rem;
+        overflow: hidden;
+        text-overflow: ellipsis;
 
         &:first-child {
           border-top-left-radius: 13px;
@@ -96,7 +127,26 @@
   .transactions {
     margin: 3rem;
 
+    &__infos{
+      display: flex;
+      flex-direction: column;
+    }
+  
+    &__cards{
+      width: 100%;
+      margin-top: 3rem;
+      margin-left: 0rem;
+      order: 1;
+    }
     table {
+      order: 2;
+
+      tbody{
+        display: block;
+        height: 100vh;
+        overflow-y: visible;
+        padding: 0.5rem;
+      }
     }
   }
 }

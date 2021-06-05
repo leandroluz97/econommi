@@ -14,7 +14,6 @@ import firebase from "../config/firebase-config"
 interface TransactionsProviderType {
   children: ReactNode
 }
-interface User {}
 
 type Categories = {
   name: string
@@ -27,7 +26,7 @@ type Categories = {
 interface Transaction {
   category: Categories[]
   type: string
-  date: string
+  createdAt: string
   amount: number
   description: string
   id: string
@@ -35,13 +34,17 @@ interface Transaction {
 type TransactionAdd = {
   category: Categories[]
   type: string
-  date: string
+  createdAt: string
   amount: number
   description: string
 }
 interface ContextProps {
   transactions: Transaction[]
   addNewTransactions: (data: TransactionAdd) => Promise<void>
+  deleteTransaction:(id: string) => Promise<void>
+  editTransaction:(id:string)=>void
+  editStorage:Transaction
+  updateTransaction:(data: TransactionAdd) => Promise<void>
 }
 
 //Context
@@ -52,6 +55,7 @@ export const TransactionsProvider = ({
   children,
 }: TransactionsProviderType) => {
   const [transactions, setTransactions] = useState<Transaction[]>([])
+  const [editStorage, setEditStorage] = useState<Transaction>({} as Transaction)
 
   useEffect(() => {
     ;(async function () {
@@ -69,6 +73,7 @@ export const TransactionsProvider = ({
         .collection("users")
         .doc(email)
         .collection("transactions")
+        .orderBy('createdAt','desc')
         .get()
 
       let transactionsArray = [] as Transaction[]
@@ -91,14 +96,53 @@ export const TransactionsProvider = ({
 
       const newTransaction = await docRef.collection("transactions").add(data)
 
-      const newTransactionId = await newTransaction.onSnapshot((doc) => {
-        let transaction = {
-          ...doc.data(),
-          id: doc.id,
-        } as Transaction
-        let allTransaction = [...transactions, transaction]
+      const newTransactionId = await newTransaction.get()
+
+      let transaction = {
+          ...newTransactionId.data(),
+          id: newTransactionId.id,
+      } as Transaction
+        
+        let allTransaction = [transaction, ...transactions]
+        
         setTransactions(allTransaction)
+
+        toast.success('Transaction Added! 😉', {
+          bodyClassName: "toastify",
+          className: "toastify__success",
+        })
+        
+    } catch (error) {
+      console.log(error)
+
+      toast.error(error.message, {
+        bodyClassName: "toastify__error",
+        className: "toastify",
       })
+    }
+  }
+  async function deleteTransaction(id: string) {
+    let db = firebase.firestore()
+
+    try {
+      const user = firebase.auth().currentUser
+      const email = user?.email as string
+
+      let docRef = db.collection("users").doc(email)
+
+      const deleteTransaction = await docRef.collection("transactions").doc(id).delete()
+
+      const allTransaction = transactions.filter(transaction=>transaction.id !== id)
+
+      console.log('deleted one', allTransaction);
+      
+      setTransactions(allTransaction)
+
+      toast.success('Transaction deleted 😉', {
+        bodyClassName: "toastify",
+        className: "toastify__success",
+      })
+     
     } catch (error) {
       console.log(error)
 
@@ -109,8 +153,49 @@ export const TransactionsProvider = ({
     }
   }
 
+
+  function editTransaction(id:string){
+    const editTransaction = transactions.find(transaction => transaction.id  === id)
+    if (editTransaction) {
+      setEditStorage(editTransaction)
+    }
+  }
+
+  async function updateTransaction(data:TransactionAdd){
+    let db = firebase.firestore()
+
+    try {
+
+      const user = firebase.auth().currentUser
+      const email = user?.email as string
+
+      let docRef = db.collection("users").doc(email)
+
+      const updatedTransaction = await docRef.collection("transactions")
+                            .doc(editStorage.id).set(data)
+        
+        let allTransaction = transactions.map((trans=>{
+          if (trans.id === editStorage.id) {
+            return {id:editStorage.id, ...data}
+          }
+
+          return trans
+        })) as Transaction[]
+        
+        setTransactions(allTransaction)
+      
+    } catch (error) {
+      toast.error(error.message, {
+        bodyClassName: "toastify__error",
+        className: "toastify",
+      })
+    }
+    
+  }
+
+
   return (
-    <TransactionsContext.Provider value={{ transactions, addNewTransactions }}>
+    <TransactionsContext.Provider value={{ transactions, addNewTransactions, deleteTransaction,editTransaction,editStorage,updateTransaction }}>
       {children}
     </TransactionsContext.Provider>
   )

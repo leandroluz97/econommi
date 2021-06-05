@@ -28,6 +28,8 @@ interface ContextProps {
   getAllCategories: () => Promise<void>
   defaultCategory: Categories
   getDefaultCategories: () => Promise<void>
+  option: Categories
+  setOption: (option:Categories) => void
 }
 
 //Context
@@ -39,12 +41,15 @@ export const CategoriesProvider = ({ children }: CategoriesProviderType) => {
   const [defaultCategory, setDefaultCategory] = useState<Categories>(
     {} as Categories
   )
+  const [option, setOption] = useState<Categories>({}as Categories)
 
   useEffect(() => {
+  
     ;(async function () {
       await getDefaultCategories()
     })()
-  }, [defaultCategory])
+    
+  }, [])
 
   async function getAllCategories() {
     let db = firebase.firestore()
@@ -62,6 +67,7 @@ export const CategoriesProvider = ({ children }: CategoriesProviderType) => {
       userCategories.forEach((snap) => {
         categoriesArray.push({ ...snap.data(), id: snap.id } as Categories)
       })
+      
       setCategories(categoriesArray)
     } catch (error) {}
   }
@@ -78,9 +84,11 @@ export const CategoriesProvider = ({ children }: CategoriesProviderType) => {
         .get()
 
       let catDefault = {} as Categories
-      const dat = defaultCategoryAsync.forEach((cat) => {
+        defaultCategoryAsync.forEach((cat) => {
         catDefault = { id: cat.id, ...cat.data() } as Categories
       })
+      
+      setOption(catDefault)
       setDefaultCategory(catDefault)
     } catch (error) {}
   }
@@ -92,6 +100,8 @@ export const CategoriesProvider = ({ children }: CategoriesProviderType) => {
         getAllCategories,
         defaultCategory,
         getDefaultCategories,
+        option,
+        setOption,
       }}
     >
       {children}

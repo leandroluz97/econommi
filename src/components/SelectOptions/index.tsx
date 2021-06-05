@@ -35,6 +35,9 @@ const SelectOptions = ({ options, option, setOption }: SelectOptionsProps) => {
   function closeModal() {
     setIsOpen(false)
   }
+
+ 
+  
   return (
     <div className={styles.backdrop}>
       <div className={styles.select}>

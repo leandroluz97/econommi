@@ -23,6 +23,7 @@
   --gray-500: #72818d;
   --gray-550: #959595;
   --gray-600: #7d7d7d;
+  --gray-900: #434343;
 
   --red-100: #f46f6f;
   --red-200: #cb4848;
@@ -61,10 +62,15 @@ body {
 }
 
 .toastify {
-  background-color: #e43333 !important;
   color: white !important;
+  font-size: 1.5rem;
+
   &__error {
-    font-size: 1.5rem;
+    background-color: #e43333 !important;
+  }
+
+  &__success {
+    background-color: #335adc !important;
   }
 }
 

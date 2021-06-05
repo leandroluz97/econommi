@@ -1,4 +1,4 @@
-import plusComponent from "../../assets/plusComponent.svg"
+
 import filterImg from "../../assets/filter.svg"
 import searchImg from "../../assets/search.svg"
 import trash from "../../assets/trash.svg"
@@ -10,11 +10,20 @@ import NewTransactionModal from "../../components/NewTransactionModal"
 import { useEffect, useState } from "react"
 import { useTransactions } from "../../hooks/useTransactions"
 import { useCategories } from "../../hooks/useCategories"
+import EditTransactionModal from "../../components/EditTransactionModal"
+import AmountCard from "../../components/AmountCard"
+import currency from '../../utils/currency'
+
+import expenses from '../../assets/expenses.svg'
+import current from '../../assets/current.svg'
+import revenue from '../../assets/revenue.svg'
+
 
 const Transactions = () => {
-  const [modalIsOpen, setIsOpen] = useState(false)
-  const { transactions } = useTransactions()
-  const { getAllCategories, categories, getDefaultCategories } = useCategories()
+  const [modalIsOpenAdd, setIsOpenAdd] = useState(false)
+  const [modalIsOpenEdit, setIsOpenEdit] = useState(false)
+  const { transactions, deleteTransaction,editTransaction } = useTransactions()
+  
 
   useEffect(() => {
     /*
@@ -23,40 +32,58 @@ const Transactions = () => {
       await getDefaultCategories()
     })()
     */
-    console.log("Transf")
+    console.log(transactions);
   }, [])
 
-  function handleNewTransactions() {
-    setIsOpen(true)
+
+  const transactionInfo = transactions.reduce((acc, value)=>{
+      if(value.type==='income'){
+        acc.income += value.amount
+      }else{
+        acc.expenses += value.amount
+      }
+      acc.total += value.amount
+
+      return acc
+  },{total:0, expenses:0, income:0})
+  
+  function handleNewTransaction() {
+    setIsOpenAdd(true)
+  }
+  function handleEditTransaction(id:string) {
+
+    editTransaction(id)
+    setIsOpenEdit(true)
   }
 
-  function openModal() {
-    setIsOpen(true)
+  function closeModalAdd() {
+    setIsOpenAdd(false)
+  }
+  function closeModalEdit() {
+    setIsOpenEdit(false)
   }
 
-  function closeModal() {
-    setIsOpen(false)
-  }
+  
   return (
     <>
       <div className={styles.transactions}>
         <div className={styles.transactions__buttons}>
           <div>
-            <RoundedButton handleClick={handleNewTransactions} img={plusImg} />
+            <RoundedButton handleClick={handleNewTransaction} img={plusImg} />
           </div>
 
           <div>
             <RoundedButton
-              handleClick={handleNewTransactions}
+              handleClick={handleNewTransaction}
               img={searchImg}
             />
             <RoundedButton
-              handleClick={handleNewTransactions}
+              handleClick={handleNewTransaction}
               img={filterImg}
             />
           </div>
         </div>
-
+        <div className={styles.transactions__infos} >
         {transactions !== null ? (
           <table className={styles.transactions__table}>
             <thead>
@@ -87,13 +114,13 @@ const Transactions = () => {
                   </td>
                   <td>{transaction.category[0].name}</td>
                   <td>{transaction.type}</td>
-                  <td>{transaction.date}</td>
-                  <td>€ {transaction.amount}</td>
+                  <td>{transaction.createdAt}</td>
+                  <td>{currency(transaction.amount)}</td>
                   <td>
-                    <button>
+                    <button onClick={()=>handleEditTransaction(transaction.id)}>
                       <img src={edit} alt='edit' />
                     </button>
-                    <button>
+                    <button onClick={()=>deleteTransaction(transaction.id)}>
                       <img src={trash} alt='edit' />
                     </button>
                   </td>
@@ -106,8 +133,21 @@ const Transactions = () => {
             You don't have any transactions.
           </h2>
         )}
+      <div className={styles.transactions__cards}>
+          <AmountCard type='Current Balance' amount={transactionInfo.total} img={current}/>
+          <AmountCard type='Income' amount={transactionInfo.income} img={revenue}/>
+          <AmountCard type='Expenses' amount={transactionInfo.expenses} img={expenses}/>
       </div>
-      <NewTransactionModal modalIsOpen={modalIsOpen} closeModal={closeModal} />
+        
+        </div>
+      </div>
+
+
+      <NewTransactionModal modalIsOpen={modalIsOpenAdd} closeModal={closeModalAdd} />
+      {
+        modalIsOpenEdit&&(<EditTransactionModal modalIsOpen={modalIsOpenEdit} closeModal={closeModalEdit} />)
+      }
+      
     </>
   )
 }

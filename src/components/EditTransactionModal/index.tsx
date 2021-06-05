@@ -10,7 +10,7 @@ import SelectOptions from "../SelectOptions/"
 import { useTransactions } from "../../hooks/useTransactions"
 import { useCategories } from "../../hooks/useCategories"
 
-interface NewTransationTypes {
+interface EditTransationTypes {
   amount: string
   category: string
   type: string
@@ -25,7 +25,7 @@ type Categories = {
   id: string
 }
 
-interface TransactionAdd {
+interface TransactionEdit {
   category: Categories[]
   type: string
   createdAt: string
@@ -33,28 +33,35 @@ interface TransactionAdd {
   description: string
 }
 
-interface NewTransactionModalProps {
+interface EditTransactionModalProps {
   modalIsOpen: boolean
   closeModal: () => void
 }
 
-const NewTransactionModal = ({
+const EditTransactionModal = ({
   modalIsOpen,
   closeModal,
-}: NewTransactionModalProps) => {
-  const { addNewTransactions } = useTransactions()
+}: EditTransactionModalProps) => {
+  const { updateTransaction, editStorage } = useTransactions()
   
   const {
     getAllCategories,
     categories,
-    defaultCategory,
     getDefaultCategories,
-    option,
-    setOption
   } = useCategories()
 
-  const [type, setType] = useState("income")
-  
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    setValue,
+    reset,
+  } = useForm<EditTransationTypes>()
+
+  const [category] = editStorage.category
+
+  const [type, setType] = useState(editStorage.type)
+  const [option, setOption] = useState(category)
 
   useEffect(() => {
     
@@ -62,31 +69,25 @@ const NewTransactionModal = ({
       await getAllCategories()
       await getDefaultCategories()
     })()
+    setValue('amount', String(editStorage.amount), { shouldValidate: true })
+    setValue('description', editStorage.description, { shouldValidate: true })
     
   }, [])
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    reset,
-  } = useForm<NewTransationTypes>()
 
-  async function addNewTransaction(data: NewTransationTypes) {
+  async function updatedTransaction(data: EditTransationTypes) {
     try {
       const date = new Date()
 
-      const newTransactions = {
+      const updatedTransactions = {
         amount: Number(data.amount),
         category: [{ ...option }],
         type: type,
         description: data.description,
-        createdAt: new Intl.DateTimeFormat("pt-PT").format(date),
-      } as TransactionAdd
+        createdAt: editStorage.createdAt,
+      } as TransactionEdit
 
-   
-      
-      await addNewTransactions(newTransactions)
+      await updateTransaction(updatedTransactions)
 
       reset()
       closeModal()
@@ -103,7 +104,7 @@ const NewTransactionModal = ({
       overlayClassName='global__overlay'
       contentLabel='Profile Configuration'
     >
-      <form className={styles.form} onSubmit={handleSubmit(addNewTransaction)}>
+      <form className={styles.form} onSubmit={handleSubmit(updatedTransaction)}>
         <img
           src={closeImg}
           alt='close'
@@ -111,16 +112,18 @@ const NewTransactionModal = ({
           onClick={() => closeModal()}
         />
 
-        <h2>New Transaction</h2>
+        <h2>Edit Transaction</h2>
 
         <Input
           property={register("amount", {
             required: "Invalid amount",
             minLength: {
-              value: 1,
-              message: "Entre a valid amount",
+              value: 2,
+              message: "Must have 8 characters",
             },
+
           })}
+         
           label='Amount'
           type='number'
           error={errors.amount}
@@ -182,4 +185,4 @@ const NewTransactionModal = ({
   )
 }
 
-export default NewTransactionModal
+export default EditTransactionModal

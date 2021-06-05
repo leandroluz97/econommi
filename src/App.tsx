@@ -5,8 +5,8 @@ import Routes from "./routes"
 import { UiProvider } from "./hooks/useUi"
 import { AuthProvider } from "./hooks/useAuth"
 import Modal from "react-modal"
-import { TransactionsProvider } from "./hooks/useTransactions"
 import { CategoriesProvider } from "./hooks/useCategories"
+
 
 Modal.setAppElement("#root")
 

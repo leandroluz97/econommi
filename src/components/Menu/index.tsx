@@ -25,7 +25,7 @@ const Menu = () => {
 
   useEffect(() => {
     const pathname = location.pathname.slice(1)
-
+    
     setPage(pathname)
   }, [location])
 

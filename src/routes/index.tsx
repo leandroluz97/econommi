@@ -47,11 +47,11 @@ const Routes = () => {
             <User />
             <Switch>
               <Route exact path='/dashboard' component={Dashboard} />
-              <Route exact path='/transactions' component={Transactions} />
-              <Route exact path='/categories' component={Categories} />
-              <Route exact path='/notifications' component={Notifications} />
-              <Route exact path='/settings' component={Settings} />
-              <Route exact path='/share' component={Share} />
+              <Route  path='/transactions' component={Transactions} />
+              <Route  path='/categories' component={Categories} />
+              <Route  path='/notifications' component={Notifications} />
+              <Route  path='/settings' component={Settings} />
+              <Route  path='/share' component={Share} />
               <Redirect to='/dashboard' />
             </Switch>
           </div>
