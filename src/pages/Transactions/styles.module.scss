@@ -1,10 +1,26 @@
 .transactions {
+
+  >h2{
+    font-size: 2.6rem;
+    color: var(--gray-900);
+    font-weight: 700;
+    margin-bottom: 2rem;
+  }
+  
   &__buttons {
     display: flex;
     justify-content: space-between;
+    align-items: center;
 
     div:last-child button:last-child {
       margin-left: 2rem;
+    }
+
+    div:last-child{
+      display: flex;
+      width: 50%;
+      justify-content: space-between;
+      align-items: center;
     }
   }
 
@@ -17,13 +33,13 @@
     margin-top: 3rem;
     margin-left: 2.5rem;
   }
+
   table {
     width: 100%;
     border-spacing: 0 1rem;
     margin-top: 2rem;
 
     thead {
-
       display: table;
       width: 100%;
       table-layout: fixed;
@@ -110,6 +126,7 @@
     text-align: center;
     font-size: 2.5rem;
     color: var(--gray-450);
+    width: 100%;
   }
 
   &__icon {
@@ -125,11 +142,25 @@
 
 @media (max-width: 768px) {
   .transactions {
-    margin: 3rem;
+    margin: 2rem;
 
     &__infos{
       display: flex;
       flex-direction: column;
+    }
+
+    &__buttons {
+      div:last-child button:last-child {
+        margin-left: 1rem;
+      }
+
+      div:first-child{
+      margin-right: 1rem;
+      }
+  
+      div:last-child{
+        width: 90%;
+      }
     }
   
     &__cards{
@@ -140,12 +171,14 @@
     }
     table {
       order: 2;
+      margin-bottom: 100px;
 
       tbody{
         display: block;
-        height: 100vh;
         overflow-y: visible;
         padding: 0.5rem;
+        margin-bottom: 100px;
+       
       }
     }
   }
@@ -153,25 +186,34 @@
 
 @media (max-width: 649px) {
   .transactions {
-    table {
-      thead {
-        th {
-          font-size: 1.4rem;
+
+    table{
+      thead{
+        th:nth-child(3){
+          display: none;
+        }
+        th:nth-child(4){
+          display: none;
+        }
+        th:nth-child(6){
+          text-align: left;
+        }
+      }
+      tbody{
+        td:nth-child(3){
+          display: none;
+        }
+        td:nth-child(4){
+          display: none;
         }
 
-        th:nth-child(3) {
-          display: none;
-        }
-        th:nth-child(4) {
-          display: none;
-        }
-      }
-      td:nth-child(3) {
-        display: none;
-      }
-      td:nth-child(4) {
-        display: none;
+        margin-bottom: 350px;
       }
     }
+  }
+}
+
+@media (max-width: 460px) {
+  .transactions {
   }
 }

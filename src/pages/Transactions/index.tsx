@@ -7,9 +7,8 @@ import plusImg from "../../assets/plusComponent.svg"
 import styles from "./styles.module.scss"
 import RoundedButton from "../../components/RoundedButton"
 import NewTransactionModal from "../../components/NewTransactionModal"
-import { useEffect, useState } from "react"
+import { ChangeEvent, useEffect, useState } from "react"
 import { useTransactions } from "../../hooks/useTransactions"
-import { useCategories } from "../../hooks/useCategories"
 import EditTransactionModal from "../../components/EditTransactionModal"
 import AmountCard from "../../components/AmountCard"
 import currency from '../../utils/currency'
@@ -17,11 +16,13 @@ import currency from '../../utils/currency'
 import expenses from '../../assets/expenses.svg'
 import current from '../../assets/current.svg'
 import revenue from '../../assets/revenue.svg'
+import RoundedSearch from "../../components/RoundedSearch"
 
 
 const Transactions = () => {
   const [modalIsOpenAdd, setIsOpenAdd] = useState(false)
   const [modalIsOpenEdit, setIsOpenEdit] = useState(false)
+  const [search, setSearch]=useState('')
   const { transactions, deleteTransaction,editTransaction } = useTransactions()
   
 
@@ -42,10 +43,12 @@ const Transactions = () => {
       }else{
         acc.expenses += value.amount
       }
-      acc.total += value.amount
+      
 
       return acc
-  },{total:0, expenses:0, income:0})
+  },{ expenses:0, income:0})
+
+  const total = transactionInfo.income - transactionInfo.expenses
   
   function handleNewTransaction() {
     setIsOpenAdd(true)
@@ -62,29 +65,37 @@ const Transactions = () => {
   function closeModalEdit() {
     setIsOpenEdit(false)
   }
+  function handleSearchTransaction(event:ChangeEvent<HTMLInputElement>) {
+    setSearch(event.target.value)
+  }
 
-  
+  const searched = transactions.filter((transaction) => transaction.category[0].name.toLowerCase().includes(search))
   return (
     <>
       <div className={styles.transactions}>
+        <h2>Transactions</h2>
         <div className={styles.transactions__buttons}>
           <div>
-            <RoundedButton handleClick={handleNewTransaction} img={plusImg} />
+            <RoundedButton handleClick={handleNewTransaction} img={plusImg} textAlt='Plus icon' />
           </div>
 
           <div>
-            <RoundedButton
-              handleClick={handleNewTransaction}
+            <RoundedSearch
+              handleChange={handleSearchTransaction}
               img={searchImg}
+              textAlt='filter icon'
+              search={search}
+              placeholder='Search by category'
             />
             <RoundedButton
               handleClick={handleNewTransaction}
               img={filterImg}
+              textAlt='filter icon'
             />
           </div>
         </div>
         <div className={styles.transactions__infos} >
-        {transactions !== null ? (
+        {transactions.length > 1 ? (
           <table className={styles.transactions__table}>
             <thead>
               <tr>
@@ -97,7 +108,7 @@ const Transactions = () => {
               </tr>
             </thead>
             <tbody>
-              {transactions.map((transaction) => (
+              {searched.map((transaction) => (
                 <tr key={transaction.id}>
                   <td>
                     <span
@@ -129,15 +140,15 @@ const Transactions = () => {
             </tbody>
           </table>
         ) : (
-          <h2 className={styles.transactions__empty}>
+          <h3 className={styles.transactions__empty}>
             You don't have any transactions.
-          </h2>
+          </h3>
         )}
-      <div className={styles.transactions__cards}>
-          <AmountCard type='Current Balance' amount={transactionInfo.total} img={current}/>
+      {transactions.length > 1 &&(<div className={styles.transactions__cards}>
+          <AmountCard type='Current Balance' amount={total} img={current}/>
           <AmountCard type='Income' amount={transactionInfo.income} img={revenue}/>
           <AmountCard type='Expenses' amount={transactionInfo.expenses} img={expenses}/>
-      </div>
+      </div>)}
         
         </div>
       </div>

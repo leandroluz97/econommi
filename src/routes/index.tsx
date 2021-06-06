@@ -42,8 +42,9 @@ const Routes = () => {
           >
             <Menu />
           </div>
+          <MobileMenu />
           <div className={styles.layout__routes}>
-            <MobileMenu />
+            
             <User />
             <Switch>
               <Route exact path='/dashboard' component={Dashboard} />
