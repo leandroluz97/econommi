@@ -1,10 +1,11 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import RoundedButton from "../../components/RoundedButton"
 import styles from './styles.module.scss'
 import plusImg from "../../assets/plusComponent.svg"
 import filterImg from "../../assets/filter.svg"
 import { useTransactions } from "../../hooks/useTransactions"
 import { useCategories } from "../../hooks/useCategories"
+import NewCategoryModal from "../../components/NewCategoryModal"
 
 
 const Categories = () => {
@@ -12,14 +13,20 @@ const Categories = () => {
   const [modalIsOpenAdd, setIsOpenAdd] = useState(false)
   const [modalIsOpenEdit, setIsOpenEdit] = useState(false)
   const { transactions, deleteTransaction,editTransaction } = useTransactions()
-  const { categories} = useCategories()
+  const { categories,getAllCategories} = useCategories()
 
-  function handleNewTransaction() {
+  useEffect(() => {
+   (async function () {
+     await getAllCategories()
+   })()
+  }, [])
+
+  function handleNewCategory() {
     setIsOpenAdd(true)
   }
-  function handleEditTransaction(id:string) {
+  function handleEditCategory(id:string) {
 
-    
+
     setIsOpenEdit(true)
   }
 
@@ -35,7 +42,7 @@ const Categories = () => {
       <h2>Categories</h2>
       <div className={styles.categories__buttons}>
         <div>
-          <RoundedButton handleClick={handleNewTransaction} img={plusImg} textAlt='Plus icon' />
+          <RoundedButton handleClick={handleNewCategory} img={plusImg} textAlt='Plus icon' />
         </div>
       </div>
       <div className={styles.categories__infos} >
@@ -82,14 +89,10 @@ const Categories = () => {
           You don't have any transactions.
         </h3>
       )}
-   
-      
       </div>
     </div>
-
-
     
-    
+    <NewCategoryModal modalIsOpen={modalIsOpenAdd} closeModal={closeModalAdd} />
   </>
 )
 }

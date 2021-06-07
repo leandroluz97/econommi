@@ -10,11 +10,11 @@ import SelectOptions from "../SelectOptions/"
 import { useTransactions } from "../../hooks/useTransactions"
 import { useCategories } from "../../hooks/useCategories"
 
-interface NewTransationTypes {
-  amount: string
-  category: string
+interface NewCategoryTypes {
+  name: string
+  color: string
   type: string
-  description: string
+  icon: string
 }
 
 type Categories = {
@@ -25,23 +25,22 @@ type Categories = {
   id: string
 }
 
-interface TransactionAdd {
-  category: Categories[]
+interface CategoryAdd {
+  name:string
   type: string
-  createdAt: string
-  amount: number
-  description: string
+  color:string
+  icon:string
 }
 
-interface NewTransactionModalProps {
+interface NewCategoryModalProps {
   modalIsOpen: boolean
   closeModal: () => void
 }
 
-const NewTransactionModal = ({
+const NewCategoryModal = ({
   modalIsOpen,
   closeModal,
-}: NewTransactionModalProps) => {
+}: NewCategoryModalProps) => {
   const { addNewTransactions } = useTransactions()
   
   const {
@@ -59,8 +58,10 @@ const NewTransactionModal = ({
   useEffect(() => {
     
     (async function () {
+      /*
       await getAllCategories()
       await getDefaultCategories()
+      */
     })()
     
   }, [])
@@ -70,23 +71,23 @@ const NewTransactionModal = ({
     handleSubmit,
     formState: { errors },
     reset,
-  } = useForm<NewTransationTypes>()
+  } = useForm<NewCategoryTypes>()
 
-  async function addNewTransaction(data: NewTransationTypes) {
+  async function addNewCategory(data: NewCategoryTypes) {
     try {
       const date = new Date()
 
-      const newTransactions = {
-        amount: Number(data.amount),
-        category: [{ ...option }],
+      const category = {
+        name: data.name,
         type: type,
-        description: data.description,
-        createdAt: new Intl.DateTimeFormat("pt-PT").format(date),
-      } as TransactionAdd
+        color: data.color,
+        icon: data.icon
+      
+      } as CategoryAdd
 
    
       
-      await addNewTransactions(newTransactions)
+      //await addNewTransactions(newTransactions)
 
       reset()
       closeModal()
@@ -103,7 +104,7 @@ const NewTransactionModal = ({
       overlayClassName='global__overlay'
       contentLabel='Profile Configuration'
     >
-      <form className={styles.form} onSubmit={handleSubmit(addNewTransaction)}>
+      <form className={styles.form} onSubmit={handleSubmit(addNewCategory)}>
         <img
           src={closeImg}
           alt='close'
@@ -111,29 +112,21 @@ const NewTransactionModal = ({
           onClick={() => closeModal()}
         />
 
-        <h2>New Transaction</h2>
+        <h2>New Category</h2>
 
         <Input
-          property={register("amount", {
-            required: "Invalid amount",
+          property={register("name", {
+            required: "Invalid Name",
             minLength: {
-              value: 1,
-              message: "Entre a valid amount",
+              value: 4,
+              message: "Must have 4 characters",
             },
           })}
-          label='Amount'
-          type='number'
-          error={errors.amount}
-          name='amount'
+          label='Name'
+          type='text'
+          error={errors.name}
+          name='firstName'
         />
-
-        <div>
-         <SelectOptions
-            options={categories}
-            option={option}
-            setOption={setOption}
-         /> 
-        </div>
 
         <div className={styles.form__buttons}>
           <div
@@ -160,19 +153,7 @@ const NewTransactionModal = ({
           </div>
         </div>
 
-        <Input
-          property={register("description", {
-            required: "Invalid Description",
-            minLength: {
-              value: 2,
-              message: "Must have 8 characters",
-            },
-          })}
-          label='Description'
-          type='text'
-          error={errors.description}
-          name='firstName'
-        />
+        
 
         <div className={styles.form__submit}>
           <input type='submit' value='Add New Transactions' />
@@ -182,4 +163,4 @@ const NewTransactionModal = ({
   )
 }
 
-export default NewTransactionModal
+export default NewCategoryModal
