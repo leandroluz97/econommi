@@ -16,7 +16,7 @@ const MobileMenu = () => {
   const { page, setPage } = useUI()
 
   useEffect(()=> {
-    console.log('mobile');
+    //console.log('mobile');
     
   },[])
 

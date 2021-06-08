@@ -44,7 +44,7 @@ const Categories = () => {
         </div>
       </div>
       <div className={styles.categories__infos} >
-      {transactions.length > 0 ? (
+      {transactions.length > 1 ? (
         <table className={styles.categories__table}>
           <thead>
             <tr>
@@ -83,7 +83,7 @@ const Categories = () => {
           </tbody>
         </table>
       ) : (
-        <h3 className={styles.transactions__empty}>
+        <h3 className={styles.categories__empty}>
           You don't have any transactions.
         </h3>
       )}

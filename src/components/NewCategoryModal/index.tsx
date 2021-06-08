@@ -49,19 +49,23 @@ const NewCategoryModal = ({
     defaultCategory,
     getDefaultCategories,
     option,
-    setOption
+    setOption,
+    getAllCategoriesPlus,
+    colors,
+    icons
   } = useCategories()
 
   const [type, setType] = useState("income")
+  const [colorChosen, setColorChosen] = useState(colors[0]?.color)
+  const [iconChosen, setIconChosen] = useState(icons[0]?.icon)
   
 
   useEffect(() => {
     
     (async function () {
-      /*
-      await getAllCategories()
-      await getDefaultCategories()
-      */
+      
+      await getAllCategoriesPlus()
+    
     })()
     
   }, [])
@@ -96,6 +100,9 @@ const NewCategoryModal = ({
     }
   }
 
+  
+  
+
   return (
     <Modal
       isOpen={modalIsOpen}
@@ -127,6 +134,35 @@ const NewCategoryModal = ({
           error={errors.name}
           name='firstName'
         />
+
+        <div className={styles.form__colors}>
+          {
+              colors.map(color=>(
+                <div key={color.id}  
+                className={colorChosen===color.color? `${styles.form__color} 
+                ${styles.form__colorActive}`: `${styles.form__color}`} 
+                onClick={()=>setColorChosen(color.color)}
+                
+                style={{
+                  backgroundColor: `${color.id}`,
+                }}></div>
+              ))
+          }
+        </div>
+
+        <div className={styles.form__icons}>
+          {
+              icons.map(icon=>(
+                <div key={icon.id}  
+                className={iconChosen===icon.icon? `${styles.form__icon} 
+                ${styles.form__colorActive}`: `${styles.form__icon}`}
+                onClick={()=>setIconChosen(icon.icon)}
+                >
+                  <img src={icon.icon} alt="default" />
+                </div>
+              ))
+          }
+        </div>
 
         <div className={styles.form__buttons}>
           <div

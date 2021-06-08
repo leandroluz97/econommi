@@ -23,6 +23,16 @@ type Categories = {
   id: string
 }
 
+interface IconsType{
+ id:string
+ icon:string
+}
+interface ColorsType{
+ id:string
+ color:string
+}
+
+
 interface ContextProps {
   categories: Categories[]
   getAllCategories: () => Promise<void>
@@ -30,6 +40,9 @@ interface ContextProps {
   getDefaultCategories: () => Promise<void>
   option: Categories
   setOption: (option:Categories) => void
+  getAllCategoriesPlus: () => Promise<void>
+  icons:IconsType[]
+  colors:ColorsType[]
 }
 
 //Context
@@ -42,6 +55,8 @@ export const CategoriesProvider = ({ children }: CategoriesProviderType) => {
     {} as Categories
   )
   const [option, setOption] = useState<Categories>({}as Categories)
+  const [icons, setIcons] = useState<IconsType[]>([])
+  const [colors, setColors] = useState<ColorsType[]>([])
 
   useEffect(() => {
   
@@ -69,7 +84,14 @@ export const CategoriesProvider = ({ children }: CategoriesProviderType) => {
       })
       
       setCategories(categoriesArray)
-    } catch (error) {}
+    } catch (error) {
+
+      toast.error(error.message, {
+        bodyClassName: "toastify__error",
+        className: "toastify",
+      })
+
+    }
   }
 
   async function getDefaultCategories() {
@@ -90,7 +112,51 @@ export const CategoriesProvider = ({ children }: CategoriesProviderType) => {
       
       setOption(catDefault)
       setDefaultCategory(catDefault)
-    } catch (error) {}
+    } catch (error) {
+
+      toast.error(error.message, {
+        bodyClassName: "toastify__error",
+        className: "toastify",
+      })
+    }
+  }
+
+  async function getAllCategoriesPlus() {
+    let db = firebase.firestore()
+    try {
+      const user = firebase.auth().currentUser
+      const email = user?.email as string
+
+      let categoriesColors = await db
+        .collection("categoriesplus")
+        .doc('colors')
+        .get()
+
+      let categoriesIcons = await db
+        .collection("categoriesplus")
+        .doc('icons')
+        .get()
+
+        let normalizedColors = [...categoriesColors.data()?.colors].reduce((acc,color)=>{
+        acc=[...acc, {['color']:color, id:color}]
+ 
+        return acc
+        },[])
+      
+        let normalizesIcons = [...categoriesIcons.data()?.icons].reduce((acc,icon)=>{
+        acc=[...acc, {['icon']:icon, id:icon.slice(-12)}]
+        
+        return acc
+        },[])
+
+        setColors(normalizedColors)
+        setIcons(normalizesIcons)
+    } catch (error) {
+      toast.error(error.message, {
+        bodyClassName: "toastify__error",
+        className: "toastify",
+      })
+    }
   }
 
   return (
@@ -102,6 +168,9 @@ export const CategoriesProvider = ({ children }: CategoriesProviderType) => {
         getDefaultCategories,
         option,
         setOption,
+        getAllCategoriesPlus,
+        colors,
+        icons
       }}
     >
       {children}

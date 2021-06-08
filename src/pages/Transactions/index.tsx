@@ -33,7 +33,7 @@ const Transactions = () => {
       await getDefaultCategories()
     })()
     */
-    console.log(transactions);
+    //console.log(transactions);
   }, [])
 
 
