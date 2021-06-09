@@ -1,80 +1,76 @@
-import React, { useEffect, useState } from "react"
-import { useForm } from "react-hook-form"
-import Modal from "react-modal"
-import Input from "../Input"
-import styles from "./styles.module.scss"
-import closeImg from "../../assets/close.svg"
-import incomeImg from "../../assets/income.svg"
-import outcomeImg from "../../assets/outcome.svg"
-import SelectOptions from "../SelectOptions/"
-import { useTransactions } from "../../hooks/useTransactions"
-import { useCategories } from "../../hooks/useCategories"
+import React, { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import Modal from "react-modal";
+import Input from "../Input";
+import styles from "./styles.module.scss";
+import closeImg from "../../assets/close.svg";
+import incomeImg from "../../assets/income.svg";
+import outcomeImg from "../../assets/outcome.svg";
+import SelectOptions from "../SelectOptions/";
+import { useTransactions } from "../../hooks/useTransactions";
+import { useCategories } from "../../hooks/useCategories";
 
 interface NewTransationTypes {
-  amount: string
-  category: string
-  type: string
-  description: string
+  amount: string;
+  category: string;
+  type: string;
+  description: string;
 }
 
 type Categories = {
-  name: string
-  type: string
-  color: string
-  icon: string
-  id: string
-}
+  name: string;
+  type: string;
+  color: string;
+  icon: string;
+  id: string;
+};
 
 interface TransactionAdd {
-  category: Categories[]
-  type: string
-  createdAt: string
-  amount: number
-  description: string
+  category: Categories[];
+  type: string;
+  createdAt: string;
+  amount: number;
+  description: string;
 }
 
 interface NewTransactionModalProps {
-  modalIsOpen: boolean
-  closeModal: () => void
+  modalIsOpen: boolean;
+  closeModal: () => void;
 }
 
 const NewTransactionModal = ({
   modalIsOpen,
   closeModal,
 }: NewTransactionModalProps) => {
-  const { addNewTransactions } = useTransactions()
-  
+  const { addNewTransactions } = useTransactions();
+
   const {
     getAllCategories,
     categories,
-    defaultCategory,
     getDefaultCategories,
     option,
-    setOption
-  } = useCategories()
+    setOption,
+  } = useCategories();
 
-  const [type, setType] = useState("income")
-  
+  const [type, setType] = useState("income");
 
   useEffect(() => {
-    
     (async function () {
-      await getAllCategories()
-      await getDefaultCategories()
-    })()
-    
-  }, [])
+      await getAllCategories();
+      await getDefaultCategories();
+    })();
+  }, []);
 
   const {
     register,
     handleSubmit,
     formState: { errors },
     reset,
-  } = useForm<NewTransationTypes>()
+  } = useForm<NewTransationTypes>();
 
   async function addNewTransaction(data: NewTransationTypes) {
     try {
-      const date = new Date()
+      const date = new Date();
 
       const newTransactions = {
         amount: Number(data.amount),
@@ -82,16 +78,14 @@ const NewTransactionModal = ({
         type: type,
         description: data.description,
         createdAt: new Intl.DateTimeFormat("pt-PT").format(date),
-      } as TransactionAdd
+      } as TransactionAdd;
 
-   
-      
-      await addNewTransactions(newTransactions)
+      await addNewTransactions(newTransactions);
 
-      reset()
-      closeModal()
+      reset();
+      closeModal();
     } catch (error) {
-      console.log(error.message)
+      console.log(error.message);
     }
   }
 
@@ -99,14 +93,14 @@ const NewTransactionModal = ({
     <Modal
       isOpen={modalIsOpen}
       onRequestClose={closeModal}
-      className='global__modal'
-      overlayClassName='global__overlay'
-      contentLabel='Profile Configuration'
+      className="global__modal"
+      overlayClassName="global__overlay"
+      contentLabel="Profile Configuration"
     >
       <form className={styles.form} onSubmit={handleSubmit(addNewTransaction)}>
         <img
           src={closeImg}
-          alt='close'
+          alt="close"
           className={styles.form__close}
           onClick={() => closeModal()}
         />
@@ -121,18 +115,18 @@ const NewTransactionModal = ({
               message: "Entre a valid amount",
             },
           })}
-          label='Amount'
-          type='number'
+          label="Amount"
+          type="number"
           error={errors.amount}
-          name='amount'
+          name="amount"
         />
 
         <div>
-         <SelectOptions
+          <SelectOptions
             options={categories}
             option={option}
             setOption={setOption}
-         /> 
+          />
         </div>
 
         <div className={styles.form__buttons}>
@@ -145,7 +139,7 @@ const NewTransactionModal = ({
             onClick={() => setType("income")}
           >
             <span>Income</span>
-            <img src={incomeImg} alt='income' />
+            <img src={incomeImg} alt="income" />
           </div>
           <div
             className={
@@ -156,7 +150,7 @@ const NewTransactionModal = ({
             onClick={() => setType("outcome")}
           >
             <span>Outcome</span>
-            <img src={outcomeImg} alt='outcome' />
+            <img src={outcomeImg} alt="outcome" />
           </div>
         </div>
 
@@ -168,18 +162,18 @@ const NewTransactionModal = ({
               message: "Must have 8 characters",
             },
           })}
-          label='Description'
-          type='text'
+          label="Description"
+          type="text"
           error={errors.description}
-          name='firstName'
+          name="firstName"
         />
 
         <div className={styles.form__submit}>
-          <input type='submit' value='Add New Transactions' />
+          <input type="submit" value="Add New Transactions" />
         </div>
       </form>
     </Modal>
-  )
-}
+  );
+};
 
-export default NewTransactionModal
+export default NewTransactionModal;

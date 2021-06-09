@@ -5,6 +5,16 @@
   > div {
     margin: 3rem 0;
   }
+  &__label {
+    display: block;
+    color: var(--gray-600);
+    font-size: 1.4rem;
+    margin-bottom: 1rem;
+
+    span {
+      color: var(--red-100);
+    }
+  }
   &__close {
     position: absolute;
     top: 0;
@@ -12,43 +22,41 @@
     cursor: pointer;
   }
 
-  &__colors{
+  &__colors {
     display: flex;
     justify-content: space-between;
-    
   }
-  &__color{
+  &__color {
     display: block;
-    width: 40px;
-    height: 40px;
+    width: 50px;
+    height: 50px;
     border-radius: 100px;
-    padding: 0.3rem;
-    background-clip:content-box;
+    padding: 0.5rem;
+    background-clip: content-box;
     border: solid 3px var(--white);
     transition: all 0.3s ease;
-   
   }
 
-  &__colorActive{
+  &__colorActive {
     border: solid 3px var(--green);
   }
 
-  &__icons{
+  &__icons {
     display: flex;
     justify-content: space-between;
   }
 
-  &__icon{
+  &__icon {
     border-radius: 100px;
-    height: 44px;
-    width: 44px;
+    height: 50px;
+    width: 50px;
     display: flex;
     justify-content: center;
     align-items: center;
-    img{
+    img {
       filter: brightness(0.5);
-    border-radius: 100px;
-    padding: 0.5rem;
+
+      padding: 0rem;
     }
   }
 
