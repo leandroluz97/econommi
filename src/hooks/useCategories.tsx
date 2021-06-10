@@ -42,11 +42,10 @@ interface ColorsType {
 interface ContextProps {
   categories: Categories[];
   getAllCategories: () => Promise<void>;
-  //defaultCategory: Categories;
   getDefaultCategories: () => Promise<void>;
   option: Categories;
   setOption: (option: Categories) => void;
-  getAllCategoriesPlus: () => Promise<void>;
+  getAllCategoriesPlus: (edit: boolean) => Promise<void>;
   icons: IconsType[];
   colors: ColorsType[];
   colorChosen: ColorsType;
@@ -54,6 +53,8 @@ interface ContextProps {
   iconChosen: IconsType;
   setIconChosen: (option: IconsType) => void;
   addNewCategory: (data: CategoriesAdd) => void;
+  editCategories: (id: string) => void;
+  editCategoryStorage: Categories;
 }
 
 //Context
@@ -74,6 +75,10 @@ export const CategoriesProvider = ({ children }: CategoriesProviderType) => {
 
   const [colorChosen, setColorChosen] = useState<ColorsType>({} as ColorsType);
   const [iconChosen, setIconChosen] = useState<IconsType>({} as IconsType);
+
+  const [editCategoryStorage, setEditCategoryStorage] = useState<Categories>(
+    {} as Categories
+  );
 
   useEffect(() => {
     (async function () {
@@ -134,7 +139,7 @@ export const CategoriesProvider = ({ children }: CategoriesProviderType) => {
     }
   }
 
-  async function getAllCategoriesPlus() {
+  async function getAllCategoriesPlus(edit: boolean) {
     let db = firebase.firestore();
     try {
       const user = firebase.auth().currentUser;
@@ -170,8 +175,10 @@ export const CategoriesProvider = ({ children }: CategoriesProviderType) => {
 
       setColors(normalizedColors);
       setIcons(normalizesIcons);
-      setColorChosen(normalizedColors[0]);
-      setIconChosen(normalizesIcons[0]);
+      if (!edit) {
+        setColorChosen(normalizedColors[0]);
+        setIconChosen(normalizesIcons[0]);
+      }
     } catch (error) {
       toast.error(error.message, {
         bodyClassName: "toastify__error",
@@ -232,6 +239,19 @@ export const CategoriesProvider = ({ children }: CategoriesProviderType) => {
     }
   }
 
+  function editCategories(id: string) {
+    const editCategory = categories.find((category) => category.id === id);
+    if (editCategory) {
+      setEditCategoryStorage(editCategory);
+
+      setColorChosen({ color: editCategory.color, id: editCategory.color });
+      setIconChosen({
+        icon: editCategory.icon,
+        id: editCategory.icon.slice(-12),
+      });
+    }
+  }
+
   return (
     <CategoriesContext.Provider
       value={{
@@ -248,6 +268,8 @@ export const CategoriesProvider = ({ children }: CategoriesProviderType) => {
         setColorChosen,
         setIconChosen,
         addNewCategory,
+        editCategories,
+        editCategoryStorage,
       }}
     >
       {children}

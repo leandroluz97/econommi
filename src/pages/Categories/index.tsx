@@ -7,13 +7,14 @@ import { useTransactions } from "../../hooks/useTransactions";
 import { useCategories } from "../../hooks/useCategories";
 import NewCategoryModal from "../../components/NewCategoryModal";
 import edit from "../../assets/Edit.svg";
+import EditCategoryModal from "../../components/EditCategoryModal";
 
 const Categories = () => {
   const [modalIsOpenAdd, setIsOpenAdd] = useState(false);
   const [modalIsOpenEdit, setIsOpenEdit] = useState(false);
   const { transactions, deleteTransaction, editTransaction } =
     useTransactions();
-  const { categories, getAllCategories } = useCategories();
+  const { categories, getAllCategories, editCategories } = useCategories();
 
   useEffect(() => {
     (async function () {
@@ -25,6 +26,7 @@ const Categories = () => {
     setIsOpenAdd(true);
   }
   function handleEditCategory(id: string) {
+    editCategories(id);
     setIsOpenEdit(true);
   }
 
@@ -112,6 +114,12 @@ const Categories = () => {
         modalIsOpen={modalIsOpenAdd}
         closeModal={closeModalAdd}
       />
+      {modalIsOpenEdit && (
+        <EditCategoryModal
+          modalIsOpen={modalIsOpenEdit}
+          closeModal={closeModalEdit}
+        />
+      )}
     </>
   );
 };

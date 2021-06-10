@@ -1,12 +1,11 @@
 .transactions {
-
-  >h2{
+  > h2 {
     font-size: 2.6rem;
     color: var(--gray-900);
     font-weight: 700;
     margin-bottom: 2rem;
   }
-  
+
   &__buttons {
     display: flex;
     justify-content: space-between;
@@ -16,7 +15,7 @@
       margin-left: 2rem;
     }
 
-    div:last-child{
+    div:last-child {
       display: flex;
       width: 50%;
       justify-content: space-between;
@@ -24,11 +23,11 @@
     }
   }
 
-  &__infos{
+  &__infos {
     display: flex;
   }
 
-  &__cards{
+  &__cards {
     width: 25%;
     margin-top: 3rem;
     margin-left: 2.5rem;
@@ -51,7 +50,7 @@
         font-family: Roboto;
         font-style: normal;
         font-weight: 500;
-        font-size: 1.8rem;
+        font-size: 1.4rem;
         color: var(--white);
 
         &:first-child {
@@ -67,14 +66,13 @@
     }
     tbody {
       display: block;
-      max-height: 450px;
+      max-height: 400px;
       overflow-y: scroll;
       padding: 0.5rem;
 
       tr {
-
         margin: 1rem 0;
-        
+
         display: table;
         width: 100%;
         table-layout: fixed;
@@ -95,7 +93,7 @@
         font-family: Roboto;
         font-style: normal;
         font-weight: normal;
-        font-size: 1.6rem;
+        font-size: 1.4rem;
         color: var(--gray-500);
         min-width: 7.5rem;
         overflow: hidden;
@@ -144,7 +142,7 @@
   .transactions {
     margin: 2rem;
 
-    &__infos{
+    &__infos {
       display: flex;
       flex-direction: column;
     }
@@ -154,16 +152,16 @@
         margin-left: 1rem;
       }
 
-      div:first-child{
-      margin-right: 1rem;
+      div:first-child {
+        margin-right: 1rem;
       }
-  
-      div:last-child{
+
+      div:last-child {
         width: 90%;
       }
     }
-  
-    &__cards{
+
+    &__cards {
       width: 100%;
       margin-top: 3rem;
       margin-left: 0rem;
@@ -173,12 +171,11 @@
       order: 2;
       margin-bottom: 100px;
 
-      tbody{
+      tbody {
         display: block;
         overflow-y: visible;
         padding: 0.5rem;
         margin-bottom: 100px;
-       
       }
     }
   }
@@ -186,24 +183,23 @@
 
 @media (max-width: 649px) {
   .transactions {
-
-    table{
-      thead{
-        th:nth-child(3){
+    table {
+      thead {
+        th:nth-child(3) {
           display: none;
         }
-        th:nth-child(4){
+        th:nth-child(4) {
           display: none;
         }
-        th:nth-child(6){
+        th:nth-child(6) {
           text-align: left;
         }
       }
-      tbody{
-        td:nth-child(3){
+      tbody {
+        td:nth-child(3) {
           display: none;
         }
-        td:nth-child(4){
+        td:nth-child(4) {
           display: none;
         }
 

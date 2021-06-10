@@ -1,54 +1,51 @@
-import React, { useEffect, useState } from "react"
-import { useForm } from "react-hook-form"
-import Modal from "react-modal"
-import Input from "../Input"
-import styles from "./styles.module.scss"
-import closeImg from "../../assets/close.svg"
-import incomeImg from "../../assets/income.svg"
-import outcomeImg from "../../assets/outcome.svg"
-import SelectOptions from "../SelectOptions/"
-import { useTransactions } from "../../hooks/useTransactions"
-import { useCategories } from "../../hooks/useCategories"
+import React, { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import Modal from "react-modal";
+import Input from "../Input";
+import styles from "./styles.module.scss";
+import closeImg from "../../assets/close.svg";
+import incomeImg from "../../assets/income.svg";
+import outcomeImg from "../../assets/outcome.svg";
+import SelectOptions from "../SelectOptions/";
+import { useTransactions } from "../../hooks/useTransactions";
+import { useCategories } from "../../hooks/useCategories";
 
 interface EditTransationTypes {
-  amount: string
-  category: string
-  type: string
-  description: string
+  amount: string;
+  category: string;
+  type: string;
+  description: string;
 }
 
 type Categories = {
-  name: string
-  type: string
-  color: string
-  icon: string
-  id: string
-}
+  name: string;
+  type: string;
+  color: string;
+  icon: string;
+  id: string;
+};
 
 interface TransactionEdit {
-  category: Categories[]
-  type: string
-  createdAt: string
-  amount: number
-  description: string
+  category: Categories[];
+  type: string;
+  createdAt: string;
+  amount: number;
+  description: string;
 }
 
 interface EditTransactionModalProps {
-  modalIsOpen: boolean
-  closeModal: () => void
+  modalIsOpen: boolean;
+  closeModal: () => void;
 }
 
 const EditTransactionModal = ({
   modalIsOpen,
   closeModal,
 }: EditTransactionModalProps) => {
-  const { updateTransaction, editStorage } = useTransactions()
-  
-  const {
-    getAllCategories,
-    categories,
-    getDefaultCategories,
-  } = useCategories()
+  const { updateTransaction, editStorage } = useTransactions();
+
+  const { getAllCategories, categories, getDefaultCategories } =
+    useCategories();
 
   const {
     register,
@@ -56,28 +53,25 @@ const EditTransactionModal = ({
     formState: { errors },
     setValue,
     reset,
-  } = useForm<EditTransationTypes>()
+  } = useForm<EditTransationTypes>();
 
-  const [category] = editStorage.category
+  const [category] = editStorage.category;
 
-  const [type, setType] = useState(editStorage.type)
-  const [option, setOption] = useState(category)
+  const [type, setType] = useState(editStorage.type);
+  const [option, setOption] = useState(category);
 
   useEffect(() => {
-    
     (async function () {
-      await getAllCategories()
-      await getDefaultCategories()
-    })()
-    setValue('amount', String(editStorage.amount), { shouldValidate: true })
-    setValue('description', editStorage.description, { shouldValidate: true })
-    
-  }, [])
-
+      await getAllCategories();
+      await getDefaultCategories();
+    })();
+    setValue("amount", String(editStorage.amount), { shouldValidate: true });
+    setValue("description", editStorage.description, { shouldValidate: true });
+  }, []);
 
   async function updatedTransaction(data: EditTransationTypes) {
     try {
-      const date = new Date()
+      const date = new Date();
 
       const updatedTransactions = {
         amount: Number(data.amount),
@@ -85,14 +79,14 @@ const EditTransactionModal = ({
         type: type,
         description: data.description,
         createdAt: editStorage.createdAt,
-      } as TransactionEdit
+      } as TransactionEdit;
 
-      await updateTransaction(updatedTransactions)
+      await updateTransaction(updatedTransactions);
 
-      reset()
-      closeModal()
+      reset();
+      closeModal();
     } catch (error) {
-      console.log(error.message)
+      console.log(error.message);
     }
   }
 
@@ -100,14 +94,14 @@ const EditTransactionModal = ({
     <Modal
       isOpen={modalIsOpen}
       onRequestClose={closeModal}
-      className='global__modal'
-      overlayClassName='global__overlay'
-      contentLabel='Profile Configuration'
+      className="global__modal"
+      overlayClassName="global__overlay"
+      contentLabel="Profile Configuration"
     >
       <form className={styles.form} onSubmit={handleSubmit(updatedTransaction)}>
         <img
           src={closeImg}
-          alt='close'
+          alt="close"
           className={styles.form__close}
           onClick={() => closeModal()}
         />
@@ -121,21 +115,19 @@ const EditTransactionModal = ({
               value: 2,
               message: "Must have 8 characters",
             },
-
           })}
-         
-          label='Amount'
-          type='number'
+          label="Amount"
+          type="number"
           error={errors.amount}
-          name='amount'
+          name="amount"
         />
 
         <div>
-         <SelectOptions
+          <SelectOptions
             options={categories}
             option={option}
             setOption={setOption}
-         /> 
+          />
         </div>
 
         <div className={styles.form__buttons}>
@@ -148,18 +140,18 @@ const EditTransactionModal = ({
             onClick={() => setType("income")}
           >
             <span>Income</span>
-            <img src={incomeImg} alt='income' />
+            <img src={incomeImg} alt="income" />
           </div>
           <div
             className={
-              type === "outcome"
+              type === "expenses"
                 ? `${styles.form__buttons__outcome} ${styles.activeOutcome}`
                 : `${styles.form__buttons__outcome}`
             }
-            onClick={() => setType("outcome")}
+            onClick={() => setType("expenses")}
           >
             <span>Outcome</span>
-            <img src={outcomeImg} alt='outcome' />
+            <img src={outcomeImg} alt="expenses" />
           </div>
         </div>
 
@@ -171,18 +163,18 @@ const EditTransactionModal = ({
               message: "Must have 8 characters",
             },
           })}
-          label='Description'
-          type='text'
+          label="Description"
+          type="text"
           error={errors.description}
-          name='firstName'
+          name="firstName"
         />
 
         <div className={styles.form__submit}>
-          <input type='submit' value='Add New Transactions' />
+          <input type="submit" value="Add New Transactions" />
         </div>
       </form>
     </Modal>
-  )
-}
+  );
+};
 
-export default EditTransactionModal
+export default EditTransactionModal;

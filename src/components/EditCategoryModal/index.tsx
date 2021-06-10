@@ -35,7 +35,7 @@ interface NewCategoryModalProps {
   closeModal: () => void;
 }
 
-const NewCategoryModal = ({
+const EditCategoryModal = ({
   modalIsOpen,
   closeModal,
 }: NewCategoryModalProps) => {
@@ -48,27 +48,32 @@ const NewCategoryModal = ({
     setIconChosen,
     setColorChosen,
     addNewCategory,
+    editCategoryStorage,
   } = useCategories();
 
-  const [type, setType] = useState("income");
+  const typed = editCategoryStorage.type;
 
-  useEffect(() => {
-    (async function () {
-      await getAllCategoriesPlus(false);
-    })();
-  }, []);
+  const [type, setType] = useState(typed);
 
   const {
     register,
     handleSubmit,
     formState: { errors },
     reset,
+    setValue,
   } = useForm<NewCategoryTypes>();
+
+  useEffect(() => {
+    (async function () {
+      await getAllCategoriesPlus(true);
+    })();
+    setValue("name", String(editCategoryStorage.name), {
+      shouldValidate: true,
+    });
+  }, []);
 
   async function handleAddNewCategory(data: NewCategoryTypes) {
     try {
-      const date = new Date();
-
       const category = {
         name: data.name,
         type: type,
@@ -78,7 +83,7 @@ const NewCategoryModal = ({
 
       console.log(category);
 
-      await addNewCategory(category);
+      //  await addNewCategory(category);
 
       reset();
       closeModal();
@@ -86,6 +91,8 @@ const NewCategoryModal = ({
       console.log(error.message);
     }
   }
+
+  console.log(colorChosen.color, editCategoryStorage.color);
 
   return (
     <Modal
@@ -106,14 +113,14 @@ const NewCategoryModal = ({
           onClick={() => closeModal()}
         />
 
-        <h2>New Category</h2>
+        <h2>Edit Category</h2>
 
         <Input
           property={register("name", {
             required: "Invalid Name",
             minLength: {
-              value: 4,
-              message: "Must have 4 characters",
+              value: 2,
+              message: "Entre a valid amount",
             },
           })}
           label="Name"
@@ -180,11 +187,11 @@ const NewCategoryModal = ({
           </div>
           <div
             className={
-              type === "outcome"
+              type === "expenses"
                 ? `${styles.form__buttons__outcome} ${styles.activeOutcome}`
                 : `${styles.form__buttons__outcome}`
             }
-            onClick={() => setType("outcome")}
+            onClick={() => setType("expenses")}
           >
             <span>Outcome</span>
             <img src={outcomeImg} alt="outcome" />
@@ -199,4 +206,4 @@ const NewCategoryModal = ({
   );
 };
 
-export default NewCategoryModal;
+export default EditCategoryModal;
