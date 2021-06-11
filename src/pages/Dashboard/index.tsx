@@ -29,16 +29,47 @@ const Dashboard = () => {
   const total = transactionInfo.income - transactionInfo.expenses;
 
   const [state, setstate] = useState({
-    labels: ["January", "February", "March", "April", "May"],
+    labels: [
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December",
+    ],
     datasets: [
       {
-        label: "Rainfall",
+        label: "Current Balance",
         fill: false,
         lineTension: 0.5,
-        backgroundColor: "rgba(75,192,192,1)",
-        borderColor: "rgba(0,0,0,1)",
+        backgroundColor: "rgba(83, 134, 233, 1)",
+        borderColor: "rgba(83, 134, 233, 1)",
         borderWidth: 2,
-        data: [65, 59, 80, 81, 56],
+        data: [65, 59, 80, 81, 70, 80, 80, 70, 75, 73, 71, 83],
+      },
+      {
+        label: "Income",
+        fill: false,
+        lineTension: 0.5,
+        backgroundColor: "rgba(139, 207, 97, 1)",
+        borderColor: "rgba(139, 207, 97, 1)",
+        borderWidth: 2,
+        data: [75, 59, 70, 81, 70, 70, 80, 60, 85, 63, 81, 83],
+      },
+      {
+        label: "Expenses",
+        fill: false,
+        lineTension: 0.5,
+        backgroundColor: "rgba(222, 90, 90, 1)",
+        borderColor: "rgba(222, 90, 90, 1)",
+        borderWidth: 2,
+        data: [55, 54, 60, 71, 60, 60, 60, 60, 75, 63, 71, 73],
       },
     ],
   });
