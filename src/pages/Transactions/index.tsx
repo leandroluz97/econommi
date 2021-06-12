@@ -101,7 +101,7 @@ const Transactions = () => {
           </div>
         </div>
         <div className={styles.transactions__infos}>
-          {transactions.length > 1 ? (
+          {transactions.length >= 1 ? (
             <table className={styles.transactions__table}>
               <thead>
                 <tr>

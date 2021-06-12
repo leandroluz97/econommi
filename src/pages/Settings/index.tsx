@@ -1,13 +1,49 @@
-import React, { useEffect } from "react"
-
+import React, { useEffect } from "react";
+import styles from "./styles.module.scss";
+import RoundedButton from "../../components/RoundedButton";
+import edit from "../../assets/editBig.svg";
+import { useAuth } from "../../hooks/useAuth";
 
 const Settings = () => {
-  useEffect(()=>{
-    
-    console.log('Settings');
-    
-  },[])
-  return <div></div>
-}
+  const { currentUser } = useAuth();
+  function handleEditSettings() {}
 
-export default Settings
+  return (
+    <div className={styles.settings}>
+      <h2>Dashboard</h2>
+      <div className={styles.settings__buttons}>
+        <RoundedButton
+          handleClick={handleEditSettings}
+          img={edit}
+          textAlt="Edit informations"
+        />
+      </div>
+
+      <div className={styles.settings__wrapper}>
+        <div className={styles.settings__group}>
+          <span>Profile Image</span>
+          <img src={currentUser?.photoURL} alt="" />
+        </div>
+        <div className={styles.settings__group}>
+          <span>Display Name</span>
+          <p>{currentUser?.displayName} </p>
+        </div>
+        <div className={styles.settings__group}>
+          <span>First Name</span>
+          <p>Leandro</p>
+        </div>
+        <div className={styles.settings__group}>
+          <span>Last Name</span>
+          <p>Soares da Luz</p>
+        </div>
+
+        <div className={styles.settings__group}>
+          <span>Email</span>
+          <p>{currentUser?.email} </p>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default Settings;

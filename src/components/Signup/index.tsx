@@ -1,19 +1,19 @@
-import React, { ChangeEvent, FormEvent, useEffect, useState } from "react"
-import Input from "../Input"
-import SliderButtons from "../SliderButtons"
-import styles from "./styles.module.scss"
-import google from "../../assets/google.svg"
-import { useForm } from "react-hook-form"
-import { useUI } from "../../hooks/useUi"
-import { useAuth } from "../../hooks/useAuth"
-import { useHistory } from "react-router-dom"
+import React, { ChangeEvent, FormEvent, useEffect, useState } from "react";
+import Input from "../Input";
+import SliderButtons from "../SliderButtons";
+import styles from "./styles.module.scss";
+import google from "../../assets/google.svg";
+import { useForm } from "react-hook-form";
+import { useUI } from "../../hooks/useUi";
+import { useAuth } from "../../hooks/useAuth";
+import { useHistory } from "react-router-dom";
 
 interface SignupState {
-  firstName: string
-  lastName: string
-  email: string
-  password: string
-  repeatPassword: string
+  firstName: string;
+  lastName: string;
+  email: string;
+  password: string;
+  repeatPassword: string;
 }
 
 const Signup = () => {
@@ -24,38 +24,41 @@ const Signup = () => {
     watch,
     getValues,
     reset,
-  } = useForm<SignupState>()
+  } = useForm<SignupState>();
 
-  useEffect(()=>{
+  useEffect(() => {
+    console.log("signup");
+  }, []);
 
-    console.log('signup');
-    
-  },[])
+  const { passwordEye, repeatEye } = useUI();
+  const { onSubmitGmail, onSignupPassword } = useAuth();
 
-  const { passwordEye, repeatEye } = useUI()
-  const { onSubmitGmail, onSignupPassword } = useAuth()
-
-  let history = useHistory()
+  let history = useHistory();
 
   async function onSubmit(data: SignupState) {
     try {
-      const user = await onSignupPassword(data.email, data.password)
+      const user = await onSignupPassword(
+        data.email,
+        data.password,
+        data.firstName,
+        data.lastName
+      );
 
-      history.push("/dashboard")
+      history.push("/dashboard");
 
-      reset()
+      reset();
     } catch (error) {
-      console.log(error.message)
+      console.log(error.message);
     }
   }
 
   async function handleGmailSignup() {
     try {
-      await onSubmitGmail()
+      await onSubmitGmail();
 
-      history.push("/dashboard")
+      history.push("/dashboard");
     } catch (error) {
-      console.log(error.message)
+      console.log(error.message);
     }
   }
 
@@ -73,10 +76,10 @@ const Signup = () => {
                   message: "Must have 8 characters",
                 },
               })}
-              label='First Name'
-              type='text'
+              label="First Name"
+              type="text"
               error={errors.firstName}
-              name='firstName'
+              name="firstName"
             />
             <Input
               property={register("lastName", {
@@ -86,10 +89,10 @@ const Signup = () => {
                   message: "Must have 8 characters",
                 },
               })}
-              label='Last Name'
-              type='text'
+              label="Last Name"
+              type="text"
               error={errors.lastName}
-              name='lastName'
+              name="lastName"
             />
           </div>
 
@@ -98,10 +101,10 @@ const Signup = () => {
               required: "Invalid Email",
               pattern: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
             })}
-            label='Email'
-            type='email'
+            label="Email"
+            type="email"
             error={errors.email}
-            name='email'
+            name="email"
           />
           <Input
             property={register("password", {
@@ -111,9 +114,9 @@ const Signup = () => {
                 message: "Password must have at least 8 characters",
               },
             })}
-            label='Password'
+            label="Password"
             type={passwordEye ? "text" : "password"}
-            name='password'
+            name="password"
             error={errors.password}
             visible={passwordEye}
           />
@@ -122,33 +125,33 @@ const Signup = () => {
               validate: (value) =>
                 value === getValues("password") || "The passwords do not match",
             })}
-            label='Repeat Password'
+            label="Repeat Password"
             type={repeatEye ? "text" : "password"}
-            name='repeatPassword'
+            name="repeatPassword"
             error={errors.repeatPassword}
             visible={repeatEye}
           />
         </div>
 
         <div className={styles.signup__form__submit}>
-          <input type='submit' value='Signup!' />
+          <input type="submit" value="Signup!" />
         </div>
       </form>
       <button
-        type='button'
+        type="button"
         className={styles.signup__google}
         onClick={handleGmailSignup}
       >
-        <img src={google} alt='Google Logo' />
+        <img src={google} alt="Google Logo" />
         Signup With Google
       </button>
 
       <p className={styles.signup__policy}>
         By clicking on the button above, you agree with our
-        <a href='#'> terms of Service</a> and <a href='#'> Privacy Policy</a> .
+        <a href="#"> terms of Service</a> and <a href="#"> Privacy Policy</a> .
       </p>
     </div>
-  )
-}
+  );
+};
 
-export default Signup
+export default Signup;

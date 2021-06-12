@@ -50,7 +50,7 @@ const Categories = () => {
           </div>
         </div>
         <div className={styles.categories__infos}>
-          {transactions.length > 1 ? (
+          {transactions.length >= 1 ? (
             <table className={styles.categories__table}>
               <thead>
                 <tr>

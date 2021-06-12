@@ -198,6 +198,8 @@ export const TransactionsProvider = ({
     }
   }
 
+  console.log(transactions);
+
   return (
     <TransactionsContext.Provider
       value={{

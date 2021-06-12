@@ -4,130 +4,147 @@ import {
   useContext,
   useEffect,
   useState,
-} from "react"
-import { toast } from "react-toastify"
-import "react-toastify/dist/ReactToastify.css"
+} from "react";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
-import firebase from "../config/firebase-config"
-import Categories from "../pages/Categories"
+import firebase from "../config/firebase-config";
+import Categories from "../pages/Categories";
 
 interface AuthProviderType {
-  children: ReactNode
+  children: ReactNode;
 }
-interface User {}
+interface User {
+  displayName: string;
+  photoURL: string;
+  email: string;
+  userId?: string;
+  firstName?: string;
+  lastName?: string;
+}
 
 interface ContextProps {
-  currentUser: User | null
-  setCurrentUser: (value: User | null) => void
-  isLoading: boolean
-  onSubmitGmail: () => void
-  onSignupPassword: (email: string, password: string) => void
-  onSigninPassword: (email: string, password: string) => void
+  currentUser: User | null;
+  setCurrentUser: (value: User | null) => void;
+  isLoading: boolean;
+  onSubmitGmail: () => void;
+  onSignupPassword: (
+    email: string,
+    password: string,
+    firstName: string,
+    lastName: string
+  ) => void;
+  onSigninPassword: (email: string, password: string) => void;
 }
 
 //Context
-const AuthContext = createContext<ContextProps>({} as ContextProps)
+const AuthContext = createContext<ContextProps>({} as ContextProps);
 
 //Provider
 export const AuthProvider = ({ children }: AuthProviderType) => {
-  const [currentUser, setCurrentUser] = useState<User | null>(null)
-  const [isLoading, setIsLoading] = useState(true)
+  const [currentUser, setCurrentUser] = useState<User | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   //Sign in or Sign up  with google
   async function onSubmitGmail() {
-    let provider = new firebase.auth.GoogleAuthProvider()
-    let db = firebase.firestore()
+    let provider = new firebase.auth.GoogleAuthProvider();
+    let db = firebase.firestore();
 
     try {
-      const userAuth = await firebase.auth().signInWithPopup(provider)
-      const result = userAuth
+      const userAuth = await firebase.auth().signInWithPopup(provider);
+      const result = userAuth;
 
-      let credential = result.credential as firebase.auth.OAuthCredential
+      let credential = result.credential as firebase.auth.OAuthCredential;
 
       // The signed-in user info.
-      let user = result.user
+      let user = result.user;
 
       //get user by email
-      let docRef = db.collection("users").doc(user?.email as string)
-      const doc = await docRef.get()
+      let docRef = db.collection("users").doc(user?.email as string);
+      const doc = await docRef.get();
 
-      let catRef = await db.collection("categories").get()
+      let catRef = await db.collection("categories").get();
 
       //check if user exists
       if (!doc.exists) {
-        const ref = db.collection("users")
+        const ref = db.collection("users");
         let userData = {
           userId: user?.uid,
           photoURL: user?.photoURL,
           email: user?.email,
           displayName: user?.displayName,
-        }
+        } as User;
 
         //create user doc w/ email index
-        ref.doc(user?.email as string).set(userData)
+        ref.doc(user?.email as string).set(userData);
 
         //add all category to user
         catRef.forEach((category) => {
           ref
             .doc(user?.email as string)
             .collection("categories")
-            .add(category.data())
-        })
-      }
+            .add(category.data());
+        });
 
-      //setCurrentUser(user)
+        setCurrentUser(userData);
+      }
     } catch (error) {
       toast.error(error.message, {
         bodyClassName: "toastify__error",
         className: "toastify",
-      })
+      });
     }
   }
 
   //Sign up with password and email
-  async function onSignupPassword(email: string, password: string) {
-    let db = firebase.firestore()
+  async function onSignupPassword(
+    email: string,
+    password: string,
+    firstName: string,
+    lastName: string
+  ) {
+    let db = firebase.firestore();
 
     try {
-      let docRef = db.collection("users").doc(email)
-      let catRef = db.collection("categories").doc("default")
+      let docRef = db.collection("users").doc(email);
+      let catRef = db.collection("categories").doc("default");
 
       const user = await firebase
         .auth()
-        .createUserWithEmailAndPassword(email, password)
-      const userCredential = user.credential
+        .createUserWithEmailAndPassword(email, password);
+      const userCredential = user.credential;
 
-      const doc = await docRef.get()
-      const cat = await catRef.get()
+      const doc = await docRef.get();
+      const cat = await catRef.get();
 
       if (!doc.exists) {
         // doc.data() will be undefined in this case
 
-        const ref = db.collection("users")
+        const ref = db.collection("users");
         let userData = {
           userId: user.user?.uid,
           photoURL: user.user?.photoURL,
           email: user.user?.email,
           displayName: user.user?.displayName,
-        }
+        };
 
-        const allCategories = { ...cat.data() }
+        const allCategories = { ...cat.data() };
 
         //create user doc w/ email index
-        ref.doc(email).set(userData)
+        ref.doc(email).set(userData);
         ref
           .doc(email)
           .collection("categories")
           .doc("userCategory")
-          .set(allCategories)
+          .set(allCategories);
       }
     } catch (error) {
-      console.log(error)
+      console.log(error);
 
       toast.error(error.message, {
         bodyClassName: "toastify__error",
         className: "toastify",
-      })
+      });
     }
   }
 
@@ -136,26 +153,28 @@ export const AuthProvider = ({ children }: AuthProviderType) => {
     try {
       const userAuth = await firebase
         .auth()
-        .signInWithEmailAndPassword(email, password)
+        .signInWithEmailAndPassword(email, password);
 
       // Signed in
-      let userCredential = userAuth.user
+      let userCredential = userAuth.user;
     } catch (error) {
       toast.error(error.message, {
         bodyClassName: "toastify__error",
         className: "toastify",
-      })
+      });
     }
   }
 
   useEffect(() => {
     const unsubscribe = firebase.auth().onAuthStateChanged((user) => {
-      setCurrentUser(user)
-      setIsLoading(false)
-    })
+      setCurrentUser(user as User);
+      setIsLoading(false);
+    });
 
-    return unsubscribe
-  }, [])
+    return unsubscribe;
+  }, []);
+
+  console.log(currentUser);
 
   return (
     <AuthContext.Provider
@@ -170,13 +189,13 @@ export const AuthProvider = ({ children }: AuthProviderType) => {
     >
       {!isLoading && children}
     </AuthContext.Provider>
-  )
-}
+  );
+};
 
 export function useAuth() {
-  const context = useContext(AuthContext)
+  const context = useContext(AuthContext);
 
-  return context
+  return context;
 }
 
 /*

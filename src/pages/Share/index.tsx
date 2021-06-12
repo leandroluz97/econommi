@@ -1,13 +1,5 @@
 import React, { useEffect } from "react";
-import {
-  FacebookShareCount,
-  HatenaShareCount,
-  OKShareCount,
-  PinterestShareCount,
-  RedditShareCount,
-  TumblrShareCount,
-  VKShareCount,
-} from "react-share";
+
 import {
   EmailShareButton,
   FacebookShareButton,
@@ -18,7 +10,7 @@ import {
   TelegramShareButton,
   ViberShareButton,
 } from "react-share";
-import { FacebookIcon } from "react-share";
+
 import styles from "./styles.module.scss";
 
 import gmail from "../../assets/gmail.svg";
@@ -29,7 +21,6 @@ import messenger from "../../assets/messenger.svg";
 import linkedin from "../../assets/linkedin.svg";
 import twitter from "../../assets/twitter.svg";
 import facebook from "../../assets/facebook.svg";
-import { HashType } from "history";
 
 const Share = () => {
   useEffect(() => {
@@ -58,11 +49,11 @@ const Share = () => {
           </EmailShareButton>
 
           <LinkedinShareButton
-            url="www.econommi-app.com"
+            url="https://www.linkedin.com/in/leandro-luz/"
             title="Econommi App"
             summary="A platform where you can manage and keep track of your
                 income and outcome to have you!"
-            source="www.econommi-app.com"
+            source="https://www.linkedin.com/in/leandro-luz/"
           >
             <img src={linkedin} alt="linkedin" />
           </LinkedinShareButton>

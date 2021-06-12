@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import AmountCard from "../../components/AmountCard";
 import { useTransactions } from "../../hooks/useTransactions";
 import styles from "./styles.module.scss";
@@ -10,6 +10,10 @@ import caretdownBig from "../../assets/caretdownBig.svg";
 
 import { Doughnut, Line } from "react-chartjs-2";
 
+interface transDataType {
+  trans: number;
+  createdAt: string[];
+}
 const Dashboard = () => {
   const { transactions } = useTransactions();
 
@@ -25,10 +29,24 @@ const Dashboard = () => {
     },
     { expenses: 0, income: 0 }
   );
-
   const total = transactionInfo.income - transactionInfo.expenses;
 
-  const [state, setstate] = useState({
+  let transData: transDataType = {
+    trans: 0,
+    createdAt: [],
+  };
+  const transactionsByDay = transactions.reduce((acc, transaction) => {
+    if (transaction.type === "income") {
+      if (acc.createdAt.includes(transaction.createdAt)) {
+      }
+    }
+
+    return acc;
+  }, transData);
+
+  console.log(transactions);
+
+  const data = {
     labels: [
       "January",
       "February",
@@ -51,7 +69,7 @@ const Dashboard = () => {
         backgroundColor: "rgba(83, 134, 233, 1)",
         borderColor: "rgba(83, 134, 233, 1)",
         borderWidth: 2,
-        data: [65, 59, 80, 81, 70, 80, 80, 70, 75, 73, 71, 83],
+        data: [65, 59, 80, 81, 70, 70, 75, 73, 71, 83],
       },
       {
         label: "Income",
@@ -72,9 +90,9 @@ const Dashboard = () => {
         data: [55, 54, 60, 71, 60, 60, 60, 60, 75, 63, 71, 73],
       },
     ],
-  });
+  };
 
-  const [dog, setdog] = useState({
+  const dataCirculeGraphs = {
     labels: ["Expenses", "Income"],
     datasets: [
       {
@@ -87,7 +105,7 @@ const Dashboard = () => {
         ],
       },
     ],
-  });
+  };
 
   return (
     <div className={styles.dashboard}>
@@ -116,7 +134,7 @@ const Dashboard = () => {
       <div className={styles.dashboard__main}>
         <div className={styles.dashboard__lineGraph}>
           <Line
-            data={state}
+            data={data}
             type="line"
             options={{
               title: {
@@ -134,7 +152,7 @@ const Dashboard = () => {
         <div className={styles.dashboard__circuleGraph}>
           <Doughnut
             type="line"
-            data={dog}
+            data={dataCirculeGraphs}
             options={{
               title: {
                 display: true,
