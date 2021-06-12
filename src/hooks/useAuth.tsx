@@ -19,8 +19,8 @@ interface User {
   photoURL: string;
   email: string;
   userId?: string;
-  firstName?: string;
-  lastName?: string;
+  firstName?: string | null;
+  lastName?: string | null;
 }
 
 interface ContextProps {
@@ -73,6 +73,8 @@ export const AuthProvider = ({ children }: AuthProviderType) => {
           photoURL: user?.photoURL,
           email: user?.email,
           displayName: user?.displayName,
+          firstName: null,
+          lastName: null,
         } as User;
 
         //create user doc w/ email index
@@ -107,7 +109,7 @@ export const AuthProvider = ({ children }: AuthProviderType) => {
 
     try {
       let docRef = db.collection("users").doc(email);
-      let catRef = db.collection("categories").doc("default");
+      let catRef = await db.collection("categories").get();
 
       const user = await firebase
         .auth()
@@ -115,7 +117,6 @@ export const AuthProvider = ({ children }: AuthProviderType) => {
       const userCredential = user.credential;
 
       const doc = await docRef.get();
-      const cat = await catRef.get();
 
       if (!doc.exists) {
         // doc.data() will be undefined in this case
@@ -126,17 +127,22 @@ export const AuthProvider = ({ children }: AuthProviderType) => {
           photoURL: user.user?.photoURL,
           email: user.user?.email,
           displayName: user.user?.displayName,
-        };
-
-        const allCategories = { ...cat.data() };
+          firstName: firstName,
+          lastName: lastName,
+        } as User;
 
         //create user doc w/ email index
-        ref.doc(email).set(userData);
-        ref
-          .doc(email)
-          .collection("categories")
-          .doc("userCategory")
-          .set(allCategories);
+        ref.doc(user.user?.email as string).set(userData);
+
+        //add all category to user
+        catRef.forEach((category) => {
+          ref
+            .doc(user.user?.email as string)
+            .collection("categories")
+            .add(category.data());
+        });
+
+        setCurrentUser(userData);
       }
     } catch (error) {
       console.log(error);
@@ -169,6 +175,15 @@ export const AuthProvider = ({ children }: AuthProviderType) => {
     const unsubscribe = firebase.auth().onAuthStateChanged((user) => {
       setCurrentUser(user as User);
       setIsLoading(false);
+
+      (async function () {
+        let db = firebase.firestore();
+
+        let docRef = db.collection("users").doc(user?.email as string);
+        const doc = await docRef.get();
+
+        setCurrentUser(doc.data() as User);
+      })();
     });
 
     return unsubscribe;

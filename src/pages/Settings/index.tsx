@@ -3,6 +3,7 @@ import styles from "./styles.module.scss";
 import RoundedButton from "../../components/RoundedButton";
 import edit from "../../assets/editBig.svg";
 import { useAuth } from "../../hooks/useAuth";
+import perfil from "../../assets/Perfil.svg";
 
 const Settings = () => {
   const { currentUser } = useAuth();
@@ -10,7 +11,7 @@ const Settings = () => {
 
   return (
     <div className={styles.settings}>
-      <h2>Dashboard</h2>
+      <h2>Settings</h2>
       <div className={styles.settings__buttons}>
         <RoundedButton
           handleClick={handleEditSettings}
@@ -22,19 +23,19 @@ const Settings = () => {
       <div className={styles.settings__wrapper}>
         <div className={styles.settings__group}>
           <span>Profile Image</span>
-          <img src={currentUser?.photoURL} alt="" />
+          <img src={currentUser?.photoURL || perfil} alt="" />
         </div>
         <div className={styles.settings__group}>
           <span>Display Name</span>
-          <p>{currentUser?.displayName} </p>
+          <p>{currentUser?.displayName || "..."} </p>
         </div>
         <div className={styles.settings__group}>
           <span>First Name</span>
-          <p>Leandro</p>
+          <p>{currentUser?.firstName || "..."}</p>
         </div>
         <div className={styles.settings__group}>
           <span>Last Name</span>
-          <p>Soares da Luz</p>
+          <p>{currentUser?.lastName || "..."}</p>
         </div>
 
         <div className={styles.settings__group}>

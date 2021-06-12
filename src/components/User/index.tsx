@@ -73,10 +73,10 @@ const User = () => {
           </Modal>
         </div>
 
-        <p>{currentUser?.displayName}</p>
+        <p>{currentUser?.displayName || currentUser?.email}</p>
 
         <img
-          src={currentUser?.photoURL}
+          src={currentUser?.photoURL || perfil}
           alt="Profile"
           className={styles.user__photoURL}
         />

@@ -36,6 +36,9 @@ const Categories = () => {
   function closeModalEdit() {
     setIsOpenEdit(false);
   }
+
+  console.log("all categories: ", categories);
+
   return (
     <>
       <div className={styles.categories}>
@@ -50,7 +53,7 @@ const Categories = () => {
           </div>
         </div>
         <div className={styles.categories__infos}>
-          {transactions.length >= 1 ? (
+          {categories.length >= 1 ? (
             <table className={styles.categories__table}>
               <thead>
                 <tr>
@@ -103,9 +106,7 @@ const Categories = () => {
               </tbody>
             </table>
           ) : (
-            <h3 className={styles.categories__empty}>
-              You don't have any transactions.
-            </h3>
+            <h3 className={styles.categories__empty}>Loading categories...</h3>
           )}
         </div>
       </div>
