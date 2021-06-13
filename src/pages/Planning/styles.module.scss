@@ -1,0 +1,215 @@
+.planning {
+  > h2 {
+    font-size: 2.6rem;
+    color: var(--gray-900);
+    font-weight: 700;
+    margin-bottom: 2rem;
+  }
+
+  &__buttons {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    div:last-child button:last-child {
+      margin-left: 2rem;
+    }
+
+    div:last-child {
+      display: flex;
+      width: 50%;
+      justify-content: space-between;
+      align-items: center;
+    }
+  }
+
+  &__infos {
+    display: flex;
+  }
+
+  &__cards {
+    width: 25%;
+    margin-top: 3rem;
+    margin-left: 2.5rem;
+  }
+
+  table {
+    width: 100%;
+    border-spacing: 0 1rem;
+    margin-top: 2rem;
+
+    thead {
+      display: table;
+      width: 100%;
+      table-layout: fixed;
+
+      th {
+        background-color: var(--green);
+        padding: 1rem;
+        text-align: left;
+        font-family: Roboto;
+        font-style: normal;
+        font-weight: 500;
+        font-size: 1.4rem;
+        color: var(--white);
+
+        &:first-child {
+          border-top-left-radius: 8px;
+          border-bottom-left-radius: 8px;
+        }
+        &:last-child {
+          border-top-right-radius: 8px;
+          border-bottom-right-radius: 8px;
+          text-align: center;
+        }
+      }
+    }
+    tbody {
+      display: block;
+      max-height: 400px;
+      overflow-y: scroll;
+      padding: 0.5rem;
+
+      tr {
+        margin: 1rem 0;
+
+        display: table;
+        width: 100%;
+        table-layout: fixed;
+
+        border-radius: 10px;
+
+        background-color: var(--white);
+        filter: drop-shadow(0px 1px 1px rgba(0, 0, 0, 0.15));
+        transition: all 0.3s ease;
+
+        &:hover {
+          filter: drop-shadow(0px 3px 2px rgba(0, 0, 0, 0.1));
+        }
+      }
+
+      td {
+        padding: 0rem 1rem;
+        font-family: Roboto;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 1.4rem;
+        color: var(--gray-500);
+        min-width: 7.5rem;
+        overflow: hidden;
+        text-overflow: ellipsis;
+
+        &:first-child {
+          border-top-left-radius: 13px;
+          border-bottom-left-radius: 13px;
+        }
+        &:last-child {
+          border-top-right-radius: 13px;
+          border-bottom-right-radius: 13px;
+          text-align: center;
+        }
+        button {
+          border: none;
+          background-color: transparent;
+          padding: 0.8rem;
+          cursor: pointer;
+          text-align: right;
+        }
+      }
+    }
+  }
+
+  &__empty {
+    margin-top: 10rem;
+    text-align: center;
+    font-size: 2.5rem;
+    color: var(--gray-450);
+    width: 100%;
+  }
+
+  &__icon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 40px;
+    width: 40px;
+    background-color: red;
+    border-radius: 100px;
+  }
+}
+
+@media (max-width: 768px) {
+  .planning {
+    margin: 2rem;
+
+    &__infos {
+      display: flex;
+      flex-direction: column;
+    }
+
+    &__buttons {
+      div:last-child button:last-child {
+        margin-left: 1rem;
+      }
+
+      div:first-child {
+        margin-right: 1rem;
+      }
+
+      div:last-child {
+        width: 90%;
+      }
+    }
+
+    &__cards {
+      width: 100%;
+      margin-top: 3rem;
+      margin-left: 0rem;
+      order: 1;
+    }
+    table {
+      order: 2;
+      margin-bottom: 100px;
+
+      tbody {
+        display: block;
+        overflow-y: visible;
+        padding: 0.5rem;
+        margin-bottom: 100px;
+      }
+    }
+  }
+}
+
+@media (max-width: 649px) {
+  .planning {
+    table {
+      thead {
+        th:nth-child(3) {
+          display: none;
+        }
+        th:nth-child(4) {
+          display: none;
+        }
+        th:nth-child(6) {
+          text-align: left;
+        }
+      }
+      tbody {
+        td:nth-child(3) {
+          display: none;
+        }
+        td:nth-child(4) {
+          display: none;
+        }
+
+        margin-bottom: 350px;
+      }
+    }
+  }
+}
+
+@media (max-width: 460px) {
+  .planning {
+  }
+}

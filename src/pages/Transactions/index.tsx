@@ -47,6 +47,8 @@ const Transactions = () => {
     { expenses: 0, income: 0 }
   );
 
+  console.log(transactionInfo);
+
   const total = transactionInfo.income - transactionInfo.expenses;
 
   function handleNewTransaction() {
@@ -82,6 +84,7 @@ const Transactions = () => {
               handleClick={handleNewTransaction}
               img={plusImg}
               textAlt="Plus icon"
+              labelTitle="New transaction"
             />
           </div>
 
@@ -97,6 +100,7 @@ const Transactions = () => {
               handleClick={handleNewTransaction}
               img={filterImg}
               textAlt="filter icon"
+              labelTitle="Filter"
             />
           </div>
         </div>
@@ -152,7 +156,7 @@ const Transactions = () => {
               You don't have any transactions.
             </h3>
           )}
-          {transactions.length > 1 && (
+          {transactions.length >= 1 && (
             <div className={styles.transactions__cards}>
               <AmountCard type="Current Balance" amount={total} img={current} />
               <AmountCard

@@ -15,6 +15,7 @@ import Settings from "../pages/Settings";
 import Share from "../pages/Share";
 import { useUI } from "../hooks/useUi";
 import { TransactionsProvider } from "../hooks/useTransactions";
+import { PlanningProvider } from "../hooks/usePlanning";
 import Planning from "../pages/Planning";
 
 const Routes = () => {
@@ -32,30 +33,32 @@ const Routes = () => {
   if (currentUser) {
     routes = (
       <TransactionsProvider>
-        <div className={styles.layout}>
-          <div
-            className={
-              openMenu
-                ? `${styles.layout__sidebarExpand}`
-                : `${styles.layout__sidebar}`
-            }
-          >
-            <Menu />
+        <PlanningProvider>
+          <div className={styles.layout}>
+            <div
+              className={
+                openMenu
+                  ? `${styles.layout__sidebarExpand}`
+                  : `${styles.layout__sidebar}`
+              }
+            >
+              <Menu />
+            </div>
+            <MobileMenu />
+            <div className={styles.layout__routes}>
+              <User />
+              <Switch>
+                <Route exact path="/dashboard" component={Dashboard} />
+                <Route path="/transactions" component={Transactions} />
+                <Route path="/categories" component={Categories} />
+                <Route path="/planning" component={Planning} />
+                <Route path="/settings" component={Settings} />
+                <Route path="/share" component={Share} />
+                <Redirect to="/dashboard" />
+              </Switch>
+            </div>
           </div>
-          <MobileMenu />
-          <div className={styles.layout__routes}>
-            <User />
-            <Switch>
-              <Route exact path="/dashboard" component={Dashboard} />
-              <Route path="/transactions" component={Transactions} />
-              <Route path="/categories" component={Categories} />
-              <Route path="/planning" component={Planning} />
-              <Route path="/settings" component={Settings} />
-              <Route path="/share" component={Share} />
-              <Redirect to="/dashboard" />
-            </Switch>
-          </div>
-        </div>
+        </PlanningProvider>
       </TransactionsProvider>
     );
   }

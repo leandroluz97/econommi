@@ -1,17 +1,27 @@
-import React from "react"
-import styles from "./styles.module.scss"
+import React from "react";
+import styles from "./styles.module.scss";
 
 interface RoundedButtonProps {
-  img: string
-  handleClick: () => void
-  textAlt: string
+  img: string;
+  handleClick: () => void;
+  textAlt: string;
+  labelTitle?: string;
 }
-const RoundedButton = ({ img, handleClick,textAlt }: RoundedButtonProps) => {
+const RoundedButton = ({
+  img,
+  handleClick,
+  textAlt,
+  labelTitle,
+}: RoundedButtonProps) => {
   return (
-    <button onClick={() => handleClick()} className={styles.roudedButton}>
+    <button
+      onClick={() => handleClick()}
+      className={styles.roudedButton}
+      label-title={labelTitle}
+    >
       <img src={img} alt={textAlt} />
     </button>
-  )
-}
+  );
+};
 
-export default RoundedButton
+export default RoundedButton;

@@ -118,16 +118,23 @@ const Dashboard = () => {
           </span>
         </div>
 
-        <AmountCard type="Current Balance" amount={total} img={current} />
+        <AmountCard
+          type="Current Balance"
+          amount={total}
+          img={current}
+          cardTitle="Total current amount that you have."
+        />
         <AmountCard
           type="Income"
           amount={transactionInfo.income}
           img={revenue}
+          cardTitle="Total amount of income submitted."
         />
         <AmountCard
           type="Expenses"
           amount={transactionInfo.expenses}
           img={expenses}
+          cardTitle="Total amount of expenses submitted."
         />
       </div>
 

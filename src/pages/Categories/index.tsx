@@ -37,8 +37,6 @@ const Categories = () => {
     setIsOpenEdit(false);
   }
 
-  console.log("all categories: ", categories);
-
   return (
     <>
       <div className={styles.categories}>
@@ -49,6 +47,7 @@ const Categories = () => {
               handleClick={handleNewCategory}
               img={plusImg}
               textAlt="Plus icon"
+              labelTitle="New Category"
             />
           </div>
         </div>
