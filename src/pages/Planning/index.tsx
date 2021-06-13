@@ -11,6 +11,8 @@ import filterImg from "../../assets/filter.svg";
 import trash from "../../assets/trash.svg";
 import edit from "../../assets/Edit.svg";
 
+import NewPlanningModal from "../../components/NewPlanningModal";
+
 import expenses from "../../assets/expenses.svg";
 import current from "../../assets/current.svg";
 import revenue from "../../assets/revenue.svg";
@@ -160,16 +162,16 @@ const Planning = () => {
         </div>
       </div>
 
-      {/* <NewTransactionModal
+      <NewPlanningModal
         modalIsOpen={modalIsOpenAdd}
         closeModal={closeModalAdd}
       />
-      {modalIsOpenEdit && (
+      {/*modalIsOpenEdit && (
         <EditTransactionModal
           modalIsOpen={modalIsOpenEdit}
           closeModal={closeModalEdit}
         />
-      )}*/}
+      )*/}
     </>
   );
 };

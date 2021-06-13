@@ -1,3 +1,4 @@
+import { type } from "os";
 import {
   createContext,
   ReactNode,
@@ -22,40 +23,28 @@ type Categories = {
   id: string;
 };
 
-type PlanningAdd = {
-  name: string;
+interface Transaction {
+  category: Categories[];
   type: string;
-  color: string;
-  icon: string;
+  createdAt: string;
+  amount: number;
+  description: string;
+  id: string;
+}
+type PlanningAdd = {
+  category: Categories[];
+  type: string;
+  createdAt: string;
+  amount: number;
+  description: string;
 };
-
-interface IconsType {
-  id: string;
-  icon: string;
-}
-interface ColorsType {
-  id: string;
-  color: string;
-}
-
 interface ContextProps {
-  /*
-  categories: Categories[];
-  getAllCategories: () => Promise<void>;
-  getDefaultCategories: () => Promise<void>;
-  option: Categories;
-  setOption: (option: Categories) => void;
-  getAllCategoriesPlus: (edit: boolean) => Promise<void>;
-  icons: IconsType[];
-  colors: ColorsType[];
-  colorChosen: ColorsType;
-  setColorChosen: (option: ColorsType) => void;
-  iconChosen: IconsType;
-  setIconChosen: (option: IconsType) => void;
-  addNewCategory: (data: PlanningAdd) => void;
-  editCategories: (id: string) => void;
-  editCategoryStorage: Categories;
-  */
+  transactions: Transaction[];
+  addNewPlanning: (data: PlanningAdd) => Promise<void>;
+  deletePlanning: (id: string) => Promise<void>;
+  editPlanning: (id: string) => void;
+  editStorage: Transaction;
+  updatePlanning: (data: PlanningAdd) => Promise<void>;
 }
 
 //Context
@@ -63,132 +52,40 @@ const PlanningContext = createContext<ContextProps>({} as ContextProps);
 
 //Provider
 export const PlanningProvider = ({ children }: PlanningProviderType) => {
-  const [categories, setCategories] = useState<Categories[]>([]);
-  /*
-    const [defaultCategory, setDefaultCategory] = useState<Categories>(
-      {} as Categories
-    );
-    */
-
-  const [option, setOption] = useState<Categories>({} as Categories);
-  const [icons, setIcons] = useState<IconsType[]>([]);
-  const [colors, setColors] = useState<ColorsType[]>([]);
-
-  const [colorChosen, setColorChosen] = useState<ColorsType>({} as ColorsType);
-  const [iconChosen, setIconChosen] = useState<IconsType>({} as IconsType);
-
-  const [editCategoryStorage, setEditCategoryStorage] = useState<Categories>(
-    {} as Categories
+  const [transactions, setTransactions] = useState<Transaction[]>([]);
+  const [editStorage, setEditStorage] = useState<Transaction>(
+    {} as Transaction
   );
 
   useEffect(() => {
     (async function () {
-      // await getDefaultCategories();
-      //await getAllCategoriesPlus();
+      await getAllPlanning();
     })();
   }, []);
 
-  async function getAllCategories() {
+  async function getAllPlanning() {
     let db = firebase.firestore();
     try {
       const user = firebase.auth().currentUser;
       const email = user?.email as string;
 
-      let userCategories = await db
+      let userTransactions = await db
         .collection("users")
         .doc(email)
-        .collection("categories")
+        .collection("transactions")
+        .orderBy("createdAt", "desc")
         .get();
 
-      let categoriesArray = [] as Categories[];
-      userCategories.forEach((snap) => {
-        categoriesArray.push({ ...snap.data(), id: snap.id } as Categories);
+      let transactionsArray = [] as Transaction[];
+      userTransactions.forEach((snap) => {
+        transactionsArray.push({ ...snap.data(), id: snap.id } as Transaction);
       });
 
-      setCategories(categoriesArray);
-    } catch (error) {
-      toast.error(error.message, {
-        bodyClassName: "toastify__error",
-        className: "toastify",
-      });
-    }
+      setTransactions(transactionsArray);
+    } catch (error) {}
   }
 
-  async function getDefaultCategories() {
-    let db = firebase.firestore();
-    try {
-      const user = firebase.auth().currentUser;
-      const email = user?.email as string;
-
-      let defaultCategoryAsync = await db
-        .collection("categories")
-        .where("name", "==", "Salary")
-        .get();
-
-      let catDefault = {} as Categories;
-      defaultCategoryAsync.forEach((cat) => {
-        catDefault = { id: cat.id, ...cat.data() } as Categories;
-      });
-
-      setOption(catDefault);
-      //setDefaultCategory(catDefault);
-    } catch (error) {
-      toast.error(error.message, {
-        bodyClassName: "toastify__error",
-        className: "toastify",
-      });
-    }
-  }
-
-  async function getAllCategoriesPlus(edit: boolean) {
-    let db = firebase.firestore();
-    try {
-      const user = firebase.auth().currentUser;
-      const email = user?.email as string;
-
-      let categoriesColors = await db
-        .collection("categoriesplus")
-        .doc("colors")
-        .get();
-
-      let categoriesIcons = await db
-        .collection("categoriesplus")
-        .doc("icons")
-        .get();
-
-      let normalizedColors = [...categoriesColors.data()?.colors].reduce(
-        (acc, color) => {
-          acc = [...acc, { ["color"]: color, id: color }];
-
-          return acc;
-        },
-        []
-      );
-
-      let normalizesIcons = [...categoriesIcons.data()?.icons].reduce(
-        (acc, icon) => {
-          acc = [...acc, { ["icon"]: icon, id: icon.slice(-12) }];
-
-          return acc;
-        },
-        []
-      );
-
-      setColors(normalizedColors);
-      setIcons(normalizesIcons);
-      if (!edit) {
-        setColorChosen(normalizedColors[0]);
-        setIconChosen(normalizesIcons[0]);
-      }
-    } catch (error) {
-      toast.error(error.message, {
-        bodyClassName: "toastify__error",
-        className: "toastify",
-      });
-    }
-  }
-
-  async function addNewPlan(data: PlanningAdd) {
+  async function addNewPlanning(data: PlanningAdd) {
     let db = firebase.firestore();
 
     try {
@@ -197,39 +94,58 @@ export const PlanningProvider = ({ children }: PlanningProviderType) => {
 
       let docRef = db.collection("users").doc(email);
 
-      let checkCategory = await docRef
-        .collection("categories")
-        .where("name", "==", data.name)
-        .get();
+      const newTransaction = await docRef.collection("transactions").add(data);
 
-      let exist = await checkCategory.empty;
+      const newTransactionId = await newTransaction.get();
 
-      if (exist) {
-        console.log("check if exist: ", exist);
+      let transaction = {
+        ...newTransactionId.data(),
+        id: newTransactionId.id,
+      } as Transaction;
 
-        const newCategory = await docRef.collection("categories").add(data);
+      let allTransaction = [transaction, ...transactions];
 
-        const newCategoryId = await newCategory.get();
+      setTransactions(allTransaction);
 
-        let category = {
-          ...newCategoryId.data(),
-          id: newCategoryId.id,
-        } as Categories;
+      toast.success("Transaction Added! 😉", {
+        bodyClassName: "toastify",
+        className: "toastify__success",
+      });
+    } catch (error) {
+      console.log(error);
 
-        let allCategories = [category, ...categories];
+      toast.error(error.message, {
+        bodyClassName: "toastify__error",
+        className: "toastify",
+      });
+    }
+  }
+  async function deletePlanning(id: string) {
+    let db = firebase.firestore();
 
-        setCategories(allCategories);
+    try {
+      const user = firebase.auth().currentUser;
+      const email = user?.email as string;
 
-        toast.success("Category Added! 😉", {
-          bodyClassName: "toastify",
-          className: "toastify__success",
-        });
-      } else {
-        toast.error("Category name already Exists", {
-          bodyClassName: "toastify__error",
-          className: "toastify",
-        });
-      }
+      let docRef = db.collection("users").doc(email);
+
+      const deleteTransaction = await docRef
+        .collection("transactions")
+        .doc(id)
+        .delete();
+
+      const allTransaction = transactions.filter(
+        (transaction) => transaction.id !== id
+      );
+
+      console.log("deleted one", allTransaction);
+
+      setTransactions(allTransaction);
+
+      toast.success("Transaction deleted 😉", {
+        bodyClassName: "toastify",
+        className: "toastify__success",
+      });
     } catch (error) {
       console.log(error);
 
@@ -240,42 +156,56 @@ export const PlanningProvider = ({ children }: PlanningProviderType) => {
     }
   }
 
-  function editCategories(id: string) {
-    const editCategory = categories.find((category) => category.id === id);
-    if (editCategory) {
-      setEditCategoryStorage(editCategory);
+  function editPlanning(id: string) {
+    const editTransaction = transactions.find(
+      (transaction) => transaction.id === id
+    );
+    if (editTransaction) {
+      setEditStorage(editTransaction);
+    }
+  }
 
-      setColorChosen({ color: editCategory.color, id: editCategory.color });
-      setIconChosen({
-        icon: editCategory.icon,
-        id: editCategory.icon.slice(-12),
+  async function updatePlanning(data: PlanningAdd) {
+    let db = firebase.firestore();
+
+    try {
+      const user = firebase.auth().currentUser;
+      const email = user?.email as string;
+
+      let docRef = db.collection("users").doc(email);
+
+      const updatedTransaction = await docRef
+        .collection("transactions")
+        .doc(editStorage.id)
+        .set(data);
+
+      let allTransaction = transactions.map((trans) => {
+        if (trans.id === editStorage.id) {
+          return { id: editStorage.id, ...data };
+        }
+
+        return trans;
+      }) as Transaction[];
+
+      setTransactions(allTransaction);
+    } catch (error) {
+      toast.error(error.message, {
+        bodyClassName: "toastify__error",
+        className: "toastify",
       });
     }
   }
 
   return (
     <PlanningContext.Provider
-      value={
-        {
-          /*
-        categories,
-        getAllCategories,
-        getDefaultCategories,
-        option,
-        setOption,
-        getAllCategoriesPlus,
-        colors,
-        icons,
-        colorChosen,
-        iconChosen,
-        setColorChosen,
-        setIconChosen,
-        addNewCategory,
-        editCategories,
-        editCategoryStorage,
-        */
-        }
-      }
+      value={{
+        transactions,
+        addNewPlanning,
+        deletePlanning,
+        editPlanning,
+        editStorage,
+        updatePlanning,
+      }}
     >
       {children}
     </PlanningContext.Provider>

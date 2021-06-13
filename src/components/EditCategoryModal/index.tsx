@@ -47,7 +47,7 @@ const EditCategoryModal = ({
     iconChosen,
     setIconChosen,
     setColorChosen,
-    addNewCategory,
+    updateCategories,
     editCategoryStorage,
   } = useCategories();
 
@@ -72,7 +72,7 @@ const EditCategoryModal = ({
     });
   }, []);
 
-  async function handleAddNewCategory(data: NewCategoryTypes) {
+  async function handleEditCategory(data: NewCategoryTypes) {
     try {
       const category = {
         name: data.name,
@@ -81,9 +81,7 @@ const EditCategoryModal = ({
         icon: iconChosen.icon,
       } as CategoryAdd;
 
-      console.log(category);
-
-      //  await addNewCategory(category);
+      await updateCategories(category);
 
       reset();
       closeModal();
@@ -91,8 +89,6 @@ const EditCategoryModal = ({
       console.log(error.message);
     }
   }
-
-  console.log(colorChosen.color, editCategoryStorage.color);
 
   return (
     <Modal
@@ -102,10 +98,7 @@ const EditCategoryModal = ({
       overlayClassName="global__overlay"
       contentLabel="Profile Configuration"
     >
-      <form
-        className={styles.form}
-        onSubmit={handleSubmit(handleAddNewCategory)}
-      >
+      <form className={styles.form} onSubmit={handleSubmit(handleEditCategory)}>
         <img
           src={closeImg}
           alt="close"

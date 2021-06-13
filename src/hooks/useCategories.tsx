@@ -54,6 +54,7 @@ interface ContextProps {
   addNewCategory: (data: CategoriesAdd) => void;
   editCategories: (id: string) => void;
   editCategoryStorage: Categories;
+  updateCategories: (data: CategoriesAdd) => Promise<void>;
 }
 
 //Context
@@ -251,6 +252,37 @@ export const CategoriesProvider = ({ children }: CategoriesProviderType) => {
     }
   }
 
+  async function updateCategories(data: CategoriesAdd) {
+    let db = firebase.firestore();
+
+    try {
+      const user = firebase.auth().currentUser;
+      const email = user?.email as string;
+
+      let docRef = db.collection("users").doc(email);
+
+      const updatedCategory = await docRef
+        .collection("categories")
+        .doc(editCategoryStorage.id)
+        .set(data);
+
+      let allCategories = categories.map((category) => {
+        if (category.id === editCategoryStorage.id) {
+          return { id: editCategoryStorage.id, ...data };
+        }
+
+        return category;
+      }) as Categories[];
+
+      setCategories(allCategories);
+    } catch (error) {
+      toast.error(error.message, {
+        bodyClassName: "toastify__error",
+        className: "toastify",
+      });
+    }
+  }
+
   return (
     <CategoriesContext.Provider
       value={{
@@ -269,6 +301,7 @@ export const CategoriesProvider = ({ children }: CategoriesProviderType) => {
         addNewCategory,
         editCategories,
         editCategoryStorage,
+        updateCategories,
       }}
     >
       {children}

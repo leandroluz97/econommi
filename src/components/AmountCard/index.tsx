@@ -10,13 +10,15 @@ interface AmountCardProps {
 }
 const AmountCard = ({ type, amount, img, cardTitle }: AmountCardProps) => {
   return (
-    <div className={styles.card} card-title={cardTitle}>
+    <div className={styles.card}>
       <div className={styles.card__info}>
         <p>{type}</p>
         <p>{currency(amount)}</p>
       </div>
 
       <img src={img} alt={img} />
+
+      {cardTitle && <span className={styles.card__cardTitle}>{cardTitle}</span>}
     </div>
   );
 };
