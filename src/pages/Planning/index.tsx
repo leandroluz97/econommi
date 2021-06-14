@@ -18,6 +18,7 @@ import currentImg from "../../assets/current.svg";
 import revenueImg from "../../assets/revenue.svg";
 import { usePlanning } from "../../hooks/usePlanning";
 import getSummary from "../../utils/summary";
+import filterCategoryAmount from "../../utils/filterCategoryAmount";
 
 const Planning = () => {
   const [modalIsOpenAdd, setIsOpenAdd] = useState(false);
@@ -41,18 +42,6 @@ const Planning = () => {
   }
 
   const { total, income, expenses } = getSummary(transactions);
-
-  function getTrans(identifier: string) {
-    const allTransacategory = transactions
-      .filter((transaction) => {
-        return transaction.category[0].name === identifier;
-      })
-      .reduce((acc, value) => {
-        return acc + value.amount;
-      }, 0);
-
-    return allTransacategory;
-  }
 
   function handleNewPlanning() {
     setIsOpenAdd(true);
@@ -78,9 +67,41 @@ const Planning = () => {
 
   function progressBar(plan: PlanType) {
     // const value =  getTrans(plan.category[0].name ) * 100 / plan.amount
+    const filterAmount = filterCategoryAmount(
+      plan.category[0].name,
+      transactions
+    );
 
+    const filteredAmount = Math.round((filterAmount * 100) / plan.amount);
+    /*
+    if (!("Notification" in window)) {
+      alert("This browser does not support desktop notification");
+    }
+
+    // Let's check whether notification permissions have already been granted
+    else if (Notification.permission === "granted") {
+      // If it's okay let's create a notification
+      var notification = new Notification("Hi there!", {
+        body: "Have a good day",
+        icon: "./img/goodday.png",
+      });
+    }
+
+    // Otherwise, we need to ask the user for permission
+    else if (Notification.permission !== "denied") {
+      Notification.requestPermission().then(function (permission) {
+        // If the user accepts, let's create a notification
+        if (permission === "granted") {
+          var notification = new Notification("Hi there!", {
+            body: "Have a good day",
+            icon: "./img/goodday.png",
+          });
+        }
+      });
+    }
+*/
     let styles = {
-      width: `${(getTrans(plan.category[0].name) * 100) / plan.amount}%`,
+      width: `${filteredAmount}%`,
       backgroundColor: plan.amount < 70 ? "#DE5A5A" : "#5386E9",
       display: "block",
       height: "20px",
@@ -152,9 +173,16 @@ const Planning = () => {
                     <td>{plan.createdAt}</td>
                     <td>{currency(plan.amount)}</td>
                     <td>
-                      <span className={styles.planning__progress}>{`${
-                        (getTrans(plan.category[0].name) * 100) / plan.amount
-                      }%`}</span>
+                      <span
+                        className={styles.planning__progress}
+                      >{`${Math.round(
+                        (filterCategoryAmount(
+                          plan.category[0].name,
+                          transactions
+                        ) *
+                          100) /
+                          plan.amount
+                      )}%`}</span>
                       <span className={styles.planning__outer}>
                         <span style={{ ...progressBar(plan) }}></span>
                       </span>
