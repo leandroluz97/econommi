@@ -17,6 +17,7 @@ const Settings = () => {
           handleClick={handleEditSettings}
           img={edit}
           textAlt="Edit informations"
+          labelTitle="Update informations"
         />
       </div>
 

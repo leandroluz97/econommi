@@ -76,9 +76,10 @@ const NewPlanningModal = ({
         amount: Number(data.amount),
         category: [{ ...option }],
         type: type,
-        description: data.description,
         createdAt: new Intl.DateTimeFormat("pt-PT").format(date),
       } as TransactionAdd;
+
+      console.log(newTransactions);
 
       await addNewTransactions(newTransactions);
 
@@ -105,7 +106,15 @@ const NewPlanningModal = ({
           onClick={() => closeModal()}
         />
 
-        <h2>New Transaction</h2>
+        <h2>New Plan</h2>
+
+        <div className={styles.form__select}>
+          <SelectOptions
+            options={categories}
+            option={option}
+            setOption={setOption}
+          />
+        </div>
 
         <Input
           property={register("amount", {
@@ -115,21 +124,26 @@ const NewPlanningModal = ({
               message: "Entre a valid amount",
             },
           })}
-          label="Amount"
+          label="Limit Amount"
           type="number"
           error={errors.amount}
           name="amount"
         />
 
-        <div>
-          <SelectOptions
-            options={categories}
-            option={option}
-            setOption={setOption}
-          />
-        </div>
-
-        <div className={styles.form__buttons}>
+        {/* <Input
+          property={register("description", {
+            required: "Invalid Description",
+            minLength: {
+              value: 2,
+              message: "Must have 8 characters",
+            },
+          })}
+          label="Description"
+          type="text"
+          error={errors.description}
+          name="description"
+        />*/}
+        {/*<div className={styles.form__buttons}>
           <div
             className={
               type === "income"
@@ -152,24 +166,10 @@ const NewPlanningModal = ({
             <span>Outcome</span>
             <img src={outcomeImg} alt="outcome" />
           </div>
-        </div>
-
-        <Input
-          property={register("description", {
-            required: "Invalid Description",
-            minLength: {
-              value: 2,
-              message: "Must have 8 characters",
-            },
-          })}
-          label="Description"
-          type="text"
-          error={errors.description}
-          name="firstName"
-        />
+        </div>*/}
 
         <div className={styles.form__submit}>
-          <input type="submit" value="Add New Transactions" />
+          <input type="submit" value="Create Plan" />
         </div>
       </form>
     </Modal>

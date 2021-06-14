@@ -23,12 +23,11 @@ type Categories = {
   id: string;
 };
 
-interface Transaction {
+interface Planning {
   category: Categories[];
   type: string;
   createdAt: string;
   amount: number;
-  description: string;
   id: string;
 }
 type PlanningAdd = {
@@ -36,14 +35,13 @@ type PlanningAdd = {
   type: string;
   createdAt: string;
   amount: number;
-  description: string;
 };
 interface ContextProps {
-  transactions: Transaction[];
+  plannings: Planning[];
   addNewPlanning: (data: PlanningAdd) => Promise<void>;
   deletePlanning: (id: string) => Promise<void>;
   editPlanning: (id: string) => void;
-  editStorage: Transaction;
+  planEditStorage: Planning;
   updatePlanning: (data: PlanningAdd) => Promise<void>;
 }
 
@@ -52,9 +50,9 @@ const PlanningContext = createContext<ContextProps>({} as ContextProps);
 
 //Provider
 export const PlanningProvider = ({ children }: PlanningProviderType) => {
-  const [transactions, setTransactions] = useState<Transaction[]>([]);
-  const [editStorage, setEditStorage] = useState<Transaction>(
-    {} as Transaction
+  const [plannings, setPlannings] = useState<Planning[]>([]);
+  const [planEditStorage, setPlanEditStorage] = useState<Planning>(
+    {} as Planning
   );
 
   useEffect(() => {
@@ -69,19 +67,19 @@ export const PlanningProvider = ({ children }: PlanningProviderType) => {
       const user = firebase.auth().currentUser;
       const email = user?.email as string;
 
-      let userTransactions = await db
+      let userPlannings = await db
         .collection("users")
         .doc(email)
         .collection("transactions")
         .orderBy("createdAt", "desc")
         .get();
 
-      let transactionsArray = [] as Transaction[];
-      userTransactions.forEach((snap) => {
-        transactionsArray.push({ ...snap.data(), id: snap.id } as Transaction);
+      let planningsArray = [] as Planning[];
+      userPlannings.forEach((snap) => {
+        planningsArray.push({ ...snap.data(), id: snap.id } as Planning);
       });
 
-      setTransactions(transactionsArray);
+      setPlannings(planningsArray);
     } catch (error) {}
   }
 
@@ -94,20 +92,20 @@ export const PlanningProvider = ({ children }: PlanningProviderType) => {
 
       let docRef = db.collection("users").doc(email);
 
-      const newTransaction = await docRef.collection("transactions").add(data);
+      const newPlan = await docRef.collection("plannings").add(data);
 
-      const newTransactionId = await newTransaction.get();
+      const newTransactionId = await newPlan.get();
 
-      let transaction = {
+      let planning = {
         ...newTransactionId.data(),
         id: newTransactionId.id,
-      } as Transaction;
+      } as Planning;
 
-      let allTransaction = [transaction, ...transactions];
+      let allPlanning = [planning, ...plannings];
 
-      setTransactions(allTransaction);
+      setPlannings(allPlanning);
 
-      toast.success("Transaction Added! 😉", {
+      toast.success("Planning Created! 😉", {
         bodyClassName: "toastify",
         className: "toastify__success",
       });
@@ -129,20 +127,16 @@ export const PlanningProvider = ({ children }: PlanningProviderType) => {
 
       let docRef = db.collection("users").doc(email);
 
-      const deleteTransaction = await docRef
-        .collection("transactions")
+      const deletePlanning = await docRef
+        .collection("plannings")
         .doc(id)
         .delete();
 
-      const allTransaction = transactions.filter(
-        (transaction) => transaction.id !== id
-      );
+      const allPlanning = plannings.filter((plan) => plan.id !== id);
 
-      console.log("deleted one", allTransaction);
+      setPlannings(allPlanning);
 
-      setTransactions(allTransaction);
-
-      toast.success("Transaction deleted 😉", {
+      toast.success("Plan deleted 😉", {
         bodyClassName: "toastify",
         className: "toastify__success",
       });
@@ -157,11 +151,9 @@ export const PlanningProvider = ({ children }: PlanningProviderType) => {
   }
 
   function editPlanning(id: string) {
-    const editTransaction = transactions.find(
-      (transaction) => transaction.id === id
-    );
-    if (editTransaction) {
-      setEditStorage(editTransaction);
+    const editPlanning = plannings.find((plan) => plan.id === id);
+    if (editPlanning) {
+      setPlanEditStorage(editPlanning);
     }
   }
 
@@ -174,20 +166,20 @@ export const PlanningProvider = ({ children }: PlanningProviderType) => {
 
       let docRef = db.collection("users").doc(email);
 
-      const updatedTransaction = await docRef
-        .collection("transactions")
-        .doc(editStorage.id)
+      const updatedPlanning = await docRef
+        .collection("categories")
+        .doc(planEditStorage.id)
         .set(data);
 
-      let allTransaction = transactions.map((trans) => {
-        if (trans.id === editStorage.id) {
-          return { id: editStorage.id, ...data };
+      let allPlannings = plannings.map((plan) => {
+        if (plan.id === planEditStorage.id) {
+          return { id: planEditStorage.id, ...data };
         }
 
-        return trans;
-      }) as Transaction[];
+        return plan;
+      }) as Planning[];
 
-      setTransactions(allTransaction);
+      setPlannings(allPlannings);
     } catch (error) {
       toast.error(error.message, {
         bodyClassName: "toastify__error",
@@ -199,11 +191,11 @@ export const PlanningProvider = ({ children }: PlanningProviderType) => {
   return (
     <PlanningContext.Provider
       value={{
-        transactions,
+        plannings,
         addNewPlanning,
         deletePlanning,
         editPlanning,
-        editStorage,
+        planEditStorage,
         updatePlanning,
       }}
     >

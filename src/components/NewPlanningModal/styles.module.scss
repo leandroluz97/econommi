@@ -12,6 +12,7 @@
     cursor: pointer;
   }
 
+  /*
   &__select {
     label {
       display: block;
@@ -19,12 +20,12 @@
       font-size: 1.2rem;
     }
     select {
-      margin-top: 1rem;
+      margin-top: 0rem;
       width: 100%;
       padding: 1rem;
     }
   }
-
+*/
   &__buttons {
     display: flex;
     justify-content: space-between;
@@ -102,6 +103,10 @@
   .activeOutcome {
     background-color: #f8d8d8;
   }
+}
+
+.ReactModal__Content {
+  transform: translate(-50%);
 }
 
 @media (max-width: 768px) {
