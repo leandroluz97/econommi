@@ -13,31 +13,46 @@ import edit from "../../assets/Edit.svg";
 
 import NewPlanningModal from "../../components/NewPlanningModal";
 
-import expenses from "../../assets/expenses.svg";
-import current from "../../assets/current.svg";
-import revenue from "../../assets/revenue.svg";
+import expensesImg from "../../assets/expenses.svg";
+import currentImg from "../../assets/current.svg";
+import revenueImg from "../../assets/revenue.svg";
+import { usePlanning } from "../../hooks/usePlanning";
+import getSummary from "../../utils/summary";
 
 const Planning = () => {
   const [modalIsOpenAdd, setIsOpenAdd] = useState(false);
   const [modalIsOpenEdit, setIsOpenEdit] = useState(false);
   const [search, setSearch] = useState("");
-  const { transactions, deleteTransaction, editTransaction } =
-    useTransactions();
+  const { transactions } = useTransactions();
+  const { plannings, deletePlanning } = usePlanning();
 
-  const transactionInfo = transactions.reduce(
-    (acc, value) => {
-      if (value.type === "income") {
-        acc.income += value.amount;
-      } else {
-        acc.expenses += value.amount;
-      }
+  type Categories = {
+    name: string;
+    type: string;
+    color: string;
+    icon: string;
+    id: string;
+  };
 
-      return acc;
-    },
-    { expenses: 0, income: 0 }
-  );
+  interface PlanType {
+    category: Categories[];
+    createdAt: string;
+    amount: number;
+  }
 
-  const total = transactionInfo.income - transactionInfo.expenses;
+  const { total, income, expenses } = getSummary(transactions);
+
+  function getTrans(identifier: string) {
+    const allTransacategory = transactions
+      .filter((transaction) => {
+        return transaction.category[0].name === identifier;
+      })
+      .reduce((acc, value) => {
+        return acc + value.amount;
+      }, 0);
+
+    return allTransacategory;
+  }
 
   function handleNewPlanning() {
     setIsOpenAdd(true);
@@ -57,11 +72,22 @@ const Planning = () => {
     setSearch(event.target.value);
   }
 
-  const searched = transactions.filter((transaction) =>
-    transaction.category[0].name
-      .toLowerCase()
-      .includes(search.toLocaleLowerCase())
+  const searched = plannings.filter((plan) =>
+    plan.category[0].name.toLowerCase().includes(search.toLocaleLowerCase())
   );
+
+  function progressBar(plan: PlanType) {
+    // const value =  getTrans(plan.category[0].name ) * 100 / plan.amount
+
+    let styles = {
+      width: `${(getTrans(plan.category[0].name) * 100) / plan.amount}%`,
+      backgroundColor: plan.amount < 70 ? "#DE5A5A" : "#5386E9",
+      display: "block",
+      height: "20px",
+      borderRadius: "100px",
+    };
+    return styles;
+  }
   return (
     <>
       <div className={styles.planning}>
@@ -92,9 +118,9 @@ const Planning = () => {
             />
           </div>
         </div>
-        <div className={styles.transactions__infos}>
-          {transactions.length >= 1 ? (
-            <table className={styles.transactions__table}>
+        <div className={styles.planning__infos}>
+          {plannings.length >= 1 ? (
+            <table className={styles.planning__table}>
               <thead>
                 <tr>
                   <th></th>
@@ -106,32 +132,38 @@ const Planning = () => {
                 </tr>
               </thead>
               <tbody>
-                {searched.map((transaction) => (
-                  <tr key={transaction.id}>
+                {searched.map((plan) => (
+                  <tr key={plan.id}>
                     <td>
                       <span
-                        className={styles.transactions__icon}
+                        className={styles.planning__icon}
                         style={{
-                          backgroundColor: `${transaction.category[0].color}`,
+                          backgroundColor: `${plan.category[0].color}`,
                         }}
                       >
                         <img
-                          src={transaction.category[0].icon}
-                          alt={transaction.category[0].name}
+                          src={plan.category[0].icon}
+                          alt={plan.category[0].name}
                         />
                       </span>
                     </td>
-                    <td>{transaction.category[0].name}</td>
-                    <td>{transaction.type}</td>
-                    <td>{transaction.createdAt}</td>
-                    <td>{currency(transaction.amount)}</td>
+                    <td>{plan.category[0].name}</td>
+
+                    <td>{plan.createdAt}</td>
+                    <td>{currency(plan.amount)}</td>
                     <td>
-                      <button
-                        onClick={() => handleEditPlanning(transaction.id)}
-                      >
+                      <span className={styles.planning__progress}>{`${
+                        (getTrans(plan.category[0].name) * 100) / plan.amount
+                      }%`}</span>
+                      <span className={styles.planning__outer}>
+                        <span style={{ ...progressBar(plan) }}></span>
+                      </span>
+                    </td>
+                    <td>
+                      <button onClick={() => handleEditPlanning(plan.id)}>
                         <img src={edit} alt="edit" />
                       </button>
-                      <button onClick={() => deleteTransaction(transaction.id)}>
+                      <button onClick={() => deletePlanning(plan.id)}>
                         <img src={trash} alt="edit" />
                       </button>
                     </td>
@@ -144,19 +176,15 @@ const Planning = () => {
               You don't have any Plan yet!
             </h3>
           )}
-          {transactions.length > 1 && (
-            <div className={styles.transactions__cards}>
-              <AmountCard type="Current Balance" amount={total} img={current} />
+          {plannings.length >= 1 && (
+            <div className={styles.planning__cards}>
               <AmountCard
-                type="Income"
-                amount={transactionInfo.income}
-                img={revenue}
+                type="Current Balance"
+                amount={total}
+                img={currentImg}
               />
-              <AmountCard
-                type="Expenses"
-                amount={transactionInfo.expenses}
-                img={expenses}
-              />
+              <AmountCard type="Income" amount={income} img={revenueImg} />
+              <AmountCard type="Expenses" amount={expenses} img={expensesImg} />
             </div>
           )}
         </div>

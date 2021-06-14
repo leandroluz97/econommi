@@ -104,27 +104,6 @@ body {
   justify-content: center;
   align-items: center;
 }
-.global__modal-plan {
-  border: none;
-  border-radius: 15px;
-  background-color: white;
-  padding: 1rem;
-
-  max-width: 625px;
-  width: 100%;
-}
-.global__overlay-plan {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.4);
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
 
 .new__modal {
   border: none;

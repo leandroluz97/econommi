@@ -3,12 +3,13 @@ import AmountCard from "../../components/AmountCard";
 import { useTransactions } from "../../hooks/useTransactions";
 import styles from "./styles.module.scss";
 
-import expenses from "../../assets/expenses.svg";
-import current from "../../assets/current.svg";
-import revenue from "../../assets/revenue.svg";
+import expensesImg from "../../assets/expenses.svg";
+import currentImg from "../../assets/current.svg";
+import revenueImg from "../../assets/revenue.svg";
 import caretdownBig from "../../assets/caretdownBig.svg";
 
 import { Doughnut, Line } from "react-chartjs-2";
+import getSummary from "../../utils/summary";
 
 interface transDataType {
   trans: number;
@@ -17,19 +18,7 @@ interface transDataType {
 const Dashboard = () => {
   const { transactions } = useTransactions();
 
-  const transactionInfo = transactions.reduce(
-    (acc, value) => {
-      if (value.type === "income") {
-        acc.income += value.amount;
-      } else {
-        acc.expenses += value.amount;
-      }
-
-      return acc;
-    },
-    { expenses: 0, income: 0 }
-  );
-  const total = transactionInfo.income - transactionInfo.expenses;
+  const { total, income, expenses } = getSummary(transactions);
 
   let transData: transDataType = {
     trans: 0,
@@ -99,10 +88,7 @@ const Dashboard = () => {
         label: "Rainfall",
         backgroundColor: ["#DE5A5A", "#8BCF61"],
         hoverBackgroundColor: ["#D45050", "#82C957"],
-        data: [
-          Number(transactionInfo.expenses),
-          transactionInfo.income - transactionInfo.expenses,
-        ],
+        data: [Number(expenses), income - expenses],
       },
     ],
   };
@@ -121,19 +107,19 @@ const Dashboard = () => {
         <AmountCard
           type="Current Balance"
           amount={total}
-          img={current}
+          img={currentImg}
           cardTitle="Total current amount that you have."
         />
         <AmountCard
           type="Income"
-          amount={transactionInfo.income}
-          img={revenue}
+          amount={income}
+          img={revenueImg}
           cardTitle="Total amount of income submitted."
         />
         <AmountCard
           type="Expenses"
-          amount={transactionInfo.expenses}
-          img={expenses}
+          amount={expenses}
+          img={expensesImg}
           cardTitle="Total amount of expenses submitted."
         />
       </div>

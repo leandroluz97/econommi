@@ -12,10 +12,11 @@ import EditTransactionModal from "../../components/EditTransactionModal";
 import AmountCard from "../../components/AmountCard";
 import currency from "../../utils/currency";
 
-import expenses from "../../assets/expenses.svg";
+import expensesImg from "../../assets/expenses.svg";
 import current from "../../assets/current.svg";
 import revenue from "../../assets/revenue.svg";
 import RoundedSearch from "../../components/RoundedSearch";
+import getSummary from "../../utils/summary";
 
 const Transactions = () => {
   const [modalIsOpenAdd, setIsOpenAdd] = useState(false);
@@ -34,22 +35,7 @@ const Transactions = () => {
     //console.log(transactions);
   }, []);
 
-  const transactionInfo = transactions.reduce(
-    (acc, value) => {
-      if (value.type === "income") {
-        acc.income += value.amount;
-      } else {
-        acc.expenses += value.amount;
-      }
-
-      return acc;
-    },
-    { expenses: 0, income: 0 }
-  );
-
-  console.log(transactionInfo);
-
-  const total = transactionInfo.income - transactionInfo.expenses;
+  const { total, income, expenses } = getSummary(transactions);
 
   function handleNewTransaction() {
     setIsOpenAdd(true);
@@ -159,16 +145,8 @@ const Transactions = () => {
           {transactions.length >= 1 && (
             <div className={styles.transactions__cards}>
               <AmountCard type="Current Balance" amount={total} img={current} />
-              <AmountCard
-                type="Income"
-                amount={transactionInfo.income}
-                img={revenue}
-              />
-              <AmountCard
-                type="Expenses"
-                amount={transactionInfo.expenses}
-                img={expenses}
-              />
+              <AmountCard type="Income" amount={income} img={revenue} />
+              <AmountCard type="Expenses" amount={expenses} img={expensesImg} />
             </div>
           )}
         </div>

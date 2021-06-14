@@ -9,12 +9,11 @@ import outcomeImg from "../../assets/outcome.svg";
 import SelectOptions from "../SelectOptions/";
 import { useTransactions } from "../../hooks/useTransactions";
 import { useCategories } from "../../hooks/useCategories";
+import { usePlanning } from "../../hooks/usePlanning";
 
-interface NewTransationTypes {
+interface NewPlanningTypes {
   amount: string;
   category: string;
-  type: string;
-  description: string;
 }
 
 type Categories = {
@@ -25,15 +24,13 @@ type Categories = {
   id: string;
 };
 
-interface TransactionAdd {
+interface PlanningAdd {
   category: Categories[];
-  type: string;
   createdAt: string;
   amount: number;
-  description: string;
 }
 
-interface NewTransactionModalProps {
+interface NewPlanningModalProps {
   modalIsOpen: boolean;
   closeModal: () => void;
 }
@@ -41,8 +38,8 @@ interface NewTransactionModalProps {
 const NewPlanningModal = ({
   modalIsOpen,
   closeModal,
-}: NewTransactionModalProps) => {
-  const { addNewTransactions } = useTransactions();
+}: NewPlanningModalProps) => {
+  const { addNewPlanning } = usePlanning();
 
   const {
     getAllCategories,
@@ -52,7 +49,7 @@ const NewPlanningModal = ({
     setOption,
   } = useCategories();
 
-  const [type, setType] = useState("income");
+  //const [type, setType] = useState("income");
 
   useEffect(() => {
     (async function () {
@@ -66,22 +63,21 @@ const NewPlanningModal = ({
     handleSubmit,
     formState: { errors },
     reset,
-  } = useForm<NewTransationTypes>();
+  } = useForm<NewPlanningTypes>();
 
-  async function addNewTransaction(data: NewTransationTypes) {
+  async function addNewTransaction(data: NewPlanningTypes) {
     try {
       const date = new Date();
 
-      const newTransactions = {
+      const newPlanning = {
         amount: Number(data.amount),
         category: [{ ...option }],
-        type: type,
         createdAt: new Intl.DateTimeFormat("pt-PT").format(date),
-      } as TransactionAdd;
+      } as PlanningAdd;
 
-      console.log(newTransactions);
+      //console.log(newPlanning);
 
-      await addNewTransactions(newTransactions);
+      await addNewPlanning(newPlanning);
 
       reset();
       closeModal();

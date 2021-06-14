@@ -25,14 +25,12 @@ type Categories = {
 
 interface Planning {
   category: Categories[];
-  type: string;
   createdAt: string;
   amount: number;
   id: string;
 }
 type PlanningAdd = {
   category: Categories[];
-  type: string;
   createdAt: string;
   amount: number;
 };
@@ -70,7 +68,7 @@ export const PlanningProvider = ({ children }: PlanningProviderType) => {
       let userPlannings = await db
         .collection("users")
         .doc(email)
-        .collection("transactions")
+        .collection("plannings")
         .orderBy("createdAt", "desc")
         .get();
 
