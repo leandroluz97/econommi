@@ -1,0 +1,112 @@
+.form {
+  position: relative;
+  padding: 5rem;
+
+  > div {
+    margin: 3rem 0;
+  }
+  &__close {
+    position: absolute;
+    top: 0;
+    right: 0;
+    cursor: pointer;
+  }
+
+  /*
+  &__select {
+    label {
+      display: block;
+      color: var(--gray-600);
+      font-size: 1.2rem;
+    }
+    select {
+      margin-top: 0rem;
+      width: 100%;
+      padding: 1rem;
+    }
+  }
+*/
+  &__buttons {
+    display: flex;
+    justify-content: space-between;
+
+    div {
+      padding: 1.5rem;
+      width: 45%;
+      background-color: transparent;
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+
+      border-radius: 7px;
+      font-size: 1.6rem;
+      font-weight: 500;
+
+      > img {
+        margin-left: 1rem;
+      }
+    }
+
+    div:first-child {
+      border: 1px solid var(--green-300) !important;
+
+      span {
+        color: var(--green-300);
+      }
+    }
+    div:last-child {
+      border: 1px solid var(--red-200);
+
+      span {
+        color: var(--red-200);
+      }
+    }
+  }
+
+  h2 {
+    font-family: Roboto;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 2.6rem;
+    text-align: center;
+    margin-bottom: 1rem;
+  }
+
+  &__submit {
+    input {
+      border-radius: 6px;
+      padding: 1.5rem;
+      display: block;
+      width: 100%;
+      cursor: pointer;
+      border: none;
+      background-color: var(--green);
+      color: var(--white);
+      font-weight: 600;
+      font-size: 1.6rem;
+      height: 5.5rem;
+      margin-top: 4rem;
+
+      transition: all 0.2s ease;
+
+      &:hover {
+        background-color: #3bb098;
+      }
+    }
+  }
+
+  .activeIncome {
+    background-color: #eaf5e3;
+  }
+  .activeOutcome {
+    background-color: #f8d8d8;
+  }
+}
+
+@media (max-width: 768px) {
+  .form {
+    padding: 2rem;
+  }
+}

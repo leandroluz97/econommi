@@ -12,6 +12,7 @@ import trash from "../../assets/trash.svg";
 import edit from "../../assets/Edit.svg";
 
 import NewPlanningModal from "../../components/NewPlanningModal";
+import EditPlanningModal from "../../components/EditPlanningModal";
 
 import expensesImg from "../../assets/expenses.svg";
 import currentImg from "../../assets/current.svg";
@@ -25,7 +26,7 @@ const Planning = () => {
   const [modalIsOpenEdit, setIsOpenEdit] = useState(false);
   const [search, setSearch] = useState("");
   const { transactions } = useTransactions();
-  const { plannings, deletePlanning } = usePlanning();
+  const { plannings, deletePlanning, editPlanning } = usePlanning();
 
   type Categories = {
     name: string;
@@ -47,7 +48,7 @@ const Planning = () => {
     setIsOpenAdd(true);
   }
   function handleEditPlanning(id: string) {
-    // editPlanning(id);
+    editPlanning(id);
     setIsOpenEdit(true);
   }
 
@@ -66,7 +67,6 @@ const Planning = () => {
   );
 
   function progressBar(plan: PlanType) {
-    // const value =  getTrans(plan.category[0].name ) * 100 / plan.amount
     const filterAmount = filterCategoryAmount(
       plan.category[0].name,
       transactions
@@ -146,8 +146,8 @@ const Planning = () => {
                 <tr>
                   <th></th>
                   <th>Category</th>
-                  <th>Type</th>
-                  <th>Date</th>
+                  <th>Expended Amount</th>
+                  <th>Limit Amount</th>
                   <th>Value</th>
                   <th>Actions</th>
                 </tr>
@@ -170,7 +170,14 @@ const Planning = () => {
                     </td>
                     <td>{plan.category[0].name}</td>
 
-                    <td>{plan.createdAt}</td>
+                    <td>
+                      {currency(
+                        filterCategoryAmount(
+                          plan.category[0].name,
+                          transactions
+                        )
+                      )}
+                    </td>
                     <td>{currency(plan.amount)}</td>
                     <td>
                       <span
@@ -222,12 +229,12 @@ const Planning = () => {
         modalIsOpen={modalIsOpenAdd}
         closeModal={closeModalAdd}
       />
-      {/*modalIsOpenEdit && (
-        <EditTransactionModal
+      {modalIsOpenEdit && (
+        <EditPlanningModal
           modalIsOpen={modalIsOpenEdit}
           closeModal={closeModalEdit}
         />
-      )*/}
+      )}
     </>
   );
 };

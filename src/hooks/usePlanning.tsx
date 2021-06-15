@@ -165,7 +165,7 @@ export const PlanningProvider = ({ children }: PlanningProviderType) => {
       let docRef = db.collection("users").doc(email);
 
       const updatedPlanning = await docRef
-        .collection("categories")
+        .collection("plannings")
         .doc(planEditStorage.id)
         .set(data);
 
