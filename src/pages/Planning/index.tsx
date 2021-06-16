@@ -102,7 +102,7 @@ const Planning = () => {
 */
     let styles = {
       width: `${filteredAmount}%`,
-      backgroundColor: plan.amount < 70 ? "#DE5A5A" : "#5386E9",
+      backgroundColor: filteredAmount > 65 ? "#DE5A5A" : "#5386E9",
       display: "block",
       height: "20px",
       borderRadius: "100px",

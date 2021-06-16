@@ -39,7 +39,7 @@ const EditPlanningModal = ({
   modalIsOpen,
   closeModal,
 }: NewPlanningModalProps) => {
-  const { addNewPlanning, planEditStorage, updatePlanning } = usePlanning();
+  const {  planEditStorage, updatePlanning } = usePlanning();
 
   const { getAllCategories, categories, getDefaultCategories } =
     useCategories();

@@ -22,6 +22,12 @@ interface User {
   firstName?: string | null;
   lastName?: string | null;
 }
+interface EditSettingsTypes {
+  displayname: string;
+  firstname: string;
+  lastname: string;
+  profileImage: string;
+}
 
 interface ContextProps {
   currentUser: User | null;
@@ -35,6 +41,7 @@ interface ContextProps {
     lastName: string
   ) => void;
   onSigninPassword: (email: string, password: string) => void;
+  updateSettings: (data: EditSettingsTypes) => void;
 }
 
 //Context
@@ -189,7 +196,32 @@ export const AuthProvider = ({ children }: AuthProviderType) => {
     return unsubscribe;
   }, []);
 
-  console.log(currentUser);
+  async function updateSettings(data: EditSettingsTypes) {
+    let db = firebase.firestore();
+
+    try {
+      const user = firebase.auth().currentUser;
+      const email = user?.email as string;
+
+      const updatedUserData = {
+        displayName: data.displayname,
+        photoURL: data.profileImage,
+        email: email,
+        userId: currentUser?.userId,
+        firstName: data.firstname,
+        lastName: data.lastname,
+      };
+
+      let docRef = await db.collection("users").doc(email).set(updatedUserData);
+
+      setCurrentUser(updatedUserData);
+    } catch (error) {
+      toast.error(error.message, {
+        bodyClassName: "toastify__error",
+        className: "toastify",
+      });
+    }
+  }
 
   return (
     <AuthContext.Provider
@@ -200,6 +232,7 @@ export const AuthProvider = ({ children }: AuthProviderType) => {
         onSubmitGmail,
         onSignupPassword,
         onSigninPassword,
+        updateSettings,
       }}
     >
       {!isLoading && children}
