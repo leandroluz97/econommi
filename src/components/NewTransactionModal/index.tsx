@@ -173,7 +173,7 @@ const NewTransactionModal = ({
         />
 
         <div className={styles.form__submit}>
-          {!isLoanding && <input type="submit" value={"Add New Transaction"} />}
+          {!isLoanding && <input type="submit" value={"ADD NEW TRANSACTION"} />}
           {isLoanding && <Spinner />}
         </div>
       </form>

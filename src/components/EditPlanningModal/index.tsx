@@ -4,12 +4,10 @@ import Modal from "react-modal";
 import Input from "../Input";
 import styles from "./styles.module.scss";
 import closeImg from "../../assets/close.svg";
-import incomeImg from "../../assets/income.svg";
-import outcomeImg from "../../assets/outcome.svg";
 import SelectOptions from "../SelectOptions/";
-import { useTransactions } from "../../hooks/useTransactions";
 import { useCategories } from "../../hooks/useCategories";
 import { usePlanning } from "../../hooks/usePlanning";
+import Spinner from "../../components/Spinner";
 
 interface NewPlanningTypes {
   amount: string;
@@ -39,7 +37,7 @@ const EditPlanningModal = ({
   modalIsOpen,
   closeModal,
 }: NewPlanningModalProps) => {
-  const {  planEditStorage, updatePlanning } = usePlanning();
+  const { planEditStorage, updatePlanning } = usePlanning();
 
   const { getAllCategories, categories, getDefaultCategories } =
     useCategories();
@@ -54,6 +52,7 @@ const EditPlanningModal = ({
   const [category] = planEditStorage.category;
 
   const [option, setOption] = useState(category);
+  const [isLoanding, setIsLoading] = useState(false);
 
   useEffect(() => {
     (async function () {
@@ -66,6 +65,7 @@ const EditPlanningModal = ({
   }, []);
 
   async function addNewTransaction(data: NewPlanningTypes) {
+    setIsLoading(true);
     try {
       const newPlanning = {
         amount: Number(data.amount),
@@ -77,6 +77,7 @@ const EditPlanningModal = ({
 
       reset();
       closeModal();
+      setIsLoading(false);
     } catch (error) {
       console.log(error.message);
     }
@@ -161,7 +162,8 @@ const EditPlanningModal = ({
         </div>*/}
 
         <div className={styles.form__submit}>
-          <input type="submit" value="Create Plan" />
+          {!isLoanding && <input type="submit" value={"UPDATE PLAN"} />}
+          {isLoanding && <Spinner />}
         </div>
       </form>
     </Modal>

@@ -183,7 +183,6 @@ export const AuthProvider = ({ children }: AuthProviderType) => {
       setCurrentUser(user as User);
       setIsLoading(false);
 
-      /*
       (async function () {
         let db = firebase.firestore();
 
@@ -192,7 +191,6 @@ export const AuthProvider = ({ children }: AuthProviderType) => {
 
         setCurrentUser(doc.data() as User);
       })();
-      */
     });
 
     return unsubscribe;
@@ -209,10 +207,12 @@ export const AuthProvider = ({ children }: AuthProviderType) => {
         displayName: data.displayname,
         photoURL: data.profileImage,
         email: email,
-        userId: currentUser?.userId,
+        userId: user?.uid,
         firstName: data.firstname,
         lastName: data.lastname,
       };
+
+      console.log(currentUser);
 
       let docRef = await db
         .collection("users")
@@ -221,6 +221,8 @@ export const AuthProvider = ({ children }: AuthProviderType) => {
 
       setCurrentUser(updatedUserData);
     } catch (error) {
+      console.log(error.message);
+
       toast.error(error.message, {
         bodyClassName: "toastify__error",
         className: "toastify",
@@ -250,60 +252,3 @@ export function useAuth() {
 
   return context;
 }
-
-/*
-    let db = firebase.firestore()
-
-    const user = { nome: "leandro", idade: 23, nacionalidade: "cavoverdiano" }
-    const ref = db.collection("users")
-
-    ref.add(user)
-*/
-
-/*
-      async function saveUserToDB() {
-        let docRef = db.collection("users").doc(user?.email as string)
-        try {
-          const doc = await docRef.get()
-
-          if (doc.exists) {
-            //console.log("Document data:", doc.data())
-          } else {
-            // doc.data() will be undefined in this case
-            //console.log("No such document!")
-
-            const ref = db.collection("users")
-            let userData = {
-              userId: user?.uid,
-              photoURL: user?.photoURL,
-              email: user?.email,
-              displayName: user?.displayName,
-            }
-
-            ref.doc(user?.email as string).set(userData)
-          }
-        } catch (error) {
-          console.log(error)
-        }
-      }
-
-      if (user) {
-        saveUserToDB()
-      }
-      */
-//console.log(user)
-/*
-    firebase
-      .auth()
-      .createUserWithEmailAndPassword(email, password)
-      .then((userCredential) => {
-        // Signed in
-        let user = userCredential.user
-      })
-      .catch((error) => {
-        toast.error(error.message, {
-          bodyClassName: "toastify__error",
-          className: "toastify",
-        })
-      })
-      */

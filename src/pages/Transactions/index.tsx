@@ -135,21 +135,18 @@ const Transactions = () => {
                         onClick={() => handleOpenTransaction(transaction.id)}
                       >
                         <img src={open} alt="open" />
-                        <span>View</span>
                       </button>
                       <button
                         className={styles.transactions__action}
                         onClick={() => handleEditTransaction(transaction.id)}
                       >
                         <img src={edit} alt="edit" />
-                        <span>Edit</span>
                       </button>
                       <button
                         className={styles.transactions__action}
                         onClick={() => deleteTransaction(transaction.id)}
                       >
                         <img src={trash} alt="delete" />
-                        <span>Delete</span>
                       </button>
                     </td>
                   </tr>

@@ -9,6 +9,7 @@ import outcomeImg from "../../assets/outcome.svg";
 import SelectOptions from "../SelectOptions/";
 import { useTransactions } from "../../hooks/useTransactions";
 import { useCategories } from "../../hooks/useCategories";
+import Spinner from "../../components/Spinner";
 
 interface EditTransationTypes {
   amount: string;
@@ -56,6 +57,7 @@ const EditTransactionModal = ({
   } = useForm<EditTransationTypes>();
 
   const [category] = editStorage.category;
+  const [isLoanding, setIsLoading] = useState(false);
 
   const [type, setType] = useState(editStorage.type);
   const [option, setOption] = useState(category);
@@ -70,6 +72,7 @@ const EditTransactionModal = ({
   }, []);
 
   async function updatedTransaction(data: EditTransationTypes) {
+    setIsLoading(true);
     try {
       const date = new Date();
 
@@ -85,6 +88,7 @@ const EditTransactionModal = ({
 
       reset();
       closeModal();
+      setIsLoading(false);
     } catch (error) {
       console.log(error.message);
     }
@@ -170,7 +174,8 @@ const EditTransactionModal = ({
         />
 
         <div className={styles.form__submit}>
-          <input type="submit" value="Add New Transactions" />
+          {!isLoanding && <input type="submit" value={"UPDATE TRANSACTION"} />}
+          {isLoanding && <Spinner />}
         </div>
       </form>
     </Modal>

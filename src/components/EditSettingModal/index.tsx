@@ -4,13 +4,8 @@ import Modal from "react-modal";
 import Input from "../Input";
 import styles from "./styles.module.scss";
 import closeImg from "../../assets/close.svg";
-import incomeImg from "../../assets/income.svg";
-import outcomeImg from "../../assets/outcome.svg";
-import SelectOptions from "../SelectOptions/";
-import { useTransactions } from "../../hooks/useTransactions";
-import { useCategories } from "../../hooks/useCategories";
-import { usePlanning } from "../../hooks/usePlanning";
 import { useAuth } from "../../hooks/useAuth";
+import Spinner from "../../components/Spinner";
 
 interface EditSettingsTypes {
   displayname: string;
@@ -29,6 +24,7 @@ const EditSettingsModal = ({
   closeModal,
 }: EditSettingsModalProps) => {
   const { currentUser, updateSettings } = useAuth();
+  const [isLoanding, setIsLoading] = useState(false);
 
   const {
     register,
@@ -60,6 +56,7 @@ const EditSettingsModal = ({
   }, []);
 
   async function addNewTransaction(data: EditSettingsTypes) {
+    setIsLoading(true);
     try {
       const newPlanning = {
         displayname: data.displayname,
@@ -71,6 +68,7 @@ const EditSettingsModal = ({
       await updateSettings(newPlanning);
       reset();
       closeModal();
+      setIsLoading(false);
     } catch (error) {
       console.log(error.message);
     }
@@ -149,7 +147,8 @@ const EditSettingsModal = ({
         />
 
         <div className={styles.form__submit}>
-          <input type="submit" value="Create Plan" />
+          {!isLoanding && <input type="submit" value={"UPDATE SETTINGS"} />}
+          {isLoanding && <Spinner />}
         </div>
       </form>
     </Modal>

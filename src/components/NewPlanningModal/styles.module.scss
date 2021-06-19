@@ -75,9 +75,17 @@
   }
 
   &__submit {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    height: 5.5rem;
+    background-color: var(--green);
+    border-radius: 6px;
+
     input {
       border-radius: 6px;
-      padding: 1.5rem;
+
       display: block;
       width: 100%;
       cursor: pointer;
@@ -87,7 +95,6 @@
       font-weight: 600;
       font-size: 1.6rem;
       height: 5.5rem;
-      margin-top: 4rem;
 
       transition: all 0.2s ease;
 

@@ -6,9 +6,8 @@ import styles from "./styles.module.scss";
 import closeImg from "../../assets/close.svg";
 import incomeImg from "../../assets/income.svg";
 import outcomeImg from "../../assets/outcome.svg";
-import SelectOptions from "../SelectOptions/";
-import { useTransactions } from "../../hooks/useTransactions";
 import { useCategories } from "../../hooks/useCategories";
+import Spinner from "../../components/Spinner";
 
 interface NewCategoryTypes {
   name: string;
@@ -51,6 +50,7 @@ const NewCategoryModal = ({
   } = useCategories();
 
   const [type, setType] = useState("income");
+  const [isLoanding, setIsLoading] = useState(false);
 
   useEffect(() => {
     (async function () {
@@ -66,6 +66,7 @@ const NewCategoryModal = ({
   } = useForm<NewCategoryTypes>();
 
   async function handleAddNewCategory(data: NewCategoryTypes) {
+    setIsLoading(true);
     try {
       const date = new Date();
 
@@ -82,6 +83,7 @@ const NewCategoryModal = ({
 
       reset();
       closeModal();
+      setIsLoading(false);
     } catch (error) {
       console.log(error.message);
     }
@@ -192,7 +194,8 @@ const NewCategoryModal = ({
         </div>
 
         <div className={styles.form__submit}>
-          <input type="submit" value="Add New Transactions" />
+          {!isLoanding && <input type="submit" value={"ADD NEW CATEGORY"} />}
+          {isLoanding && <Spinner />}
         </div>
       </form>
     </Modal>

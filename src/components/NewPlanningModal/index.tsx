@@ -4,12 +4,10 @@ import Modal from "react-modal";
 import Input from "../Input";
 import styles from "./styles.module.scss";
 import closeImg from "../../assets/close.svg";
-import incomeImg from "../../assets/income.svg";
-import outcomeImg from "../../assets/outcome.svg";
 import SelectOptions from "../SelectOptions/";
-import { useTransactions } from "../../hooks/useTransactions";
 import { useCategories } from "../../hooks/useCategories";
 import { usePlanning } from "../../hooks/usePlanning";
+import Spinner from "../../components/Spinner";
 
 interface NewPlanningTypes {
   amount: string;
@@ -50,6 +48,7 @@ const NewPlanningModal = ({
   } = useCategories();
 
   //const [type, setType] = useState("income");
+  const [isLoanding, setIsLoading] = useState(false);
 
   useEffect(() => {
     (async function () {
@@ -66,6 +65,7 @@ const NewPlanningModal = ({
   } = useForm<NewPlanningTypes>();
 
   async function addNewTransaction(data: NewPlanningTypes) {
+    setIsLoading(true);
     try {
       const date = new Date();
 
@@ -81,6 +81,7 @@ const NewPlanningModal = ({
 
       reset();
       closeModal();
+      setIsLoading(false);
     } catch (error) {
       console.log(error.message);
     }
@@ -165,7 +166,8 @@ const NewPlanningModal = ({
         </div>*/}
 
         <div className={styles.form__submit}>
-          <input type="submit" value="Create Plan" />
+          {!isLoanding && <input type="submit" value={" NEW PLAN"} />}
+          {isLoanding && <Spinner />}
         </div>
       </form>
     </Modal>
