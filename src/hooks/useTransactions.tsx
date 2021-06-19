@@ -73,7 +73,7 @@ export const TransactionsProvider = ({
 
       let userTransactions = await db
         .collection("users")
-        .doc(email)
+        .doc(user?.uid)
         .collection("transactions")
         .orderBy("createdAt", "desc")
         .get();
@@ -94,7 +94,7 @@ export const TransactionsProvider = ({
       const user = firebase.auth().currentUser;
       const email = user?.email as string;
 
-      let docRef = db.collection("users").doc(email);
+      let docRef = db.collection("users").doc(user?.uid);
 
       const newTransaction = await docRef.collection("transactions").add(data);
 
@@ -129,7 +129,7 @@ export const TransactionsProvider = ({
       const user = firebase.auth().currentUser;
       const email = user?.email as string;
 
-      let docRef = db.collection("users").doc(email);
+      let docRef = db.collection("users").doc(user?.uid);
 
       const deleteTransaction = await docRef
         .collection("transactions")
@@ -174,7 +174,7 @@ export const TransactionsProvider = ({
       const user = firebase.auth().currentUser;
       const email = user?.email as string;
 
-      let docRef = db.collection("users").doc(email);
+      let docRef = db.collection("users").doc(user?.uid);
 
       const updatedTransaction = await docRef
         .collection("transactions")
@@ -197,8 +197,6 @@ export const TransactionsProvider = ({
       });
     }
   }
-
-  console.log(transactions);
 
   return (
     <TransactionsContext.Provider

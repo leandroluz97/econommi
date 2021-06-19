@@ -9,6 +9,7 @@ import outcomeImg from "../../assets/outcome.svg";
 import SelectOptions from "../SelectOptions/";
 import { useTransactions } from "../../hooks/useTransactions";
 import { useCategories } from "../../hooks/useCategories";
+import Spinner from "../../components/Spinner";
 
 interface NewTransationTypes {
   amount: string;
@@ -53,6 +54,7 @@ const NewTransactionModal = ({
   } = useCategories();
 
   const [type, setType] = useState("income");
+  const [isLoanding, setIsLoading] = useState(false);
 
   useEffect(() => {
     (async function () {
@@ -69,6 +71,7 @@ const NewTransactionModal = ({
   } = useForm<NewTransationTypes>();
 
   async function addNewTransaction(data: NewTransationTypes) {
+    setIsLoading(true);
     try {
       const date = new Date();
 
@@ -84,6 +87,7 @@ const NewTransactionModal = ({
 
       reset();
       closeModal();
+      setIsLoading(false);
     } catch (error) {
       console.log(error.message);
     }
@@ -143,14 +147,14 @@ const NewTransactionModal = ({
           </div>
           <div
             className={
-              type === "outcome"
+              type === "expenses"
                 ? `${styles.form__buttons__outcome} ${styles.activeOutcome}`
                 : `${styles.form__buttons__outcome}`
             }
-            onClick={() => setType("outcome")}
+            onClick={() => setType("expenses")}
           >
             <span>Outcome</span>
-            <img src={outcomeImg} alt="outcome" />
+            <img src={outcomeImg} alt="expenses" />
           </div>
         </div>
 
@@ -169,7 +173,8 @@ const NewTransactionModal = ({
         />
 
         <div className={styles.form__submit}>
-          <input type="submit" value="Add New Transactions" />
+          {!isLoanding && <input type="submit" value={"Add New Transaction"} />}
+          {isLoanding && <Spinner />}
         </div>
       </form>
     </Modal>

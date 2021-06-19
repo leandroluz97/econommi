@@ -67,7 +67,7 @@ export const PlanningProvider = ({ children }: PlanningProviderType) => {
 
       let userPlannings = await db
         .collection("users")
-        .doc(email)
+        .doc(user?.uid)
         .collection("plannings")
         .orderBy("createdAt", "desc")
         .get();
@@ -88,7 +88,7 @@ export const PlanningProvider = ({ children }: PlanningProviderType) => {
       const user = firebase.auth().currentUser;
       const email = user?.email as string;
 
-      let docRef = db.collection("users").doc(email);
+      let docRef = db.collection("users").doc(user?.uid);
 
       const newPlan = await docRef.collection("plannings").add(data);
 
@@ -123,7 +123,7 @@ export const PlanningProvider = ({ children }: PlanningProviderType) => {
       const user = firebase.auth().currentUser;
       const email = user?.email as string;
 
-      let docRef = db.collection("users").doc(email);
+      let docRef = db.collection("users").doc(user?.uid);
 
       const deletePlanning = await docRef
         .collection("plannings")
@@ -162,7 +162,7 @@ export const PlanningProvider = ({ children }: PlanningProviderType) => {
       const user = firebase.auth().currentUser;
       const email = user?.email as string;
 
-      let docRef = db.collection("users").doc(email);
+      let docRef = db.collection("users").doc(user?.uid);
 
       const updatedPlanning = await docRef
         .collection("plannings")

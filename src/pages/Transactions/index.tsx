@@ -15,12 +15,14 @@ import currency from "../../utils/currency";
 import expensesImg from "../../assets/expenses.svg";
 import current from "../../assets/current.svg";
 import revenue from "../../assets/revenue.svg";
+import open from "../../assets/open.svg";
 import RoundedSearch from "../../components/RoundedSearch";
 import getSummary from "../../utils/summary";
 
 const Transactions = () => {
   const [modalIsOpenAdd, setIsOpenAdd] = useState(false);
   const [modalIsOpenEdit, setIsOpenEdit] = useState(false);
+  const [modalIsOpenShow, setIsOpenShow] = useState(false);
   const [search, setSearch] = useState("");
   const { transactions, deleteTransaction, editTransaction } =
     useTransactions();
@@ -39,6 +41,10 @@ const Transactions = () => {
 
   function handleNewTransaction() {
     setIsOpenAdd(true);
+  }
+  function handleOpenTransaction(id: string) {
+    //editTransaction(id);
+    setIsOpenShow(true);
   }
   function handleEditTransaction(id: string) {
     editTransaction(id);
@@ -125,12 +131,25 @@ const Transactions = () => {
                     <td>{currency(transaction.amount)}</td>
                     <td>
                       <button
+                        className={styles.transactions__action}
+                        onClick={() => handleOpenTransaction(transaction.id)}
+                      >
+                        <img src={open} alt="open" />
+                        <span>View</span>
+                      </button>
+                      <button
+                        className={styles.transactions__action}
                         onClick={() => handleEditTransaction(transaction.id)}
                       >
                         <img src={edit} alt="edit" />
+                        <span>Edit</span>
                       </button>
-                      <button onClick={() => deleteTransaction(transaction.id)}>
-                        <img src={trash} alt="edit" />
+                      <button
+                        className={styles.transactions__action}
+                        onClick={() => deleteTransaction(transaction.id)}
+                      >
+                        <img src={trash} alt="delete" />
+                        <span>Delete</span>
                       </button>
                     </td>
                   </tr>

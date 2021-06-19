@@ -69,7 +69,6 @@ const EditSettingsModal = ({
       } as EditSettingsTypes;
 
       await updateSettings(newPlanning);
-
       reset();
       closeModal();
     } catch (error) {

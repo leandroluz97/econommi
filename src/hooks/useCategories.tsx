@@ -95,8 +95,9 @@ export const CategoriesProvider = ({ children }: CategoriesProviderType) => {
 
       let userCategories = await db
         .collection("users")
-        .doc(email)
+        .doc(user?.uid)
         .collection("categories")
+        .where("color", "!=", null)
         .get();
 
       let categoriesArray = [] as Categories[];
@@ -121,12 +122,14 @@ export const CategoriesProvider = ({ children }: CategoriesProviderType) => {
 
       let defaultCategoryAsync = await db
         .collection("categories")
-        .where("name", "==", "Salary")
+        .where("color", "!=", null)
         .get();
 
       let catDefault = {} as Categories;
       defaultCategoryAsync.forEach((cat) => {
-        catDefault = { id: cat.id, ...cat.data() } as Categories;
+        if (cat.data().name == "Salary") {
+          catDefault = { id: cat.id, ...cat.data() } as Categories;
+        }
       });
 
       setOption(catDefault);
@@ -194,7 +197,7 @@ export const CategoriesProvider = ({ children }: CategoriesProviderType) => {
       const user = firebase.auth().currentUser;
       const email = user?.email as string;
 
-      let docRef = db.collection("users").doc(email);
+      let docRef = db.collection("users").doc(user?.uid);
 
       let checkCategory = await docRef
         .collection("categories")
@@ -259,7 +262,7 @@ export const CategoriesProvider = ({ children }: CategoriesProviderType) => {
       const user = firebase.auth().currentUser;
       const email = user?.email as string;
 
-      let docRef = db.collection("users").doc(email);
+      let docRef = db.collection("users").doc(user?.uid);
 
       const updatedCategory = await docRef
         .collection("categories")
