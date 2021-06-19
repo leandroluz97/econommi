@@ -10,6 +10,7 @@ import SelectOptions from "../SelectOptions/";
 import { useTransactions } from "../../hooks/useTransactions";
 import { useCategories } from "../../hooks/useCategories";
 import Spinner from "../../components/Spinner";
+import firebase from "../../config/firebase-config";
 
 interface EditTransationTypes {
   amount: string;

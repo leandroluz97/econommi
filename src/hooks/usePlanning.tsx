@@ -74,7 +74,12 @@ export const PlanningProvider = ({ children }: PlanningProviderType) => {
 
       let planningsArray = [] as Planning[];
       userPlannings.forEach((snap) => {
-        planningsArray.push({ ...snap.data(), id: snap.id } as Planning);
+        const date = snap.data().createAt.toDate().toDateString();
+        planningsArray.push({
+          ...snap.data(),
+          id: snap.id,
+          createdAt: new Intl.DateTimeFormat("pt-PT").format(date),
+        } as Planning);
       });
 
       setPlannings(planningsArray);

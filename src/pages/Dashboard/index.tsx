@@ -26,8 +26,10 @@ const Dashboard = () => {
   };
   const transactionsByDay = transactions.reduce((acc, transaction) => {
     if (transaction.type === "income") {
+      /*
       if (acc.createdAt.includes(transaction.createdAt)) {
       }
+      */
     }
 
     return acc;

@@ -80,11 +80,30 @@ export const TransactionsProvider = ({
 
       let transactionsArray = [] as Transaction[];
       userTransactions.forEach((snap) => {
-        transactionsArray.push({ ...snap.data(), id: snap.id } as Transaction);
+        //const date = snap.data().createdAt.toDate().getTime();
+        const date = new Date(snap.data().createdAt.toDate().getTime());
+
+        const day = date.getDate();
+        const month = date.getMonth();
+        const year = date.getFullYear();
+
+        transactionsArray.push({
+          ...snap.data(),
+          id: snap.id,
+          createdAt: `${day}/${month + 1}/${year}`,
+        } as Transaction);
       });
+      console.log("text", transactionsArray);
 
       setTransactions(transactionsArray);
-    } catch (error) {}
+    } catch (error) {
+      console.log(error.message);
+
+      toast.error(error.message, {
+        bodyClassName: "toastify__error",
+        className: "toastify",
+      });
+    }
   }
 
   async function addNewTransactions(data: TransactionAdd) {
@@ -95,14 +114,33 @@ export const TransactionsProvider = ({
       const email = user?.email as string;
 
       let docRef = db.collection("users").doc(user?.uid);
+      const timestamp = firebase.firestore.Timestamp.fromDate(
+        new Date(data.createdAt)
+      );
 
-      const newTransaction = await docRef.collection("transactions").add(data);
+      const newData = {
+        ...data,
+        createdAt: timestamp,
+      };
+
+      const newTransaction = await docRef
+        .collection("transactions")
+        .add(newData);
 
       const newTransactionId = await newTransaction.get();
+
+      const date = new Date(
+        newTransactionId.data()?.createdAt.toDate().getTime()
+      );
+
+      const day = date.getDate();
+      const month = date.getMonth();
+      const year = date.getFullYear();
 
       let transaction = {
         ...newTransactionId.data(),
         id: newTransactionId.id,
+        createdAt: `${day}/${month + 1}/${year}`,
       } as Transaction;
 
       let allTransaction = [transaction, ...transactions];

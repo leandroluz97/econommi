@@ -1,3 +1,5 @@
+import firebase from "../config/firebase-config";
+
 type Categories = {
   name: string;
   type: string;

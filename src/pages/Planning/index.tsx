@@ -20,6 +20,7 @@ import revenueImg from "../../assets/revenue.svg";
 import { usePlanning } from "../../hooks/usePlanning";
 import getSummary from "../../utils/summary";
 import filterCategoryAmount from "../../utils/filterCategoryAmount";
+import firebase from "../../config/firebase-config";
 
 const Planning = () => {
   const [modalIsOpenAdd, setIsOpenAdd] = useState(false);

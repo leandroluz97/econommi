@@ -8,6 +8,7 @@ import SelectOptions from "../SelectOptions/";
 import { useCategories } from "../../hooks/useCategories";
 import { usePlanning } from "../../hooks/usePlanning";
 import Spinner from "../../components/Spinner";
+import firebase from "../../config/firebase-config";
 
 interface NewPlanningTypes {
   amount: string;
@@ -67,12 +68,10 @@ const NewPlanningModal = ({
   async function addNewTransaction(data: NewPlanningTypes) {
     setIsLoading(true);
     try {
-      const date = new Date();
-
       const newPlanning = {
         amount: Number(data.amount),
         category: [{ ...option }],
-        createdAt: new Intl.DateTimeFormat("pt-PT").format(date),
+        createdAt: String(new Date()),
       } as PlanningAdd;
 
       //console.log(newPlanning);

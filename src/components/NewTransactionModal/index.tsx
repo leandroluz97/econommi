@@ -10,6 +10,7 @@ import SelectOptions from "../SelectOptions/";
 import { useTransactions } from "../../hooks/useTransactions";
 import { useCategories } from "../../hooks/useCategories";
 import Spinner from "../../components/Spinner";
+import firebase from "../../config/firebase-config";
 
 interface NewTransationTypes {
   amount: string;
@@ -73,14 +74,13 @@ const NewTransactionModal = ({
   async function addNewTransaction(data: NewTransationTypes) {
     setIsLoading(true);
     try {
-      const date = new Date();
-
       const newTransactions = {
         amount: Number(data.amount),
         category: [{ ...option }],
         type: type,
         description: data.description,
-        createdAt: new Intl.DateTimeFormat("pt-PT").format(date),
+        // createdAt: new Intl.DateTimeFormat("pt-PT").format(date),
+        createdAt: String(new Date()),
       } as TransactionAdd;
 
       await addNewTransactions(newTransactions);
