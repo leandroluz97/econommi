@@ -11,12 +11,19 @@ import caretdownBig from "../../assets/caretdownBig.svg";
 import { Doughnut, Line } from "react-chartjs-2";
 import getSummary from "../../utils/summary";
 
+import Calendar from "../../components/Calendar";
+
 interface transDataType {
   trans: number;
   createdAt: string[];
 }
 const Dashboard = () => {
   const { transactions } = useTransactions();
+  const [calendarModalIsOpen, setCalendarModalIsOpen] = useState(false);
+
+  function calendarCloseModal() {
+    setCalendarModalIsOpen(false);
+  }
 
   const { total, income, expenses } = getSummary(transactions);
 
@@ -34,8 +41,6 @@ const Dashboard = () => {
 
     return acc;
   }, transData);
-
-  console.log(transactions);
 
   const data = {
     labels: [
@@ -104,6 +109,11 @@ const Dashboard = () => {
           <span>
             <img src={caretdownBig} alt="Caret Down" />
           </span>
+
+          <Calendar
+            closeModal={calendarCloseModal}
+            modalIsOpen={calendarModalIsOpen}
+          />
         </div>
 
         <AmountCard

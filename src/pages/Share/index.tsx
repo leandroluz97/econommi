@@ -23,9 +23,6 @@ import twitter from "../../assets/twitter.svg";
 import facebook from "../../assets/facebook.svg";
 
 const Share = () => {
-  useEffect(() => {
-    console.log("partilar");
-  }, []);
   return (
     <div className={styles.share}>
       <h2>Share 😉</h2>

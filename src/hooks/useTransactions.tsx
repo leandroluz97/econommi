@@ -93,7 +93,6 @@ export const TransactionsProvider = ({
           createdAt: `${day}/${month + 1}/${year}`,
         } as Transaction);
       });
-      console.log("text", transactionsArray);
 
       setTransactions(transactionsArray);
     } catch (error) {

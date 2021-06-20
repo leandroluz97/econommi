@@ -74,11 +74,16 @@ export const PlanningProvider = ({ children }: PlanningProviderType) => {
 
       let planningsArray = [] as Planning[];
       userPlannings.forEach((snap) => {
-        const date = snap.data().createAt.toDate().toDateString();
+        const date = new Date(snap.data().createdAt.toDate().getTime());
+
+        const day = date.getDate();
+        const month = date.getMonth();
+        const year = date.getFullYear();
+
         planningsArray.push({
           ...snap.data(),
           id: snap.id,
-          createdAt: new Intl.DateTimeFormat("pt-PT").format(date),
+          createdAt: `${day}/${month + 1}/${year}`,
         } as Planning);
       });
 
@@ -95,13 +100,31 @@ export const PlanningProvider = ({ children }: PlanningProviderType) => {
 
       let docRef = db.collection("users").doc(user?.uid);
 
-      const newPlan = await docRef.collection("plannings").add(data);
+      const timestamp = firebase.firestore.Timestamp.fromDate(
+        new Date(data.createdAt)
+      );
 
-      const newTransactionId = await newPlan.get();
+      const newData = {
+        ...data,
+        createdAt: timestamp,
+      };
+
+      const newPlan = await docRef.collection("plannings").add(newData);
+
+      const newPlanningData = await newPlan.get();
+
+      const date = new Date(
+        newPlanningData.data()?.createdAt.toDate().getTime()
+      );
+
+      const day = date.getDate();
+      const month = date.getMonth();
+      const year = date.getFullYear();
 
       let planning = {
-        ...newTransactionId.data(),
-        id: newTransactionId.id,
+        ...newPlanningData.data(),
+        id: newPlanningData.id,
+        createdAt: `${day}/${month + 1}/${year}`,
       } as Planning;
 
       let allPlanning = [planning, ...plannings];
@@ -121,6 +144,7 @@ export const PlanningProvider = ({ children }: PlanningProviderType) => {
       });
     }
   }
+
   async function deletePlanning(id: string) {
     let db = firebase.firestore();
 
