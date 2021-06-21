@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import AmountCard from "../../components/AmountCard";
 import { useTransactions } from "../../hooks/useTransactions";
 import styles from "./styles.module.scss";
@@ -13,6 +13,8 @@ import getSummary from "../../utils/summary";
 
 import Calendar from "../../components/Calendar";
 
+import DateCard from "../../components/DateCard";
+
 interface transDataType {
   trans: number;
   createdAt: string[];
@@ -21,26 +23,27 @@ const Dashboard = () => {
   const { transactions } = useTransactions();
   const [calendarModalIsOpen, setCalendarModalIsOpen] = useState(false);
 
+  let calendarRef = useRef({} as HTMLSpanElement);
+
+  useEffect(() => {
+    const e = document.addEventListener("mousedown", (event) => {
+      event.stopImmediatePropagation();
+      if (!calendarRef.current.contains(event.target as HTMLElement)) {
+        console.log(event.target);
+
+        setCalendarModalIsOpen(false);
+      }
+    });
+  });
+
   function calendarCloseModal() {
     setCalendarModalIsOpen(false);
   }
+  function handleOpenCalendarModal() {
+    setCalendarModalIsOpen(true);
+  }
 
   const { total, income, expenses } = getSummary(transactions);
-
-  let transData: transDataType = {
-    trans: 0,
-    createdAt: [],
-  };
-  const transactionsByDay = transactions.reduce((acc, transaction) => {
-    if (transaction.type === "income") {
-      /*
-      if (acc.createdAt.includes(transaction.createdAt)) {
-      }
-      */
-    }
-
-    return acc;
-  }, transData);
 
   const data = {
     labels: [
@@ -100,21 +103,21 @@ const Dashboard = () => {
     ],
   };
 
+  console.log("render");
+
   return (
     <div className={styles.dashboard}>
       <h2>Dashboard</h2>
       <div className={styles.dashboard__summary}>
-        <div className={styles.dashboard__date}>
+        <DateCard />
+        {/* <div className={styles.dashboard__date}>
           <p>Maio</p>
-          <span>
+          <span onClick={handleOpenCalendarModal} ref={calendarRef}>
             <img src={caretdownBig} alt="Caret Down" />
-          </span>
 
-          <Calendar
-            closeModal={calendarCloseModal}
-            modalIsOpen={calendarModalIsOpen}
-          />
-        </div>
+            {calendarModalIsOpen && <Calendar />}
+          </span>
+  </div>*/}
 
         <AmountCard
           type="Current Balance"
