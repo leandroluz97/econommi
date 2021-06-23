@@ -14,6 +14,7 @@ const DateCard = () => {
     document.addEventListener("mousedown", (event) => {
       event.stopImmediatePropagation();
       if (!calendarRef.current?.contains(event.target as HTMLElement)) {
+        console.log(event.target, calendarRef.current);
         setCalendarModalIsOpen(false);
       }
     });
