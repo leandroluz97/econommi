@@ -4,29 +4,43 @@ import Modal from "react-modal";
 import yearArrowLeft from "../../assets/yearArrowLeft.svg";
 import yearArrowRight from "../../assets/yearArrowRight.svg";
 import firebase from "../../config/firebase-config";
+import { useTransactions } from "../../hooks/useTransactions";
+import { usePlanning } from "../../hooks/usePlanning";
 
 interface CalendarModalProps {
-  refCalendar: any;
+  closeCalendar: () => void;
 }
 
-const Calendar = () => {
+interface handleFilterByMonthTypes {
+  monthId: number;
+  monthName: string;
+}
+
+const Calendar = ({ closeCalendar }: CalendarModalProps) => {
   const [year, setYear] = useState(2021);
   const [months, setMonths] = useState([
-    { id: "jan", month: "JAN", numeric: 1 },
-    { id: "fev", month: "FEV", numeric: 2 },
-    { id: "mar", month: "MAR", numeric: 3 },
-    { id: "abr", month: "ABR", numeric: 4 },
-    { id: "may", month: "MAY", numeric: 5 },
-    { id: "jun", month: "JUN", numeric: 6 },
-    { id: "jul", month: "JUL", numeric: 7 },
-    { id: "aug", month: "AUG", numeric: 8 },
-    { id: "oct", month: "OCT", numeric: 9 },
-    { id: "sep", month: "SEP", numeric: 10 },
-    { id: "nov", month: "NOV", numeric: 11 },
-    { id: "dec", month: "DEC", numeric: 12 },
+    { id: "jan", month: "JAN", numeric: 1, name: "January" },
+    { id: "fev", month: "FEV", numeric: 2, name: "February" },
+    { id: "mar", month: "MAR", numeric: 3, name: "March" },
+    { id: "abr", month: "ABR", numeric: 4, name: "April" },
+    { id: "may", month: "MAY", numeric: 5, name: "May" },
+    { id: "jun", month: "JUN", numeric: 6, name: "June" },
+    { id: "jul", month: "JUL", numeric: 7, name: "July" },
+    { id: "aug", month: "AUG", numeric: 8, name: "August" },
+    { id: "oct", month: "OCT", numeric: 9, name: "September" },
+    { id: "sep", month: "SEP", numeric: 10, name: "October" },
+    { id: "nov", month: "NOV", numeric: 11, name: "November" },
+    { id: "dec", month: "DEC", numeric: 12, name: "December" },
   ]);
 
-  function handleFilterByMonth(monthId: number) {
+  const { chosenMonth, setChosenMonth, filterTransactionsByMonth } =
+    useTransactions();
+  const { filterPlanningByMonth } = usePlanning();
+
+  function handleFilterByMonth({
+    monthId,
+    monthName,
+  }: handleFilterByMonthTypes) {
     const date = new Date();
     const day = date.getDate();
     const year = date.getFullYear();
@@ -45,7 +59,16 @@ const Calendar = () => {
       new Date(endOfMonth)
     );
 
-    console.log(timestampStartOfMonth, timestampEndOfMonth);
+    localStorage.setItem(
+      "@econommi:currentMonthName",
+      JSON.stringify(monthName)
+    );
+    localStorage.setItem("@econommi:currentMonthId", JSON.stringify(monthId));
+
+    filterTransactionsByMonth({ timestampStartOfMonth, timestampEndOfMonth });
+    filterPlanningByMonth({ timestampStartOfMonth, timestampEndOfMonth });
+    setChosenMonth(monthName);
+    closeCalendar();
   }
 
   return (
@@ -57,7 +80,12 @@ const Calendar = () => {
       </div>
       <div className={styles.calendar__months}>
         {months.map((mon) => (
-          <div key={mon.id} onClick={() => handleFilterByMonth(mon.numeric)}>
+          <div
+            key={mon.id}
+            onClick={() =>
+              handleFilterByMonth({ monthId: mon.numeric, monthName: mon.name })
+            }
+          >
             <p>{mon.month}</p>
           </div>
         ))}

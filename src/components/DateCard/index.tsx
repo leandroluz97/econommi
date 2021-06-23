@@ -7,6 +7,7 @@ import caretdownUp from "../../assets/caretdownUp.svg";
 
 const DateCard = () => {
   const [calendarModalIsOpen, setCalendarModalIsOpen] = useState(false);
+  const { chosenMonth, setChosenMonth } = useTransactions();
 
   let calendarRef = useRef({} as HTMLDivElement);
 
@@ -28,7 +29,7 @@ const DateCard = () => {
   }
   return (
     <div className={styles.date} ref={calendarRef}>
-      <p>Maio</p>
+      <p>{chosenMonth}</p>
       {calendarModalIsOpen ? (
         <span onClick={calendarCloseModal}>
           <img src={caretdownUp} alt="Caret Up" />
@@ -39,7 +40,7 @@ const DateCard = () => {
         </span>
       )}
 
-      {calendarModalIsOpen && <Calendar />}
+      {calendarModalIsOpen && <Calendar closeCalendar={calendarCloseModal} />}
     </div>
   );
 };

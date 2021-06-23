@@ -22,6 +22,7 @@ type Categories = {
   icon: string;
   id: string;
 };
+
 interface filterTransactionsByMonthType {
   timestampStartOfMonth: firebase.firestore.Timestamp;
   timestampEndOfMonth: firebase.firestore.Timestamp;
@@ -52,6 +53,8 @@ interface ContextProps {
   filterTransactionsByMonth: (
     data: filterTransactionsByMonthType
   ) => Promise<void>;
+  chosenMonth: string;
+  setChosenMonth: (data: string) => void;
 }
 
 //Context
@@ -65,21 +68,53 @@ export const TransactionsProvider = ({
   const [editStorage, setEditStorage] = useState<Transaction>(
     {} as Transaction
   );
+  const [chosenMonth, setChosenMonth] = useState(() => {
+    // const storagedCart = Buscar dados do localStorage
+    const storagedDate = localStorage.getItem("@econommi:currentMonthName");
+
+    if (storagedDate) {
+      return JSON.parse(storagedDate);
+    }
+
+    const date = new Date();
+    const month = date.getMonth();
+
+    const months = [
+      "January",
+      "February",
+      "March",
+      "April	",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December",
+    ];
+
+    return months[month];
+  });
 
   useEffect(() => {
     (async function () {
       const date = new Date();
       const day = date.getDate();
       const year = date.getFullYear();
-      const month = date.getMonth();
+      let month = date.getMonth() + 1;
 
       const totalDayOfMonth = new Date(year, month + 1, 0).getDate();
 
       //check if localstorage doesn't have any dated
       //code here
+      const storagedDate = localStorage.getItem("@econommi:currentMonthId");
+      if (storagedDate) {
+        month = Number(JSON.parse(storagedDate));
+      }
 
-      const startOfMonth = `${year}-${month + 1}-${1}`;
-      const endOfMonth = `${year}-${month + 1}-${totalDayOfMonth}`;
+      const startOfMonth = `${year}-${month}-${1}`;
+      const endOfMonth = `${year}-${month}-${totalDayOfMonth}`;
       //const startOfMonth = `${year}-${month + 1}-${21}`;
       //const endOfMonth = `${totalDayOfMonth}-${monthId}-${year}`;
 
@@ -139,7 +174,10 @@ export const TransactionsProvider = ({
     }
   }
 
-  async function filterTransactionsByMonth({}: filterTransactionsByMonthType) {
+  async function filterTransactionsByMonth({
+    timestampStartOfMonth,
+    timestampEndOfMonth,
+  }: filterTransactionsByMonthType) {
     let db = firebase.firestore();
     try {
       const user = firebase.auth().currentUser;
@@ -149,6 +187,8 @@ export const TransactionsProvider = ({
         .collection("users")
         .doc(user?.uid)
         .collection("transactions")
+        .where("createdAt", ">", timestampStartOfMonth)
+        .where("createdAt", "<", timestampEndOfMonth)
         .orderBy("createdAt", "desc")
         .get();
 
@@ -319,6 +359,8 @@ export const TransactionsProvider = ({
         editStorage,
         updateTransaction,
         filterTransactionsByMonth,
+        chosenMonth,
+        setChosenMonth,
       }}
     >
       {children}
