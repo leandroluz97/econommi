@@ -23,6 +23,7 @@ const Dashboard = () => {
   const { transactions } = useTransactions();
   const [calendarModalIsOpen, setCalendarModalIsOpen] = useState(false);
 
+  /*
   let calendarRef = useRef({} as HTMLSpanElement);
 
   useEffect(() => {
@@ -35,7 +36,7 @@ const Dashboard = () => {
       }
     });
   });
-
+*/
   function calendarCloseModal() {
     setCalendarModalIsOpen(false);
   }

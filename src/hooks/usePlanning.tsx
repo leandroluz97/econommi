@@ -65,15 +65,19 @@ export const PlanningProvider = ({ children }: PlanningProviderType) => {
       const date = new Date();
       const day = date.getDate();
       const year = date.getFullYear();
-      const month = date.getMonth();
+      let month = date.getMonth() + 1;
 
       const totalDayOfMonth = new Date(year, month + 1, 0).getDate();
 
       //check if localstorage doesn't have any dated
       //code here
+      const storagedDate = localStorage.getItem("@econommi:currentMonthId");
+      if (storagedDate) {
+        month = Number(JSON.parse(storagedDate));
+      }
 
-      const startOfMonth = `${year}-${month + 1}-${1}`;
-      const endOfMonth = `${year}-${month + 1}-${totalDayOfMonth}`;
+      const startOfMonth = `${year}-${month}-${1}`;
+      const endOfMonth = `${year}-${month}-${totalDayOfMonth}`;
       //const startOfMonth = `${year}-${month + 1}-${21}`;
       //const endOfMonth = `${totalDayOfMonth}-${monthId}-${year}`;
 

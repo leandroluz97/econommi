@@ -12,13 +12,21 @@ const DateCard = () => {
   let calendarRef = useRef({} as HTMLDivElement);
 
   useEffect(() => {
-    document.addEventListener("mousedown", (event) => {
+    //handle close calendar when clicked outsite
+    const handler = (event: any) => {
       event.stopImmediatePropagation();
       if (!calendarRef.current?.contains(event.target as HTMLElement)) {
-        console.log(event.target, calendarRef.current);
         setCalendarModalIsOpen(false);
       }
-    });
+    };
+
+    // close calendar when clicked outsite
+    document.addEventListener("mousedown", handler);
+
+    //clean up the mousedown effect
+    return () => {
+      document.removeEventListener("mousedown", handler);
+    };
   }, []);
 
   function calendarCloseModal() {
