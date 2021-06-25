@@ -149,7 +149,7 @@ const Planning = () => {
                   <th>Category</th>
                   <th>Expended Amount</th>
                   <th>Limit Amount</th>
-                  <th>Value</th>
+                  <th>% Expended</th>
                   <th>Actions</th>
                 </tr>
               </thead>

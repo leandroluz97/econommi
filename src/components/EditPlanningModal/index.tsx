@@ -8,6 +8,7 @@ import SelectOptions from "../SelectOptions/";
 import { useCategories } from "../../hooks/useCategories";
 import { usePlanning } from "../../hooks/usePlanning";
 import Spinner from "../../components/Spinner";
+import firebase from "../../config/firebase-config";
 
 interface NewPlanningTypes {
   amount: string;
@@ -26,6 +27,7 @@ interface PlanningEdit {
   category: Categories[];
   createdAt: string;
   amount: number;
+  timestamp?: firebase.firestore.Timestamp;
 }
 
 interface NewPlanningModalProps {
@@ -71,6 +73,7 @@ const EditPlanningModal = ({
         amount: Number(data.amount),
         category: [{ ...option }],
         createdAt: planEditStorage.createdAt,
+        timestamp: planEditStorage.timestamp,
       } as PlanningEdit;
 
       await updatePlanning(newPlanning);

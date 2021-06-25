@@ -8,6 +8,7 @@ import {
 } from "react";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import getMonthWithAlgorism from "../utils/getMonthWith";
 
 import firebase from "../config/firebase-config";
 
@@ -35,14 +36,18 @@ interface Transaction {
   amount: number;
   description: string;
   id: string;
+  timestamp?: firebase.firestore.Timestamp;
 }
+
 type TransactionAdd = {
   category: Categories[];
   type: string;
   createdAt: string;
   amount: number;
   description: string;
+  timestamp?: firebase.firestore.Timestamp;
 };
+
 interface ContextProps {
   transactions: Transaction[];
   addNewTransactions: (data: TransactionAdd) => Promise<void>;
@@ -77,24 +82,9 @@ export const TransactionsProvider = ({
     }
 
     const date = new Date();
-    const month = date.getMonth();
+    const month = getMonthWithAlgorism(date.getMonth());
 
-    const months = [
-      "January",
-      "February",
-      "March",
-      "April	",
-      "May",
-      "June",
-      "July",
-      "August",
-      "September",
-      "October",
-      "November",
-      "December",
-    ];
-
-    return months[month];
+    return month;
   });
 
   useEffect(() => {
@@ -160,6 +150,7 @@ export const TransactionsProvider = ({
           ...snap.data(),
           id: snap.id,
           createdAt: `${day}/${month + 1}/${year}`,
+          timestamp: snap.data().createdAt,
         } as Transaction);
       });
 
@@ -205,6 +196,7 @@ export const TransactionsProvider = ({
           ...snap.data(),
           id: snap.id,
           createdAt: `${day}/${month + 1}/${year}`,
+          timestamp: snap.data().createdAt,
         } as Transaction);
       });
 
@@ -254,6 +246,7 @@ export const TransactionsProvider = ({
         ...newTransactionId.data(),
         id: newTransactionId.id,
         createdAt: `${day}/${month + 1}/${year}`,
+        timestamp: newTransactionId.data()?.createdAt,
       } as Transaction;
 
       let allTransaction = [transaction, ...transactions];
@@ -273,6 +266,7 @@ export const TransactionsProvider = ({
       });
     }
   }
+
   async function deleteTransaction(id: string) {
     let db = firebase.firestore();
 
@@ -327,10 +321,18 @@ export const TransactionsProvider = ({
 
       let docRef = db.collection("users").doc(user?.uid);
 
+      const updatedData = {
+        amount: data.amount,
+        category: data.category,
+        createdAt: data.timestamp,
+        description: data.description,
+        type: data.type,
+      };
+
       const updatedTransaction = await docRef
         .collection("transactions")
         .doc(editStorage.id)
-        .set(data);
+        .set(updatedData);
 
       let allTransaction = transactions.map((trans) => {
         if (trans.id === editStorage.id) {

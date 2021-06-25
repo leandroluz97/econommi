@@ -33,6 +33,7 @@ interface TransactionEdit {
   createdAt: string;
   amount: number;
   description: string;
+  timestamp?: firebase.firestore.Timestamp;
 }
 
 interface EditTransactionModalProps {
@@ -83,6 +84,7 @@ const EditTransactionModal = ({
         type: type,
         description: data.description,
         createdAt: editStorage.createdAt,
+        timestamp: editStorage.timestamp,
       } as TransactionEdit;
 
       await updateTransaction(updatedTransactions);
