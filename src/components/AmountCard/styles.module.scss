@@ -1,3 +1,7 @@
+.wrapper {
+  position: relative;
+}
+
 .card {
   display: flex;
   justify-content: space-between;
@@ -29,30 +33,30 @@
     }
   }
 
-  &__cardTitle {
-    position: absolute;
-    top: -40px;
-    left: 50%;
-
-    display: inline-block;
-    padding: 5px 10px;
-    border-radius: 2px;
-    background: var(--gray-600);
-    color: #fff;
-    font-size: 1.2rem;
-    font-family: sans-serif;
-    white-space: nowrap;
-    border-radius: 100px;
-    z-index: 9;
-
-    transform: translateX(-50%) scale(0.8);
-    opacity: 0;
-
-    transition: all 0.2s ease;
-  }
-
-  &:hover &__cardTitle {
+  &:hover + .cardTitle {
     transform: translateX(-50%) scale(1);
     opacity: 1;
   }
+}
+
+.cardTitle {
+  position: absolute;
+  top: -40px;
+  left: 50%;
+
+  display: inline-block;
+  padding: 5px 10px;
+  border-radius: 2px;
+  background: var(--gray-600);
+  color: #fff;
+  font-size: 1.2rem;
+  font-family: sans-serif;
+  white-space: nowrap;
+  border-radius: 100px;
+  z-index: 9;
+
+  transform: translateX(-50%) scale(0.8);
+  opacity: 0;
+
+  transition: all 0.2s ease;
 }

@@ -19,10 +19,13 @@ import open from "../../assets/open.svg";
 import RoundedSearch from "../../components/RoundedSearch";
 import getSummary from "../../utils/summary";
 
+import FilterTransactionModal from "../../components/FilterTransactionModal";
+
 const Transactions = () => {
   const [modalIsOpenAdd, setIsOpenAdd] = useState(false);
   const [modalIsOpenEdit, setIsOpenEdit] = useState(false);
   const [modalIsOpenShow, setIsOpenShow] = useState(false);
+  const [modalIsOpenFilter, setIsOpenFilter] = useState(false);
   const [search, setSearch] = useState("");
   const { transactions, deleteTransaction, editTransaction } =
     useTransactions();
@@ -39,24 +42,38 @@ const Transactions = () => {
 
   const { total, income, expenses } = getSummary(transactions);
 
+  //handle open modal
   function handleNewTransaction() {
     setIsOpenAdd(true);
   }
+
   function handleOpenTransaction(id: string) {
     //editTransaction(id);
     setIsOpenShow(true);
   }
+
   function handleEditTransaction(id: string) {
     editTransaction(id);
     setIsOpenEdit(true);
   }
 
+  function handleFilterTransaction() {
+    setIsOpenFilter(true);
+  }
+
+  //handle close modal
   function closeModalAdd() {
     setIsOpenAdd(false);
   }
+
   function closeModalEdit() {
     setIsOpenEdit(false);
   }
+
+  function closeModalFilter() {
+    setIsOpenFilter(false);
+  }
+
   function handleSearchTransaction(event: ChangeEvent<HTMLInputElement>) {
     setSearch(event.target.value);
   }
@@ -89,7 +106,7 @@ const Transactions = () => {
               placeholder="Search by category"
             />
             <RoundedButton
-              handleClick={handleNewTransaction}
+              handleClick={handleFilterTransaction}
               img={filterImg}
               textAlt="filter icon"
               labelTitle="Filter"
@@ -178,6 +195,10 @@ const Transactions = () => {
           closeModal={closeModalEdit}
         />
       )}
+      <FilterTransactionModal
+        modalIsOpen={modalIsOpenFilter}
+        closeModal={closeModalFilter}
+      />
     </>
   );
 };

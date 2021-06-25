@@ -16,7 +16,7 @@ interface handleFilterByMonthTypes {
   monthName: string;
 }
 
-const Calendar = ({ closeCalendar }: CalendarModalProps) => {
+const CalendarFilter = ({ closeCalendar }: CalendarModalProps) => {
   const [year, setYear] = useState(2021);
   const [months, setMonths] = useState([
     { id: "jan", month: "JAN", numeric: 1, name: "January" },
@@ -36,8 +36,6 @@ const Calendar = ({ closeCalendar }: CalendarModalProps) => {
   const { chosenMonth, setChosenMonth, filterTransactionsByMonth } =
     useTransactions();
   const { filterPlanningByMonth } = usePlanning();
-
-  console.log(chosenMonth);
 
   function handleFilterByMonth({
     monthId,
@@ -106,7 +104,7 @@ const Calendar = ({ closeCalendar }: CalendarModalProps) => {
   );
 };
 
-export default Calendar;
+export default CalendarFilter;
 
 /*isOpen={modalIsOpen}
       onRequestClose={closeModal}
