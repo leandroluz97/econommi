@@ -19,7 +19,7 @@ import open from "../../assets/open.svg";
 import RoundedSearch from "../../components/RoundedSearch";
 import getSummary from "../../utils/summary";
 
-import FilterTransactionModal from "../../components/FilterTransactionModal";
+import FilterModal from "../../components/FilterModal";
 
 const Transactions = () => {
   const [modalIsOpenAdd, setIsOpenAdd] = useState(false);
@@ -195,7 +195,8 @@ const Transactions = () => {
           closeModal={closeModalEdit}
         />
       )}
-      <FilterTransactionModal
+      <FilterModal
+        title="Filter Transaction by Month"
         modalIsOpen={modalIsOpenFilter}
         closeModal={closeModalFilter}
       />

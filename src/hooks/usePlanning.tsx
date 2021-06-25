@@ -10,6 +10,7 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 import firebase from "../config/firebase-config";
+import getMonthWithAlgorism from "../utils/getMonthWith";
 
 interface PlanningProviderType {
   children: ReactNode;
@@ -243,6 +244,12 @@ export const PlanningProvider = ({ children }: PlanningProviderType) => {
         createdAt: `${day}/${month + 1}/${year}`,
         timestamp: newPlanningData.data()?.createdAt,
       } as Planning;
+
+      //check if we are at the same month otherwise don't show transaction on ui
+      const storagedDate = localStorage.getItem("@econommi:currentMonthName");
+      const actualMonth = getMonthWithAlgorism(date.getMonth());
+
+      if (actualMonth !== storagedDate) return;
 
       //all planning updated for ui
       let allPlanning = [planning, ...plannings];

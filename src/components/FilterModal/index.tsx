@@ -6,10 +6,10 @@ import styles from "./styles.module.scss";
 import closeImg from "../../assets/close.svg";
 import incomeImg from "../../assets/income.svg";
 import outcomeImg from "../../assets/outcome.svg";
-import SelectOptions from "../SelectOptions/";
+import SelectOptions from "../SelectOptions";
 import { useTransactions } from "../../hooks/useTransactions";
 import { useCategories } from "../../hooks/useCategories";
-import Spinner from "../../components/Spinner";
+import Spinner from "../Spinner";
 import firebase from "../../config/firebase-config";
 import CalendarFilter from "../CalendarFilter";
 
@@ -39,11 +39,13 @@ interface TransactionAdd {
 interface NewTransactionModalProps {
   modalIsOpen: boolean;
   closeModal: () => void;
+  title: string;
 }
 
-const FilterTransactionModal = ({
+const FilterModal = ({
   modalIsOpen,
   closeModal,
+  title,
 }: NewTransactionModalProps) => {
   const { addNewTransactions } = useTransactions();
 
@@ -73,6 +75,7 @@ const FilterTransactionModal = ({
   } = useForm<NewTransationTypes>();
 
   async function addNewTransaction(data: NewTransationTypes) {
+    /*
     setIsLoading(true);
     try {
       const newTransactions = {
@@ -92,6 +95,7 @@ const FilterTransactionModal = ({
     } catch (error) {
       console.log(error.message);
     }
+    */
   }
 
   return (
@@ -110,7 +114,7 @@ const FilterTransactionModal = ({
           onClick={() => closeModal()}
         />
 
-        <h2>Filter transaction Transaction</h2>
+        <h2>{title}</h2>
 
         <CalendarFilter closeCalendar={closeModal} />
         {/*
@@ -126,4 +130,4 @@ const FilterTransactionModal = ({
   );
 };
 
-export default FilterTransactionModal;
+export default FilterModal;

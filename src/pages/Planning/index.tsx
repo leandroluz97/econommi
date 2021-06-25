@@ -13,6 +13,7 @@ import edit from "../../assets/Edit.svg";
 
 import NewPlanningModal from "../../components/NewPlanningModal";
 import EditPlanningModal from "../../components/EditPlanningModal";
+import FilterModal from "../../components/FilterModal";
 
 import expensesImg from "../../assets/expenses.svg";
 import currentImg from "../../assets/current.svg";
@@ -25,6 +26,7 @@ import firebase from "../../config/firebase-config";
 const Planning = () => {
   const [modalIsOpenAdd, setIsOpenAdd] = useState(false);
   const [modalIsOpenEdit, setIsOpenEdit] = useState(false);
+  const [modalIsOpenFilter, setIsOpenFilter] = useState(false);
   const [search, setSearch] = useState("");
   const { transactions } = useTransactions();
   const { plannings, deletePlanning, editPlanning } = usePlanning();
@@ -56,9 +58,19 @@ const Planning = () => {
   function closeModalAdd() {
     setIsOpenAdd(false);
   }
+
   function closeModalEdit() {
     setIsOpenEdit(false);
   }
+
+  function handleFilterPlanning() {
+    setIsOpenFilter(true);
+  }
+
+  function closeModalFilter() {
+    setIsOpenFilter(false);
+  }
+
   function handleSearchPlanning(event: ChangeEvent<HTMLInputElement>) {
     setSearch(event.target.value);
   }
@@ -133,7 +145,7 @@ const Planning = () => {
               placeholder="Search by category"
             />
             <RoundedButton
-              handleClick={handleNewPlanning}
+              handleClick={handleFilterPlanning}
               img={filterImg}
               textAlt="filter icon"
               labelTitle="Filter"
@@ -236,6 +248,11 @@ const Planning = () => {
           closeModal={closeModalEdit}
         />
       )}
+      <FilterModal
+        title="Filter Planning by Month"
+        modalIsOpen={modalIsOpenFilter}
+        closeModal={closeModalFilter}
+      />
     </>
   );
 };

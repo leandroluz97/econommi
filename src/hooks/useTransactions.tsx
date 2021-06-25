@@ -81,8 +81,18 @@ export const TransactionsProvider = ({
       return JSON.parse(storagedDate);
     }
 
+    // get atual date
     const date = new Date();
     const month = getMonthWithAlgorism(date.getMonth());
+
+    //set name of month in localstorage
+    localStorage.setItem("@econommi:currentMonthName", JSON.stringify(month));
+
+    //set number of month 0-11
+    localStorage.setItem(
+      "@econommi:currentMonthId",
+      JSON.stringify(date.getMonth())
+    );
 
     return month;
   });
@@ -249,6 +259,10 @@ export const TransactionsProvider = ({
         timestamp: newTransactionId.data()?.createdAt,
       } as Transaction;
 
+      //check if we are at the same month otherwise don't show transaction on ui
+      const actualMonth = getMonthWithAlgorism(date.getMonth());
+      if (actualMonth !== chosenMonth) return;
+
       let allTransaction = [transaction, ...transactions];
 
       setTransactions(allTransaction);
@@ -284,8 +298,6 @@ export const TransactionsProvider = ({
       const allTransaction = transactions.filter(
         (transaction) => transaction.id !== id
       );
-
-      console.log("deleted one", allTransaction);
 
       setTransactions(allTransaction);
 
