@@ -17,9 +17,21 @@ import share from "../../assets/share.svg";
 import plus from "../../assets/plus.svg";
 import { Link, useHistory, useLocation } from "react-router-dom";
 import { useUI } from "../../hooks/useUi";
+import NewTransactionModal from "../NewTransactionModal";
 
 const Menu = () => {
-  const { page, setPage, openMenu, setOpenMenu } = useUI();
+  const { page, setPage, openMenu, setOpenMenu, modalIsOpenAdd, setIsOpenAdd } =
+    useUI();
+
+  //handle open modal
+  function handleNewTransaction() {
+    setIsOpenAdd(true);
+  }
+
+  //handle close modal
+  function closeModalAdd() {
+    setIsOpenAdd(false);
+  }
 
   const location = useLocation();
 
@@ -30,67 +42,74 @@ const Menu = () => {
   }, [location]);
 
   return (
-    <div
-      className={
-        openMenu ? `${styles.menu}` : ` ${styles.menu} ${styles.menu__closed}`
-      }
-    >
-      <div>
-        <button onClick={() => setOpenMenu(!openMenu)}>
-          {openMenu ? (
-            <img src={leftArrow} alt="Left Arrow" />
-          ) : (
-            <img src={rightArrow} alt="Right Arrow" />
-          )}
-        </button>
+    <>
+      <div
+        className={
+          openMenu ? `${styles.menu}` : ` ${styles.menu} ${styles.menu__closed}`
+        }
+      >
         <div>
-          <img src={eLogo} alt="Logo" />
+          <button onClick={() => setOpenMenu(!openMenu)}>
+            {openMenu ? (
+              <img src={leftArrow} alt="Left Arrow" />
+            ) : (
+              <img src={rightArrow} alt="Right Arrow" />
+            )}
+          </button>
+          <div>
+            <img src={eLogo} alt="Logo" />
+          </div>
         </div>
+
+        <ul>
+          <li className={page === "dashboard" ? styles.active : undefined}>
+            <Link to="/dashboard" onClick={() => setPage("dashboard")}>
+              <img src={home} alt="Dashboard" />
+              <span>Dashboard</span>
+            </Link>
+          </li>
+          <li className={page === "transactions" ? styles.active : undefined}>
+            <Link to="/transactions" onClick={() => setPage("transactions")}>
+              <img src={transaction} alt="Transactions" />
+              <span>Transactions</span>
+            </Link>
+          </li>
+          <li className={page === "categories" ? styles.active : undefined}>
+            <Link to="/categories" onClick={() => setPage("categories")}>
+              <img src={category} alt="Category" />
+              <span>Category</span>
+            </Link>
+          </li>
+          <li className={page === "planning" ? styles.active : undefined}>
+            <Link to="/planning" onClick={() => setPage("planning")}>
+              <img src={planning} alt="Planning" />
+              <span>Planning</span>
+            </Link>
+          </li>
+          <li className={page === "settings" ? styles.active : undefined}>
+            <Link to="/settings" onClick={() => setPage("settings")}>
+              <img src={setting} alt="Settings" />
+              <span>Settings</span>
+            </Link>
+          </li>
+          <li className={page === "share" ? styles.active : undefined}>
+            <Link to="share" onClick={() => setPage("share")}>
+              <img src={share} alt="Share with friends" />
+              <span>Share with friends</span>
+            </Link>
+          </li>
+        </ul>
+
+        <button type="button" onClick={handleNewTransaction}>
+          <img src={plus} alt="Add transactions" />
+        </button>
       </div>
 
-      <ul>
-        <li className={page === "dashboard" ? styles.active : undefined}>
-          <Link to="/dashboard" onClick={() => setPage("dashboard")}>
-            <img src={home} alt="Dashboard" />
-            <span>Dashboard</span>
-          </Link>
-        </li>
-        <li className={page === "transactions" ? styles.active : undefined}>
-          <Link to="/transactions" onClick={() => setPage("transactions")}>
-            <img src={transaction} alt="Transactions" />
-            <span>Transactions</span>
-          </Link>
-        </li>
-        <li className={page === "categories" ? styles.active : undefined}>
-          <Link to="/categories" onClick={() => setPage("categories")}>
-            <img src={category} alt="Category" />
-            <span>Category</span>
-          </Link>
-        </li>
-        <li className={page === "planning" ? styles.active : undefined}>
-          <Link to="/planning" onClick={() => setPage("planning")}>
-            <img src={planning} alt="Planning" />
-            <span>Planning</span>
-          </Link>
-        </li>
-        <li className={page === "settings" ? styles.active : undefined}>
-          <Link to="/settings" onClick={() => setPage("settings")}>
-            <img src={setting} alt="Settings" />
-            <span>Settings</span>
-          </Link>
-        </li>
-        <li className={page === "share" ? styles.active : undefined}>
-          <Link to="share" onClick={() => setPage("share")}>
-            <img src={share} alt="Share with friends" />
-            <span>Share with friends</span>
-          </Link>
-        </li>
-      </ul>
-
-      <button type="button">
-        <img src={plus} alt="Add transactions" />
-      </button>
-    </div>
+      <NewTransactionModal
+        modalIsOpen={modalIsOpenAdd}
+        closeModal={closeModalAdd}
+      />
+    </>
   );
 };
 

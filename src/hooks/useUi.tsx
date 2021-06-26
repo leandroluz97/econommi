@@ -21,6 +21,8 @@ interface UiProps {
   setPage: (value: string) => void;
   openMenu: boolean;
   setOpenMenu: (value: boolean) => void;
+  modalIsOpenAdd: boolean;
+  setIsOpenAdd: (value: boolean) => void;
 }
 
 //Context
@@ -33,6 +35,7 @@ export const UiProvider = ({ children }: UiProviderType) => {
   const [repeatEye, setRepeat] = useState<boolean>(false);
   const [page, setPage] = useState<string>("dashboard");
   const [openMenu, setOpenMenu] = useState(true);
+  const [modalIsOpenAdd, setIsOpenAdd] = useState(false);
 
   useEffect(() => {}, []);
 
@@ -49,6 +52,8 @@ export const UiProvider = ({ children }: UiProviderType) => {
         setPage,
         openMenu,
         setOpenMenu,
+        setIsOpenAdd,
+        modalIsOpenAdd,
       }}
     >
       {children}
