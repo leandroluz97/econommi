@@ -8,6 +8,8 @@ import incomeImg from "../../assets/income.svg";
 import outcomeImg from "../../assets/outcome.svg";
 import { useCategories } from "../../hooks/useCategories";
 import Spinner from "../../components/Spinner";
+import { useTransactions } from "../../hooks/useTransactions";
+import currentDateToTimestamp from "../../utils/currentDateToTimestamp";
 
 interface NewCategoryTypes {
   name: string;
@@ -41,6 +43,7 @@ const EditCategoryModal = ({
     updateCategories,
     editCategoryStorage,
   } = useCategories();
+  const { getAllTransactions } = useTransactions();
 
   const typed = editCategoryStorage.type;
 
@@ -75,6 +78,9 @@ const EditCategoryModal = ({
       } as CategoryAdd;
 
       await updateCategories(category);
+      const { timestampStartOfMonth, timestampEndOfMonth } =
+        currentDateToTimestamp();
+      await getAllTransactions({ timestampStartOfMonth, timestampEndOfMonth });
 
       reset();
       closeModal();

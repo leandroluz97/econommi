@@ -21,7 +21,8 @@
   }
 
   table {
-    margin-top: 5rem;
+    width: 100%;
+    margin-top: 3rem;
     th {
       font-size: 1.6rem;
       font-weight: 400;
@@ -34,6 +35,7 @@
       font-weight: 500;
       color: var(--gray-700);
       text-align: left;
+      padding: 0.5rem;
 
       span {
         display: flex;

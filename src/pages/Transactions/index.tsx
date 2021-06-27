@@ -218,10 +218,12 @@ const Transactions = () => {
         </div>
       </div>
 
-      <NewTransactionModal
-        modalIsOpen={modalIsOpenAdd}
-        closeModal={closeModalAdd}
-      />
+      {modalIsOpenShow && (
+        <NewTransactionModal
+          modalIsOpen={modalIsOpenAdd}
+          closeModal={closeModalAdd}
+        />
+      )}
       {modalIsOpenEdit && (
         <EditTransactionModal
           modalIsOpen={modalIsOpenEdit}

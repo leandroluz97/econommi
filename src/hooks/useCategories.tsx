@@ -93,6 +93,8 @@ export const CategoriesProvider = ({ children }: CategoriesProviderType) => {
       const user = firebase.auth().currentUser;
       const email = user?.email as string;
 
+      let defaultCategory = {};
+
       let userCategories = await db
         .collection("users")
         .doc(user?.uid)
@@ -105,6 +107,9 @@ export const CategoriesProvider = ({ children }: CategoriesProviderType) => {
         categoriesArray.push({ ...snap.data(), id: snap.id } as Categories);
       });
 
+      defaultCategory = categoriesArray[0];
+
+      setOption(defaultCategory as Categories);
       setCategories(categoriesArray);
     } catch (error) {
       toast.error(error.message, {
@@ -132,7 +137,7 @@ export const CategoriesProvider = ({ children }: CategoriesProviderType) => {
         }
       });
 
-      setOption(catDefault);
+      //setOption(catDefault);
       //setDefaultCategory(catDefault);
     } catch (error) {
       toast.error(error.message, {

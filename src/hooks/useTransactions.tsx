@@ -49,6 +49,10 @@ type TransactionAdd = {
 };
 
 interface ContextProps {
+  getAllTransactions: ({
+    timestampStartOfMonth,
+    timestampEndOfMonth,
+  }: filterTransactionsByMonthType) => Promise<void>;
   transactions: Transaction[];
   addNewTransactions: (data: TransactionAdd) => Promise<void>;
   deleteTransaction: (id: string) => Promise<void>;
@@ -143,6 +147,17 @@ export const TransactionsProvider = ({
       const user = firebase.auth().currentUser;
       const email = user?.email as string;
 
+      let userCategories = await db
+        .collection("users")
+        .doc(user?.uid)
+        .collection("categories")
+        .get();
+
+      const allCategories: any = {};
+      userCategories.forEach((snap) => {
+        allCategories[snap.id] = snap.data();
+      });
+
       let userTransactions = await db
         .collection("users")
         .doc(user?.uid)
@@ -166,6 +181,7 @@ export const TransactionsProvider = ({
           id: snap.id,
           createdAt: `${day}/${month + 1}/${year}`,
           timestamp: snap.data().createdAt,
+          category: [allCategories[snap.data().category.id]],
         } as Transaction);
       });
 
@@ -212,7 +228,9 @@ export const TransactionsProvider = ({
           id: snap.id,
           createdAt: `${day}/${month + 1}/${year}`,
           timestamp: snap.data().createdAt,
+          category: [snap.data().category],
         } as Transaction);
+        // category: [snap.data().category],
       });
 
       setTransactions(transactionsArray);
@@ -241,6 +259,7 @@ export const TransactionsProvider = ({
       const newData = {
         ...data,
         createdAt: timestamp,
+        category: docRef.collection("categories").doc(data.category[0].id),
       };
 
       const newTransaction = await docRef
@@ -371,6 +390,7 @@ export const TransactionsProvider = ({
   return (
     <TransactionsContext.Provider
       value={{
+        getAllTransactions,
         transactions,
         addNewTransactions,
         deleteTransaction,

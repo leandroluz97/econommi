@@ -108,12 +108,7 @@ const OpenTransaction = ({
           </thead>
           <tbody>
             <tr>
-              <td colSpan={5}>
-                It was popularised in the 1960s with the release of Letraset
-                sheets containing Lorem Ipsum passages, and more recently with
-                desktop publishing software like Aldus PageMaker including
-                versions of Lorem Ipsum.
-              </td>
+              <td colSpan={5}>{openedTransaction.description}</td>
             </tr>
           </tbody>
         </table>

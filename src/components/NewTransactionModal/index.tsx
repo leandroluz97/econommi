@@ -60,7 +60,7 @@ const NewTransactionModal = ({
   useEffect(() => {
     (async function () {
       await getAllCategories();
-      await getDefaultCategories();
+      //await getDefaultCategories();
     })();
   }, []);
 
