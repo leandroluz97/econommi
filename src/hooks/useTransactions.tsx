@@ -60,6 +60,8 @@ interface ContextProps {
   ) => Promise<void>;
   chosenMonth: string;
   setChosenMonth: (data: string) => void;
+  openedTransaction: Transaction;
+  setOpenedTransaction: (tran: Transaction) => void;
 }
 
 //Context
@@ -71,6 +73,9 @@ export const TransactionsProvider = ({
 }: TransactionsProviderType) => {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [editStorage, setEditStorage] = useState<Transaction>(
+    {} as Transaction
+  );
+  const [openedTransaction, setOpenedTransaction] = useState<Transaction>(
     {} as Transaction
   );
   const [chosenMonth, setChosenMonth] = useState(() => {
@@ -375,6 +380,8 @@ export const TransactionsProvider = ({
         filterTransactionsByMonth,
         chosenMonth,
         setChosenMonth,
+        openedTransaction,
+        setOpenedTransaction,
       }}
     >
       {children}

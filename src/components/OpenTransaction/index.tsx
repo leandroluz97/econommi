@@ -11,6 +11,7 @@ import { useTransactions } from "../../hooks/useTransactions";
 import { useCategories } from "../../hooks/useCategories";
 import Spinner from "../../components/Spinner";
 import firebase from "../../config/firebase-config";
+import currency from "../../utils/currency";
 
 interface NewTransationTypes {
   amount: string;
@@ -44,54 +45,9 @@ const OpenTransaction = ({
   modalIsOpen,
   closeModal,
 }: NewTransactionModalProps) => {
-  const { addNewTransactions } = useTransactions();
+  const { openedTransaction } = useTransactions();
 
-  const {
-    getAllCategories,
-    categories,
-    getDefaultCategories,
-    option,
-    setOption,
-  } = useCategories();
-
-  const [type, setType] = useState("income");
   const [isLoanding, setIsLoading] = useState(false);
-
-  useEffect(() => {
-    (async function () {
-      await getAllCategories();
-      await getDefaultCategories();
-    })();
-  }, []);
-
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    reset,
-  } = useForm<NewTransationTypes>();
-
-  async function addNewTransaction(data: NewTransationTypes) {
-    setIsLoading(true);
-    try {
-      const newTransactions = {
-        amount: Number(data.amount),
-        category: [{ ...option }],
-        type: type,
-        description: data.description,
-        // createdAt: new Intl.DateTimeFormat("pt-PT").format(date),
-        createdAt: String(new Date()),
-      } as TransactionAdd;
-
-      await addNewTransactions(newTransactions);
-
-      reset();
-      closeModal();
-      setIsLoading(false);
-    } catch (error) {
-      console.log(error.message);
-    }
-  }
 
   return (
     <Modal
@@ -123,11 +79,23 @@ const OpenTransaction = ({
           </thead>
           <tbody>
             <tr>
-              <td></td>
-              <td>Viagem</td>
-              <td>Expenses</td>
-              <td>12/03/2021</td>
-              <td>25,56€</td>
+              <td>
+                <span
+                  className={styles.single__icon}
+                  style={{
+                    backgroundColor: `${openedTransaction.category[0].color}`,
+                  }}
+                >
+                  <img
+                    src={openedTransaction.category[0].icon}
+                    alt={openedTransaction.category[0].name}
+                  />
+                </span>
+              </td>
+              <td>{openedTransaction.category[0].name}</td>
+              <td>{openedTransaction.category[0].type}</td>
+              <td>{openedTransaction.createdAt}</td>
+              <td>{currency(openedTransaction.amount)}</td>
             </tr>
           </tbody>
 

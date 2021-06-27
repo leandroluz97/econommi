@@ -12,38 +12,42 @@
     cursor: pointer;
   }
 
-  h2 {
-    font-family: Roboto;
-    font-style: normal;
-    font-weight: 500;
+  > h2 {
     font-size: 2.6rem;
+    color: var(--gray-900);
+    font-weight: 700;
+    margin-bottom: 2rem;
     text-align: center;
-    margin-bottom: 1rem;
   }
 
   table {
+    margin-top: 5rem;
     th {
-      text-align: left;
       font-size: 1.6rem;
       font-weight: 400;
       color: var(--gray-500);
+      text-align: left;
       padding: 0.5rem;
     }
     td {
-      text-align: left;
       font-size: 1.6rem;
       font-weight: 500;
       color: var(--gray-700);
-      padding: 0.5rem;
+      text-align: left;
+
+      span {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 50px;
+        width: 50px;
+        background-color: red;
+        border-radius: 100px;
+      }
     }
   }
+
   &__head {
     padding-top: 4rem !important;
-  }
-}
-
-@media (max-width: 768px) {
-  .single {
-    padding: 2rem;
   }
 }

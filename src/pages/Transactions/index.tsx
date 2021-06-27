@@ -21,9 +21,28 @@ import FilterModal from "../../components/FilterModal";
 
 import currency from "../../utils/currency";
 import getSummary from "../../utils/summary";
+import firebase from "../../config/firebase-config";
 
 import { useUI } from "../../hooks/useUi";
 import { useTransactions } from "../../hooks/useTransactions";
+
+type Categories = {
+  name: string;
+  type: string;
+  color: string;
+  icon: string;
+  id: string;
+};
+
+interface Transaction {
+  category: Categories[];
+  type: string;
+  createdAt: string;
+  amount: number;
+  description: string;
+  id: string;
+  timestamp?: firebase.firestore.Timestamp;
+}
 
 const Transactions = () => {
   //ui States
@@ -36,8 +55,13 @@ const Transactions = () => {
 
   //Custom hooks
   const { modalIsOpenAdd, setIsOpenAdd } = useUI();
-  const { transactions, deleteTransaction, editTransaction } =
-    useTransactions();
+  const {
+    transactions,
+    deleteTransaction,
+    editTransaction,
+    setOpenedTransaction,
+    openedTransaction,
+  } = useTransactions();
 
   //functions utilities
   const { total, income, expenses } = getSummary(transactions);
@@ -52,8 +76,8 @@ const Transactions = () => {
   }
 
   //Handle Open Transaction
-  function handleOpenTransaction(id: string) {
-    //editTransaction(id);
+  function handleOpenTransaction(transaction: Transaction) {
+    setOpenedTransaction(transaction);
     setIsOpenShow(true);
   }
 
@@ -158,7 +182,7 @@ const Transactions = () => {
                     <td>
                       <button
                         className={styles.transactions__action}
-                        onClick={() => handleOpenTransaction(transaction.id)}
+                        onClick={() => handleOpenTransaction(transaction)}
                       >
                         <img src={open} alt="open" />
                       </button>
@@ -204,10 +228,13 @@ const Transactions = () => {
           closeModal={closeModalEdit}
         />
       )}
-      <OpenTransaction
-        modalIsOpen={modalIsOpenShow}
-        closeModal={closeModalOpen}
-      />
+
+      {modalIsOpenShow && (
+        <OpenTransaction
+          modalIsOpen={modalIsOpenShow}
+          closeModal={closeModalOpen}
+        />
+      )}
       <FilterModal
         title="Filter Transaction by Month"
         modalIsOpen={modalIsOpenFilter}
