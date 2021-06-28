@@ -77,13 +77,13 @@ const Menu = () => {
           <li className={page === "categories" ? styles.active : undefined}>
             <Link to="/categories" onClick={() => setPage("categories")}>
               <img src={category} alt="Category" />
-              <span>Category</span>
+              <span>Categories</span>
             </Link>
           </li>
           <li className={page === "planning" ? styles.active : undefined}>
-            <Link to="/planning" onClick={() => setPage("planning")}>
+            <Link to="/plannings" onClick={() => setPage("plannings")}>
               <img src={planning} alt="Planning" />
-              <span>Planning</span>
+              <span>Plannings</span>
             </Link>
           </li>
           <li className={page === "settings" ? styles.active : undefined}>

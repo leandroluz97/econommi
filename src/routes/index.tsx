@@ -53,7 +53,7 @@ const Routes = () => {
                 <Route exact path="/dashboard" component={Dashboard} />
                 <Route path="/transactions" component={Transactions} />
                 <Route path="/categories" component={Categories} />
-                <Route path="/planning" component={Planning} />
+                <Route path="/plannings" component={Planning} />
                 <Route path="/settings" component={Settings} />
                 <Route path="/share" component={Share} />
                 <Redirect to="/dashboard" />
