@@ -14,7 +14,7 @@ interface SigninState {
   password: string;
 }
 
-const Signin = () => {
+const ForgotPasswordForm = () => {
   const {
     register,
     handleSubmit,
@@ -51,7 +51,7 @@ const Signin = () => {
   }
   return (
     <div className={styles.signin}>
-      <SliderButtons />
+      <h1>Password Reset</h1>
       <form className={styles.signin__form} onSubmit={handleSubmit(onSubmit)}>
         <div className={styles.signin__form__inputs}>
           <Input
@@ -64,39 +64,16 @@ const Signin = () => {
             error={errors.email}
             name="email"
           />
-          <Input
-            property={register("password", {
-              required: "You must specify a password",
-              minLength: {
-                value: 8,
-                message: "Password must have at least 8 characters",
-              },
-            })}
-            label="Password"
-            type={passwordEye ? "text" : "password"}
-            name="password"
-            error={errors.password}
-            visible={passwordEye}
-          />
-
-          <span className={styles.signin__form__forgot}>
-            Forgot your password? <Link to="/forgot-password">Click here</Link>.
-          </span>
         </div>
 
         <div className={styles.signin__form__submit}>
-          <input type="submit" value="Signin!" />
+          <input type="submit" value="Reset Password" />
         </div>
       </form>
 
-      <button
-        type="button"
-        className={styles.signin__google}
-        onClick={() => handleGmailSignup()}
-      >
-        <img src={google} alt="Google Logo" />
-        Signin With Google
-      </button>
+      <div className={styles.signin__backToSingIn}>
+        <Link to="/signin">Back To SignIn</Link>
+      </div>
 
       <p className={styles.signin__policy}>
         By clicking on the button above, you agree with our
@@ -106,4 +83,4 @@ const Signin = () => {
   );
 };
 
-export default Signin;
+export default ForgotPasswordForm;

@@ -1,0 +1,152 @@
+.signin {
+  background: var(--white);
+  width: 100%;
+  max-width: 450px;
+
+  border-radius: 1rem;
+  box-shadow: 9px 39px 107px rgba(91, 141, 136, 0.2);
+  padding: 5rem;
+  position: relative;
+
+  h1 {
+    margin-bottom: 5rem;
+    text-align: center;
+    color: var(--gray-900);
+  }
+
+  &__form {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+    align-self: center;
+    min-height: auto;
+
+    &__util {
+      display: flex;
+      margin-bottom: 0;
+
+      > :first-child {
+        margin-right: 1rem;
+      }
+      > :last-child {
+        margin-left: 1rem;
+      }
+    }
+
+    &__inputs {
+      margin-bottom: 3rem;
+
+      & > div {
+        margin-bottom: 1.5rem;
+      }
+    }
+
+    &__forgot {
+      color: var(--gray-600);
+
+      a {
+        color: #4285f4;
+        text-decoration: underline;
+      }
+    }
+
+    &__submit {
+      input {
+        border-radius: 6px;
+        padding: 1.2rem;
+        display: block;
+        width: 100%;
+        cursor: pointer;
+        border: none;
+        background-color: var(--green);
+        color: var(--white);
+        font-weight: 600;
+        font-size: 1.4rem;
+        height: 4.4rem;
+        margin-bottom: 1.5rem;
+
+        transition: all 0.2s ease;
+
+        &:hover {
+          background-color: #3bb098;
+        }
+      }
+    }
+  }
+
+  &__backToSingIn {
+    text-align: center;
+    a {
+      color: var(--green-10);
+      font-size: 1.4rem;
+      text-decoration: none;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+
+  &__policy {
+    font-size: 10px;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    color: var(--gray-400);
+    text-align: center;
+    background-color: var(--gray-100);
+    width: 100%;
+    padding: 1rem;
+    border-bottom-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+
+    a {
+      text-decoration: underline;
+      color: var(--green);
+      font-weight: 500;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .signin {
+    background: var(--white);
+    width: 100%;
+    max-width: 450px;
+    height: 670px;
+    border-radius: 1rem;
+    box-shadow: 9px 39px 107px rgba(91, 141, 136, 0.2);
+    padding: 5rem 2rem;
+    position: relative;
+
+    &__form {
+      display: flex;
+      justify-content: space-between;
+      flex-direction: column;
+      align-self: center;
+      min-height: 400px;
+
+      &__util {
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 0;
+
+        > :first-child {
+          margin-right: 0rem;
+          margin-bottom: 1.5rem;
+        }
+        > :last-child {
+          margin-left: 0rem;
+        }
+      }
+
+      &__inputs {
+        margin-bottom: 3rem;
+
+        & > div {
+          margin-bottom: 1.5rem;
+        }
+      }
+    }
+  }
+}

@@ -2,6 +2,7 @@ import React from "react";
 import { Switch, Route, Redirect } from "react-router-dom";
 import Dashboard from "../pages/Dashboard";
 import Signup from "../pages/Signup";
+import ForgotPassword from "../pages/ForgotPassword";
 import Signin from "../pages/SignIn";
 import Menu from "../components/Menu";
 import styles from "./styles.module.scss";
@@ -26,6 +27,7 @@ const Routes = () => {
     <Switch>
       <Route path="/signup" component={Signup} />
       <Route path="/signin" component={Signin} />
+      <Route path="/forgot-password" component={ForgotPassword} />
       <Redirect to="/signin" />
     </Switch>
   );

@@ -1,14 +1,13 @@
-import React from "react"
-import "./styles/global.scss"
-import { BrowserRouter as Router } from "react-router-dom"
-import Routes from "./routes"
-import { UiProvider } from "./hooks/useUi"
-import { AuthProvider } from "./hooks/useAuth"
-import Modal from "react-modal"
-import { CategoriesProvider } from "./hooks/useCategories"
+import React from "react";
+import "./styles/global.scss";
+import { BrowserRouter as Router } from "react-router-dom";
+import Routes from "./routes";
+import { UiProvider } from "./hooks/useUi";
+import { AuthProvider } from "./hooks/useAuth";
+import Modal from "react-modal";
+import { CategoriesProvider } from "./hooks/useCategories";
 
-
-Modal.setAppElement("#root")
+Modal.setAppElement("#root");
 
 function App() {
   return (
@@ -23,7 +22,7 @@ function App() {
         </CategoriesProvider>
       </AuthProvider>
     </>
-  )
+  );
 }
 
-export default App
+export default App;
