@@ -8,47 +8,37 @@ import { useUI } from "../../hooks/useUi";
 import { useAuth } from "../../hooks/useAuth";
 import { useHistory } from "react-router-dom";
 import { Link } from "react-router-dom";
+import Spinner from "../../components/Spinner";
 
-interface SigninState {
+interface emailType {
   email: string;
-  password: string;
 }
 
 const ForgotPasswordForm = () => {
+  const [isLoading, setIsLoading] = useState(false);
+
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<SigninState>();
+  } = useForm<emailType>();
 
-  useEffect(() => {
-    console.log("signin");
-  }, []);
-
-  const { passwordEye } = useUI();
-  const { onSubmitGmail, onSigninPassword } = useAuth();
+  const { resetPassword } = useAuth();
 
   let history = useHistory();
 
-  const onSubmit = async (data: SigninState) => {
+  const onSubmit = async (data: emailType) => {
+    setIsLoading(true);
     try {
-      await onSigninPassword(data.email, data.password);
+      await resetPassword(data.email);
 
-      history.push("/dashboard");
+      setIsLoading(false);
+      // history.push("/signin");
     } catch (error) {
-      console.log(error.message);
+      console.log("aqui", error.message);
     }
   };
 
-  async function handleGmailSignup() {
-    try {
-      await onSubmitGmail();
-
-      history.push("/dashboard");
-    } catch (error) {
-      console.log(error.message);
-    }
-  }
   return (
     <div className={styles.signin}>
       <h1>Password Reset</h1>
@@ -67,7 +57,13 @@ const ForgotPasswordForm = () => {
         </div>
 
         <div className={styles.signin__form__submit}>
-          <input type="submit" value="Reset Password" />
+          {isLoading ? (
+            <div className={styles.spin}>
+              <Spinner />
+            </div>
+          ) : (
+            <input type="submit" value="Reset Password" />
+          )}
         </div>
       </form>
 

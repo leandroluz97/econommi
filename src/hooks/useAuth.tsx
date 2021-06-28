@@ -42,6 +42,7 @@ interface ContextProps {
   ) => void;
   onSigninPassword: (email: string, password: string) => void;
   updateSettings: (data: EditSettingsTypes) => void;
+  resetPassword: (email: string) => void;
 }
 
 //Context
@@ -230,6 +231,24 @@ export const AuthProvider = ({ children }: AuthProviderType) => {
     }
   }
 
+  async function resetPassword(email: string) {
+    try {
+      const auth = await firebase.auth().sendPasswordResetEmail(email);
+
+      const passwordReseted = await auth;
+
+      toast.success("Resete Email link sended! 😉", {
+        bodyClassName: "toastify",
+        className: "toastify__success",
+      });
+    } catch (error) {
+      toast.error(error.message, {
+        bodyClassName: "toastify__error",
+        className: "toastify",
+      });
+    }
+  }
+
   return (
     <AuthContext.Provider
       value={{
@@ -240,6 +259,7 @@ export const AuthProvider = ({ children }: AuthProviderType) => {
         onSignupPassword,
         onSigninPassword,
         updateSettings,
+        resetPassword,
       }}
     >
       {!isLoading && children}

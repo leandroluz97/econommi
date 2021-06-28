@@ -21,18 +21,6 @@
     align-self: center;
     min-height: auto;
 
-    &__util {
-      display: flex;
-      margin-bottom: 0;
-
-      > :first-child {
-        margin-right: 1rem;
-      }
-      > :last-child {
-        margin-left: 1rem;
-      }
-    }
-
     &__inputs {
       margin-bottom: 3rem;
 
@@ -41,17 +29,9 @@
       }
     }
 
-    &__forgot {
-      color: var(--gray-600);
-
-      a {
-        color: #4285f4;
-        text-decoration: underline;
-      }
-    }
-
     &__submit {
-      input {
+      input,
+      .spin {
         border-radius: 6px;
         padding: 1.2rem;
         display: block;
@@ -70,6 +50,11 @@
         &:hover {
           background-color: #3bb098;
         }
+      }
+      .spin {
+        display: flex;
+        justify-content: center;
+        align-items: center;
       }
     }
   }
@@ -113,7 +98,7 @@
     background: var(--white);
     width: 100%;
     max-width: 450px;
-    height: 670px;
+    height: auto;
     border-radius: 1rem;
     box-shadow: 9px 39px 107px rgba(91, 141, 136, 0.2);
     padding: 5rem 2rem;
@@ -124,7 +109,7 @@
       justify-content: space-between;
       flex-direction: column;
       align-self: center;
-      min-height: 400px;
+      min-height: auto;
 
       &__util {
         display: flex;
