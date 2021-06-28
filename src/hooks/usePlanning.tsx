@@ -85,6 +85,18 @@ export const PlanningProvider = ({ children }: PlanningProviderType) => {
       const user = firebase.auth().currentUser;
       const email = user?.email as string;
 
+      //get all user categories
+      let userCategories = await db
+        .collection("users")
+        .doc(user?.uid)
+        .collection("categories")
+        .get();
+
+      const allCategories: any = {};
+      userCategories.forEach((snap) => {
+        allCategories[snap.id] = { ...snap.data(), id: snap.id };
+      });
+
       //get planning from firestore
       let userPlannings = await db
         .collection("users")
@@ -110,6 +122,7 @@ export const PlanningProvider = ({ children }: PlanningProviderType) => {
           id: snap.id,
           createdAt: `${day}/${month + 1}/${year}`,
           timestamp: snap.data().createdAt,
+          category: [allCategories[snap.data().category.id]],
         } as Planning);
       });
 
@@ -135,6 +148,18 @@ export const PlanningProvider = ({ children }: PlanningProviderType) => {
       const user = firebase.auth().currentUser;
       const email = user?.email as string;
 
+      //get all user categories
+      let userCategories = await db
+        .collection("users")
+        .doc(user?.uid)
+        .collection("categories")
+        .get();
+
+      const allCategories: any = {};
+      userCategories.forEach((snap) => {
+        allCategories[snap.id] = { ...snap.data(), id: snap.id };
+      });
+
       //get planning from firestore
       let userPlannings = await db
         .collection("users")
@@ -159,6 +184,7 @@ export const PlanningProvider = ({ children }: PlanningProviderType) => {
           id: snap.id,
           createdAt: `${day}/${month + 1}/${year}`,
           timestamp: snap.data().createdAt,
+          category: [allCategories[snap.data().category.id]],
         } as Planning);
       });
 
@@ -210,6 +236,14 @@ export const PlanningProvider = ({ children }: PlanningProviderType) => {
         new Date(data.createdAt)
       );
 
+      //get user category by reference
+      let userCategories = await db
+        .collection("users")
+        .doc(user?.uid)
+        .collection("categories")
+        .doc(data.category[0].id)
+        .get();
+
       //new plan with firestore timestamp date
       const newData = {
         ...data,
@@ -246,6 +280,12 @@ export const PlanningProvider = ({ children }: PlanningProviderType) => {
         id: newPlanningData.id,
         createdAt: `${day}/${month + 1}/${year}`,
         timestamp: newPlanningData.data()?.createdAt,
+        category: [
+          {
+            ...userCategories.data(),
+            id: userCategories.id,
+          },
+        ],
       } as Planning;
 
       //check if we are at the same month otherwise don't show transaction on ui
@@ -313,11 +353,11 @@ export const PlanningProvider = ({ children }: PlanningProviderType) => {
 
   function editPlanning(id: string) {
     //find plan to edit and store it
-    const editPlanning = plannings.find((plan) => plan.id === id);
+    const editPlanningFound = plannings.find((plan) => plan.id === id);
 
     //check plan otherwise do nothing
-    if (editPlanning) {
-      setPlanEditStorage(editPlanning);
+    if (editPlanningFound) {
+      setPlanEditStorage(editPlanningFound);
     }
   }
 
@@ -329,9 +369,19 @@ export const PlanningProvider = ({ children }: PlanningProviderType) => {
       const user = firebase.auth().currentUser;
       const email = user?.email as string;
 
+      let docRef = db.collection("users").doc(user?.uid);
+
+      //get user category by reference
+      let userCategories = await db
+        .collection("users")
+        .doc(user?.uid)
+        .collection("categories")
+        .doc(planEditStorage.category[0].id)
+        .get();
+
       const updatedData = {
         amount: data.amount,
-        category: data.category,
+        category: docRef.collection("categories").doc(data.category[0].id),
         createdAt: data.timestamp,
       };
 
@@ -346,7 +396,16 @@ export const PlanningProvider = ({ children }: PlanningProviderType) => {
       //update plan in state
       let allPlannings = plannings.map((plan) => {
         if (plan.id === planEditStorage.id) {
-          return { id: planEditStorage.id, ...data };
+          return {
+            id: planEditStorage.id,
+            ...data,
+            category: [
+              {
+                ...userCategories.data(),
+                id: userCategories.id,
+              },
+            ],
+          };
         }
 
         return plan;

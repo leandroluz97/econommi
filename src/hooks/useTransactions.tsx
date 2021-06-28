@@ -155,7 +155,7 @@ export const TransactionsProvider = ({
 
       const allCategories: any = {};
       userCategories.forEach((snap) => {
-        allCategories[snap.id] = snap.data();
+        allCategories[snap.id] = { ...snap.data(), id: snap.id };
       });
 
       let userTransactions = await db
@@ -205,6 +205,17 @@ export const TransactionsProvider = ({
       const user = firebase.auth().currentUser;
       const email = user?.email as string;
 
+      let userCategories = await db
+        .collection("users")
+        .doc(user?.uid)
+        .collection("categories")
+        .get();
+
+      const allCategories: any = {};
+      userCategories.forEach((snap) => {
+        allCategories[snap.id] = { ...snap.data(), id: snap.id };
+      });
+
       let userTransactions = await db
         .collection("users")
         .doc(user?.uid)
@@ -228,7 +239,7 @@ export const TransactionsProvider = ({
           id: snap.id,
           createdAt: `${day}/${month + 1}/${year}`,
           timestamp: snap.data().createdAt,
-          category: [snap.data().category],
+          category: [allCategories[snap.data().category.id]],
         } as Transaction);
         // category: [snap.data().category],
       });
@@ -256,6 +267,14 @@ export const TransactionsProvider = ({
         new Date(data.createdAt)
       );
 
+      //get user category by reference
+      let userCategories = await db
+        .collection("users")
+        .doc(user?.uid)
+        .collection("categories")
+        .doc(data.category[0].id)
+        .get();
+
       const newData = {
         ...data,
         createdAt: timestamp,
@@ -281,6 +300,12 @@ export const TransactionsProvider = ({
         id: newTransactionId.id,
         createdAt: `${day}/${month + 1}/${year}`,
         timestamp: newTransactionId.data()?.createdAt,
+        category: [
+          {
+            ...userCategories.data(),
+            id: userCategories.id,
+          },
+        ],
       } as Transaction;
 
       //check if we are at the same month otherwise don't show transaction on ui
@@ -357,9 +382,17 @@ export const TransactionsProvider = ({
 
       let docRef = db.collection("users").doc(user?.uid);
 
+      //get user category by reference
+      let userCategories = await db
+        .collection("users")
+        .doc(user?.uid)
+        .collection("categories")
+        .doc(editStorage.category[0].id)
+        .get();
+
       const updatedData = {
         amount: data.amount,
-        category: data.category,
+        category: docRef.collection("categories").doc(data.category[0].id),
         createdAt: data.timestamp,
         description: data.description,
         type: data.type,
@@ -372,7 +405,16 @@ export const TransactionsProvider = ({
 
       let allTransaction = transactions.map((trans) => {
         if (trans.id === editStorage.id) {
-          return { id: editStorage.id, ...data };
+          return {
+            id: editStorage.id,
+            ...data,
+            category: [
+              {
+                ...userCategories.data(),
+                id: userCategories.id,
+              },
+            ],
+          };
         }
 
         return trans;
