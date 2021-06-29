@@ -80,9 +80,9 @@ const Menu = () => {
               <span>Categories</span>
             </Link>
           </li>
-          <li className={page === "planning" ? styles.active : undefined}>
+          <li className={page === "plannings" ? styles.active : undefined}>
             <Link to="/plannings" onClick={() => setPage("plannings")}>
-              <img src={planning} alt="Planning" />
+              <img src={planning} alt="Plannings" />
               <span>Plannings</span>
             </Link>
           </li>
@@ -104,11 +104,6 @@ const Menu = () => {
           <img src={plus} alt="Add transactions" />
         </button>
       </div>
-
-      <NewTransactionModal
-        modalIsOpen={modalIsOpenAdd}
-        closeModal={closeModalAdd}
-      />
     </>
   );
 };

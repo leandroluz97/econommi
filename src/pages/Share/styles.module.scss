@@ -24,6 +24,41 @@
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     row-gap: 4rem;
+
+    li {
+      list-style: none;
+      text-align: center;
+
+      position: relative;
+
+      span {
+        position: absolute;
+        position: absolute;
+        top: -35px;
+        left: 50%;
+
+        display: inline-block;
+        padding: 5px 10px;
+        border-radius: 2px;
+        background: var(--gray-600);
+        color: #fff;
+        font-size: 1.2rem;
+        font-family: sans-serif;
+        white-space: nowrap;
+        border-radius: 100px;
+        z-index: 9;
+
+        transform: translateX(-50%) scale(0.8);
+        opacity: 0;
+
+        transition: all 0.2s ease;
+      }
+
+      button:hover + span {
+        transform: translateX(-50%) scale(1);
+        opacity: 1;
+      }
+    }
   }
 }
 

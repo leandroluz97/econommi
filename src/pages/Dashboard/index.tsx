@@ -23,20 +23,6 @@ const Dashboard = () => {
   const { transactions } = useTransactions();
   const [calendarModalIsOpen, setCalendarModalIsOpen] = useState(false);
 
-  /*
-  let calendarRef = useRef({} as HTMLSpanElement);
-
-  useEffect(() => {
-    const e = document.addEventListener("mousedown", (event) => {
-      event.stopImmediatePropagation();
-      if (!calendarRef.current.contains(event.target as HTMLElement)) {
-        console.log(event.target);
-
-        setCalendarModalIsOpen(false);
-      }
-    });
-  });
-*/
   function calendarCloseModal() {
     setCalendarModalIsOpen(false);
   }

@@ -1,8 +1,8 @@
 .layout {
-  background-color: var(--green-50);
-  width: 100vw;
-  height: 100vh;
-  //position: relative;
+  /*background-color: var(--green-50);*/
+  /*width: 100vw;*/
+  /*height: 100vh;*/
+  /*position: relative;*/
   display: flex;
 
   &__sidebar {
@@ -10,8 +10,16 @@
     transition: all 0.3s ease;
   }
   &__routes {
-    margin: 3rem;
+    /*margin: 3rem;*/
+    padding: 3rem;
     width: 100%;
+    /*here*/
+    background-color: var(--green-50);
+
+    min-height: 100vh;
+    /*
+    overflow-x: hidden;
+    */
   }
 
   &__sidebarExpand {

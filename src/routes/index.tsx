@@ -18,11 +18,23 @@ import { useUI } from "../hooks/useUi";
 import { TransactionsProvider } from "../hooks/useTransactions";
 import { PlanningProvider } from "../hooks/usePlanning";
 import Planning from "../pages/Planning";
+import NewTransactionModal from "../components/NewTransactionModal";
 
 const Routes = () => {
   const { currentUser } = useAuth();
-  const { openMenu } = useUI();
+  const { openMenu, modalIsOpenAdd, setIsOpenAdd } = useUI();
 
+  //handle close modal
+  function closeModalAdd() {
+    setIsOpenAdd(false);
+  }
+
+  //
+  const sideBarLayoutStyle = openMenu
+    ? `${styles.layout__sidebarExpand}`
+    : `${styles.layout__sidebar}`;
+
+  //Public Routes
   let routes = (
     <Switch>
       <Route path="/signup" component={Signup} />
@@ -32,18 +44,13 @@ const Routes = () => {
     </Switch>
   );
 
+  //Private route
   if (currentUser) {
     routes = (
       <TransactionsProvider>
         <PlanningProvider>
           <div className={styles.layout}>
-            <div
-              className={
-                openMenu
-                  ? `${styles.layout__sidebarExpand}`
-                  : `${styles.layout__sidebar}`
-              }
-            >
+            <div className={sideBarLayoutStyle}>
               <Menu />
             </div>
             <MobileMenu />
@@ -60,6 +67,10 @@ const Routes = () => {
               </Switch>
             </div>
           </div>
+          <NewTransactionModal
+            modalIsOpen={modalIsOpenAdd}
+            closeModal={closeModalAdd}
+          />
         </PlanningProvider>
       </TransactionsProvider>
     );

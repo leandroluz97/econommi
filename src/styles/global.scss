@@ -34,10 +34,12 @@
 html {
   font-size: 62.5%;
   scroll-behavior: smooth;
+  height: 100%;
 }
 
 body {
   font-family: "Roboto", sans-serif;
+  height: 100%;
 }
 
 .user__modal {
@@ -61,6 +63,7 @@ body {
   right: 0;
   bottom: 0;
   background-color: rgba(255, 255, 255, 0);
+  z-index: 99;
 }
 
 .global__modal {
@@ -91,6 +94,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
+  z-index: 99;
 }
 
 .new__modal {
@@ -117,6 +121,8 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
+
+  z-index: 99;
 
   transform: translateY(40px);
 }
@@ -154,9 +160,9 @@ body {
 .toastify {
   color: white !important;
   font-size: 1.5rem;
+  font-weight: 100;
 
   &__error {
-    background-color: #e43333 !important;
   }
 
   &__success {
@@ -238,28 +244,6 @@ body {
 [card-title]:hover::after {
   transform: translateX(-50%) scale(1);
   opacity: 1;
-}
-
-::-webkit-scrollbar {
-  width: 7px;
-}
-
-/* Track */
-::-webkit-scrollbar-track {
-  //background: #f1f1f1;
-  background: #f1f1f1;
-  border-radius: 100px;
-}
-
-/* Handle */
-::-webkit-scrollbar-thumb {
-  background: var(--green);
-  border-radius: 200px;
-}
-
-/* Handle on hover */
-::-webkit-scrollbar-thumb:hover {
-  background: #32a58e;
 }
 
 @media (max-width: 768px) {

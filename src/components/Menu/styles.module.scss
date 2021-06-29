@@ -1,10 +1,14 @@
 .menu {
   background-color: var(--white);
   max-width: 290px;
+  /*new*/
+  width: 500px;
   height: 100vh;
   padding: 2rem 0;
   border-right: solid 1px var(--gray-300);
   overflow: hidden;
+  /*new*/
+  position: fixed;
 
   display: flex;
   flex-direction: column;

@@ -25,63 +25,96 @@ import facebook from "../../assets/facebook.svg";
 const Share = () => {
   return (
     <div className={styles.share}>
-      <h2>Share 😉</h2>
+      <h2>Share with friends</h2>
       <div className={styles.share__wrapper}>
-        <div className={styles.share__icons}>
-          <FacebookShareButton
-            url={"www.econommi-app.com"}
-            quote="A platform where you can manage and keep track of your
+        <ul className={styles.share__icons}>
+          <li>
+            <FacebookShareButton
+              url={"www.econommi-app.com"}
+              quote="A platform where you can manage and keep track of your
                 income and outcome to have you!"
-            hashtag="#econommi #finances"
-          >
-            <img src={facebook} alt="facebook" />
-          </FacebookShareButton>
+              hashtag="#econommi #finances"
+            >
+              <img src={facebook} alt="facebook" />
+            </FacebookShareButton>
 
-          <EmailShareButton
-            url="www.econommi-app.com"
-            subject="hello"
-            body="leandrodaluz97@gmail.com"
-          >
-            <img src={gmail} alt="gmail" />
-          </EmailShareButton>
+            <span>Facebook</span>
+          </li>
 
-          <LinkedinShareButton
-            url="https://www.linkedin.com/in/leandro-luz/"
-            title="Econommi App"
-            summary="A platform where you can manage and keep track of your
+          <li>
+            <EmailShareButton
+              url="www.econommi-app.com"
+              subject="hello"
+              body="leandrodaluz97@gmail.com"
+            >
+              <img src={gmail} alt="gmail" />
+            </EmailShareButton>
+            <span>Gmail</span>
+          </li>
+
+          <li>
+            <LinkedinShareButton
+              url="https://www.linkedin.com/in/leandro-luz/"
+              title="Econommi App"
+              summary="A platform where you can manage and keep track of your
                 income and outcome to have you!"
-            source="https://www.linkedin.com/in/leandro-luz/"
-          >
-            <img src={linkedin} alt="linkedin" />
-          </LinkedinShareButton>
+              source="https://www.linkedin.com/in/leandro-luz/"
+            >
+              <img src={linkedin} alt="linkedin" />
+            </LinkedinShareButton>
+            <span>LinkedIn</span>
+          </li>
 
-          <TwitterShareButton
-            url="www.econommi-app.com"
-            title="Econommi App"
-            hashtags={["#econommi", "#finances"]}
-          >
-            <img src={twitter} alt="twitter" />
-          </TwitterShareButton>
+          <li>
+            <TwitterShareButton
+              url="www.econommi-app.com"
+              title="Econommi App"
+              hashtags={["#econommi", "#finances"]}
+            >
+              <img src={twitter} alt="twitter" />
+            </TwitterShareButton>
+            <span>Twitter</span>
+          </li>
 
-          <WhatsappShareButton url="www.econommi-app.com" title="Econommi App">
-            <img src={whatsapp} alt="whatsapp" />
-          </WhatsappShareButton>
+          <li>
+            <WhatsappShareButton
+              url="www.econommi-app.com"
+              title="Econommi App"
+            >
+              <img src={whatsapp} alt="whatsapp" />
+            </WhatsappShareButton>
+            <span>Whatsapp</span>
+          </li>
 
-          <FacebookMessengerShareButton
-            appId="fndbdcb"
-            url="www.econommi-app.com"
-            title="Econommi App"
-          >
-            <img src={messenger} alt="messenger" />
-          </FacebookMessengerShareButton>
+          <li>
+            <FacebookMessengerShareButton
+              appId="fndbdcb"
+              url="www.econommi-app.com"
+              title="Econommi App"
+            >
+              <img src={messenger} alt="messenger" />
+            </FacebookMessengerShareButton>
+            <span>Facebook Messenger</span>
+          </li>
 
-          <TelegramShareButton url="www.econommi-app.com" title="Econommi App">
-            <img src={telegram} alt="telegram" />
-          </TelegramShareButton>
-          <ViberShareButton url="www.econommi-app.com" title="Econommi App">
-            <img src={viber} alt="viber" />
-          </ViberShareButton>
-        </div>
+          <li>
+            <TelegramShareButton
+              url="www.econommi-app.com"
+              title="Econommi App"
+            >
+              <img src={telegram} alt="telegram" />
+            </TelegramShareButton>
+
+            <span>Telegram</span>
+          </li>
+
+          <li>
+            <ViberShareButton url="www.econommi-app.com" title="Econommi App">
+              <img src={viber} alt="viber" />
+            </ViberShareButton>
+            <span>Viber</span>
+          </li>
+        </ul>
       </div>
     </div>
   );
