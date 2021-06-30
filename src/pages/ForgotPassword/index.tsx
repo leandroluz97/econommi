@@ -16,7 +16,7 @@ const ForgotPassword = () => {
             <div className={styles.forgotPassword__title}>
               <img src={econommi} alt="Econommi logo" />
               <p>
-                A platform where you can ma nage and keep <br /> track of your
+                A platform where you can manage and keep <br /> track of your
                 income and outcome <br /> to have you{" "}
                 <span>finance freedom</span>.
               </p>
