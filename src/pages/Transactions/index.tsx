@@ -197,6 +197,8 @@ const Transactions = () => {
                         onClick={() => deleteTransaction(transaction.id)}
                       >
                         <img src={trash} alt="delete" />
+
+                        <div className={styles.transactions__actions}></div>
                       </button>
                     </td>
                   </tr>

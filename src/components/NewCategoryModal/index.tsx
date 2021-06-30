@@ -182,14 +182,14 @@ const NewCategoryModal = ({
           </div>
           <div
             className={
-              type === "outcome"
+              type === "expenses"
                 ? `${styles.form__buttons__outcome} ${styles.activeOutcome}`
                 : `${styles.form__buttons__outcome}`
             }
-            onClick={() => setType("outcome")}
+            onClick={() => setType("expenses")}
           >
-            <span>Outcome</span>
-            <img src={outcomeImg} alt="outcome" />
+            <span>Expenses</span>
+            <img src={outcomeImg} alt="expenses" />
           </div>
         </div>
 

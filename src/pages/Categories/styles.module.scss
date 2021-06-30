@@ -84,9 +84,12 @@
         font-weight: normal;
         font-size: 1.4rem;
         color: var(--gray-500);
-        min-width: 7.5rem;
-        overflow: hidden;
-        text-overflow: ellipsis;
+
+        &:not(:last-child) {
+          min-width: 7.5rem;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
 
         &:first-child {
           border-top-left-radius: 13px;
@@ -144,7 +147,7 @@
         display: block;
         overflow-y: visible;
         padding: 0.5rem;
-        margin-bottom: 500px;
+        /* margin-bottom: 500px;*/
       }
     }
   }
@@ -153,6 +156,7 @@
 @media (max-width: 649px) {
   .categories {
     table {
+      margin-bottom: 3rem;
       thead {
         th {
           font-size: 1.4rem;
@@ -160,7 +164,7 @@
       }
 
       tbody {
-        margin-bottom: 500px;
+        /* margin-bottom: 500px;*/
       }
     }
   }
@@ -172,7 +176,7 @@
 
     table {
       tbody {
-        margin-bottom: 500px;
+        /*margin-bottom: 500px;*/
       }
     }
   }

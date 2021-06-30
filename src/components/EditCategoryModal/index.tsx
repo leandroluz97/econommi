@@ -186,8 +186,8 @@ const EditCategoryModal = ({
             }
             onClick={() => setType("expenses")}
           >
-            <span>Outcome</span>
-            <img src={outcomeImg} alt="outcome" />
+            <span>Expenses</span>
+            <img src={outcomeImg} alt="Expenses" />
           </div>
         </div>
 

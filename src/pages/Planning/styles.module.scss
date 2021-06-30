@@ -161,6 +161,24 @@
   }
 }
 
+@media (max-width: 1024px) {
+  .planning {
+    &__infos {
+      display: flex;
+      flex-direction: column;
+    }
+
+    &__table {
+      order: 2;
+    }
+    &__cards {
+      order: 1;
+      width: 100%;
+      margin-left: 0;
+    }
+  }
+}
+
 @media (max-width: 768px) {
   .planning {
     margin: 2rem;
@@ -192,7 +210,6 @@
     }
     table {
       order: 2;
-      margin-bottom: 100px;
 
       tbody {
         display: block;
@@ -207,6 +224,7 @@
 @media (max-width: 649px) {
   .planning {
     table {
+      margin-bottom: 3rem;
       thead {
         th:nth-child(3) {
           display: none;
@@ -225,8 +243,6 @@
         td:nth-child(4) {
           display: none;
         }
-
-        margin-bottom: 350px;
       }
     }
   }

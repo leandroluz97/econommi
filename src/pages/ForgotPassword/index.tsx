@@ -10,7 +10,6 @@ const ForgotPassword = () => {
     <>
       <div className={styles.forgotPassword}>
         <div className={styles.forgotPassword__wrapper}>
-          {/*<Signin />*/}
           <ForgotPasswordForm />
           <div className={styles.forgotPassword__content}>
             <div className={styles.forgotPassword__title}>
