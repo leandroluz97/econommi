@@ -20,8 +20,7 @@ import { useUI } from "../../hooks/useUi";
 import NewTransactionModal from "../NewTransactionModal";
 
 const Menu = () => {
-  const { page, setPage, openMenu, setOpenMenu, modalIsOpenAdd, setIsOpenAdd } =
-    useUI();
+  const { page, setPage, openMenu, setOpenMenu, setIsOpenAdd } = useUI();
 
   //handle open modal
   function handleNewTransaction() {

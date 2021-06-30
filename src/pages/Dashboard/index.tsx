@@ -141,6 +141,7 @@ const Dashboard = () => {
                 display: true,
                 position: "right",
               },
+              resposive: true,
             }}
           />
         </div>
@@ -158,6 +159,7 @@ const Dashboard = () => {
                 display: true,
                 position: "right",
               },
+              resposive: true,
             }}
           />
         </div>

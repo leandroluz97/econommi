@@ -64,15 +64,19 @@
 
 @media (max-width: 768px) {
   .share {
+    padding: 2rem;
     > h2 {
+      /*
       margin-bottom: 2rem;
       margin-left: 3rem;
       margin-top: 3rem;
+      */
     }
 
-    &__wrapper {
-      padding-bottom: 20rem;
-      margin-bottom: 50rem;
+    &__icons {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      row-gap: 4rem;
     }
   }
 }

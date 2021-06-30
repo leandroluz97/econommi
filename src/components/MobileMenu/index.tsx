@@ -14,7 +14,7 @@ import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 
 const MobileMenu = () => {
-  const { page, setPage, openMenu, setOpenMenu, modalIsOpenAdd, setIsOpenAdd } =
+  const { page, setPage, openMenu, setOpenMenu, setIsOpenAdd, modalIsOpenAdd } =
     useUI();
 
   //handle open modal
@@ -73,7 +73,7 @@ const MobileMenu = () => {
           </li>
         </ul>
 
-        <button type="button">
+        <button type="button" onClick={handleNewTransaction}>
           <img src={plus} alt="Add transactions" />
         </button>
       </div>
