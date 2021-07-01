@@ -121,7 +121,7 @@ const Transactions = () => {
       <div className={styles.transactions}>
         <h2>Transactions</h2>
         <div className={styles.transactions__buttons}>
-          <div>
+          <div className={styles.transactions__left}>
             <RoundedButton
               handleClick={handleNewTransaction}
               img={plusImg}
@@ -130,7 +130,7 @@ const Transactions = () => {
             />
           </div>
 
-          <div>
+          <div className={styles.transactions__right}>
             <RoundedSearch
               handleChange={handleSearchTransaction}
               img={searchImg}

@@ -61,38 +61,38 @@ const Menu = () => {
         </div>
 
         <ul>
-          <li className={page === "dashboard" ? styles.active : undefined}>
+          <li className={page === "dashboard" ? styles.active : ""}>
             <Link to="/dashboard" onClick={() => setPage("dashboard")}>
               <img src={home} alt="Dashboard" />
               <span>Dashboard</span>
             </Link>
           </li>
-          <li className={page === "transactions" ? styles.active : undefined}>
+          <li className={page === "transactions" ? styles.active : ""}>
             <Link to="/transactions" onClick={() => setPage("transactions")}>
               <img src={transaction} alt="Transactions" />
               <span>Transactions</span>
             </Link>
           </li>
-          <li className={page === "categories" ? styles.active : undefined}>
+          <li className={page === "categories" ? styles.active : ""}>
             <Link to="/categories" onClick={() => setPage("categories")}>
               <img src={category} alt="Category" />
               <span>Categories</span>
             </Link>
           </li>
-          <li className={page === "plannings" ? styles.active : undefined}>
+          <li className={page === "plannings" ? styles.active : ""}>
             <Link to="/plannings" onClick={() => setPage("plannings")}>
               <img src={planning} alt="Plannings" />
               <span>Plannings</span>
             </Link>
           </li>
-          <li className={page === "settings" ? styles.active : undefined}>
+          <li className={page === "settings" ? styles.active : ""}>
             <Link to="/settings" onClick={() => setPage("settings")}>
               <img src={setting} alt="Settings" />
               <span>Settings</span>
             </Link>
           </li>
-          <li className={page === "share" ? styles.active : undefined}>
-            <Link to="share" onClick={() => setPage("share")}>
+          <li className={page === "share" ? styles.active : ""}>
+            <Link to="/share" onClick={() => setPage("share")}>
               <img src={share} alt="Share with friends" />
               <span>Share with friends</span>
             </Link>

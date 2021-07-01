@@ -14,13 +14,12 @@ const RoundedButton = ({
   labelTitle,
 }: RoundedButtonProps) => {
   return (
-    <button
-      onClick={() => handleClick()}
-      className={styles.roudedButton}
-      label-title={labelTitle}
-    >
-      <img src={img} alt={textAlt} />
-    </button>
+    <div className={styles.rounded}>
+      <button onClick={() => handleClick()} className={styles.rounded__button}>
+        <img src={img} alt={textAlt} />
+      </button>
+      <span className={styles.rounded__title}>{labelTitle}</span>
+    </div>
   );
 };
 

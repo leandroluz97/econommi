@@ -127,7 +127,7 @@ const Planning = () => {
       <div className={styles.planning}>
         <h2>Planning</h2>
         <div className={styles.planning__buttons}>
-          <div>
+          <div className={styles.planning__left}>
             <RoundedButton
               handleClick={handleNewPlanning}
               img={plusImg}
@@ -136,7 +136,7 @@ const Planning = () => {
             />
           </div>
 
-          <div>
+          <div className={styles.planning__right}>
             <RoundedSearch
               handleChange={handleSearchPlanning}
               img={searchImg}

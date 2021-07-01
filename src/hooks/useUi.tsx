@@ -36,8 +36,40 @@ export const UiProvider = ({ children }: UiProviderType) => {
   const [page, setPage] = useState<string>("dashboard");
   const [openMenu, setOpenMenu] = useState(true);
   const [modalIsOpenAdd, setIsOpenAdd] = useState(false);
+  const [darkTheme, setDarkTheme] = useState(false);
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    //colors
+    const colorLight = [
+      "--gray-100: #f7fafb;",
+      "--gray-200: #dcdcdc;",
+      "--gray-300: #dadada;",
+      "--gray-400: #afafaf;",
+      "--gray-450: #a4a4a4;",
+      "--gray-500: #72818d;",
+      "--gray-550: #959595;",
+      "--gray-600: #7d7d7d;",
+      "--gray-700: #5a646d;",
+      "--gray-900: #434343;",
+    ];
+    const colorDark = [
+      "--background: #121721",
+      " --card: #19202d",
+      "--text: #FFFFFF",
+      "--border: #313743",
+    ];
+
+    //root css variables
+    const root = document.getElementsByTagName("html")[0];
+    root.style.cssText = !darkTheme
+      ? colorDark.join(";")
+      : colorLight.join(";");
+  }, [darkTheme]);
+
+  //handle set theme
+  function handleSwitchTheme() {
+    setDarkTheme(!darkTheme);
+  }
 
   return (
     <UiContext.Provider

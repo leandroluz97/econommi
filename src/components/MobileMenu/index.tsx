@@ -5,6 +5,7 @@ import notification from "../../assets/notification.svg";
 import setting from "../../assets/setting.svg";
 import share from "../../assets/share.svg";
 import plus from "../../assets/plus.svg";
+import planning from "../../assets/planning.svg";
 import { Link } from "react-router-dom";
 import { useUI } from "../../hooks/useUi";
 import NewTransactionModal from "../NewTransactionModal";
@@ -35,38 +36,38 @@ const MobileMenu = () => {
     <>
       <div className={styles.mobileMenu}>
         <ul>
-          <li className={page === "dashboard" ? styles.active : undefined}>
+          <li className={page === "dashboard" ? styles.active : ""}>
             <Link to="/" onClick={() => setPage("dashboard")}>
               <img src={home} alt="Dashboard" />
               <span></span>
             </Link>
           </li>
-          <li className={page === "transactions" ? styles.active : undefined}>
-            <Link to="transactions" onClick={() => setPage("transactions")}>
+          <li className={page === "transactions" ? styles.active : ""}>
+            <Link to="/transactions" onClick={() => setPage("transactions")}>
               <img src={transaction} alt="Transactions" />
               <span></span>
             </Link>
           </li>
-          <li className={page === "categories" ? styles.active : undefined}>
-            <Link to="categories" onClick={() => setPage("categories")}>
+          <li className={page === "categories" ? styles.active : ""}>
+            <Link to="/categories" onClick={() => setPage("categories")}>
               <img src={category} alt="Category" />
               <span></span>
             </Link>
           </li>
-          <li className={page === "notifications" ? styles.active : undefined}>
-            <Link to="notifications" onClick={() => setPage("notifications")}>
-              <img src={notification} alt="Notification" />
+          <li className={page === "plannings" ? styles.active : ""}>
+            <Link to="/plannings" onClick={() => setPage("plannings")}>
+              <img src={planning} alt="Plannings" />
               <span></span>
             </Link>
           </li>
-          <li className={page === "settings" ? styles.active : undefined}>
-            <Link to="settings" onClick={() => setPage("settings")}>
+          <li className={page === "settings" ? styles.active : ""}>
+            <Link to="/settings" onClick={() => setPage("settings")}>
               <img src={setting} alt="Settings" />
               <span></span>
             </Link>
           </li>
-          <li className={page === "share" ? styles.active : undefined}>
-            <Link to="share" onClick={() => setPage("share")}>
+          <li className={page === "share" ? styles.active : ""}>
+            <Link to="/share" onClick={() => setPage("share")}>
               <img src={share} alt="Share with friends" />
               <span></span>
             </Link>
