@@ -1,110 +1,40 @@
-import React, { useEffect, useRef, useState } from "react";
-import AmountCard from "../../components/AmountCard";
-import { useTransactions } from "../../hooks/useTransactions";
+import { Doughnut, Line } from "react-chartjs-2";
+
 import styles from "./styles.module.scss";
 
 import expensesImg from "../../assets/expenses.svg";
 import currentImg from "../../assets/current.svg";
 import revenueImg from "../../assets/revenue.svg";
-import caretdownBig from "../../assets/caretdownBig.svg";
-
-import { Doughnut, Line } from "react-chartjs-2";
-import getSummary from "../../utils/summary";
-
-import Calendar from "../../components/Calendar";
 
 import DateCard from "../../components/DateCard";
+import AmountCard from "../../components/AmountCard";
 
-interface transDataType {
-  trans: number;
-  createdAt: string[];
-}
+import getSummary from "../../utils/summary";
+import lineGraphData from "../../utils/lineGraphData";
+import { circularGraph, lineGraph } from "./data";
+
+import { useTransactions } from "../../hooks/useTransactions";
+
 const Dashboard = () => {
+  //hooks
   const { transactions } = useTransactions();
-  const [calendarModalIsOpen, setCalendarModalIsOpen] = useState(false);
 
-  function calendarCloseModal() {
-    setCalendarModalIsOpen(false);
-  }
-  function handleOpenCalendarModal() {
-    setCalendarModalIsOpen(true);
-  }
-
+  //summary data for circular graph
   const { total, income, expenses } = getSummary(transactions);
 
-  const data = {
-    labels: [
-      "January",
-      "February",
-      "March",
-      "April",
-      "May",
-      "June",
-      "July",
-      "August",
-      "September",
-      "October",
-      "November",
-      "December",
-    ],
-    datasets: [
-      {
-        label: "Current Balance",
-        fill: false,
-        lineTension: 0.5,
-        backgroundColor: "rgba(83, 134, 233, 1)",
-        borderColor: "rgba(83, 134, 233, 1)",
-        borderWidth: 2,
-        data: [65, 59, 80, 81, 70, 70, 75, 73, 71, 83],
-      },
-      {
-        label: "Income",
-        fill: false,
-        lineTension: 0.5,
-        backgroundColor: "rgba(139, 207, 97, 1)",
-        borderColor: "rgba(139, 207, 97, 1)",
-        borderWidth: 2,
-        data: [75, 59, 70, 81, 70, 70, 80, 60, 85, 63, 81, 83],
-      },
-      {
-        label: "Expenses",
-        fill: false,
-        lineTension: 0.5,
-        backgroundColor: "rgba(222, 90, 90, 1)",
-        borderColor: "rgba(222, 90, 90, 1)",
-        borderWidth: 2,
-        data: [55, 54, 60, 71, 60, 60, 60, 60, 75, 63, 71, 73],
-      },
-    ],
-  };
+  //montly data for line graph
+  const montlyExpenses = lineGraphData({ transactions, type: "expenses" });
+  const montlyIncome = lineGraphData({ transactions, type: "income" });
 
-  const dataCirculeGraphs = {
-    labels: ["Expenses", "Income"],
-    datasets: [
-      {
-        label: "Rainfall",
-        backgroundColor: ["#DE5A5A", "#8BCF61"],
-        hoverBackgroundColor: ["#D45050", "#82C957"],
-        data: [Number(expenses), income - expenses],
-      },
-    ],
-  };
-
-  console.log("render");
+  //line and circular data for ui display
+  const lineConfig = lineGraph({ montlyExpenses, montlyIncome });
+  const circularConfig = circularGraph({ income, expenses });
 
   return (
     <div className={styles.dashboard}>
       <h2>Dashboard</h2>
       <div className={styles.dashboard__summary}>
         <DateCard />
-        {/* <div className={styles.dashboard__date}>
-          <p>Maio</p>
-          <span onClick={handleOpenCalendarModal} ref={calendarRef}>
-            <img src={caretdownBig} alt="Caret Down" />
-
-            {calendarModalIsOpen && <Calendar />}
-          </span>
-  </div>*/}
 
         <AmountCard
           type="Current Balance"
@@ -128,40 +58,10 @@ const Dashboard = () => {
 
       <div className={styles.dashboard__main}>
         <div className={styles.dashboard__lineGraph}>
-          <Line
-            data={data}
-            type="line"
-            options={{
-              title: {
-                display: true,
-                text: "Average Rainfall per month",
-                fontSize: 20,
-              },
-              legend: {
-                display: true,
-                position: "right",
-              },
-              resposive: true,
-            }}
-          />
+          <Line type="line" {...lineConfig} />
         </div>
         <div className={styles.dashboard__circuleGraph}>
-          <Doughnut
-            type="line"
-            data={dataCirculeGraphs}
-            options={{
-              title: {
-                display: true,
-                text: "Average Rainfall per month",
-                fontSize: 20,
-              },
-              legend: {
-                display: true,
-                position: "right",
-              },
-              resposive: true,
-            }}
-          />
+          <Doughnut type="doughnut" {...circularConfig} />
         </div>
       </div>
     </div>
