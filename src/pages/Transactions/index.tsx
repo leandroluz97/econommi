@@ -1,4 +1,4 @@
-import { ChangeEvent, useEffect, useState } from "react";
+import { ChangeEvent, useState } from "react";
 import styles from "./styles.module.scss";
 
 import filterImg from "../../assets/filter.svg";
@@ -60,7 +60,6 @@ const Transactions = () => {
     deleteTransaction,
     editTransaction,
     setOpenedTransaction,
-    openedTransaction,
   } = useTransactions();
 
   //functions utilities

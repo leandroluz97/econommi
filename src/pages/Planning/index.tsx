@@ -1,118 +1,111 @@
-import React, { ChangeEvent, useState } from "react";
+import { ChangeEvent, useState } from "react";
+
 import styles from "./styles.module.scss";
-import { useTransactions } from "../../hooks/useTransactions";
-import RoundedButton from "../../components/RoundedButton";
-import RoundedSearch from "../../components/RoundedSearch";
-import currency from "../../utils/currency";
+
 import searchImg from "../../assets/search.svg";
-import AmountCard from "../../components/AmountCard";
 import plusImg from "../../assets/plusComponent.svg";
 import filterImg from "../../assets/filter.svg";
 import trash from "../../assets/trash.svg";
 import edit from "../../assets/Edit.svg";
-
-import NewPlanningModal from "../../components/NewPlanningModal";
-import EditPlanningModal from "../../components/EditPlanningModal";
-import FilterModal from "../../components/FilterModal";
-
 import expensesImg from "../../assets/expenses.svg";
 import currentImg from "../../assets/current.svg";
 import revenueImg from "../../assets/revenue.svg";
-import { usePlanning } from "../../hooks/usePlanning";
+
+import RoundedButton from "../../components/RoundedButton";
+import RoundedSearch from "../../components/RoundedSearch";
+import NewPlanningModal from "../../components/NewPlanningModal";
+import EditPlanningModal from "../../components/EditPlanningModal";
+import FilterModal from "../../components/FilterModal";
+import AmountCard from "../../components/AmountCard";
+
+import currency from "../../utils/currency";
 import getSummary from "../../utils/summary";
 import filterCategoryAmount from "../../utils/filterCategoryAmount";
-import firebase from "../../config/firebase-config";
+
+import { usePlanning } from "../../hooks/usePlanning";
+import { useTransactions } from "../../hooks/useTransactions";
+
+type Categories = {
+  name: string;
+  type: string;
+  color: string;
+  icon: string;
+  id: string;
+};
+
+interface PlanType {
+  category: Categories[];
+  createdAt: string;
+  amount: number;
+}
 
 const Planning = () => {
+  //state
   const [modalIsOpenAdd, setIsOpenAdd] = useState(false);
   const [modalIsOpenEdit, setIsOpenEdit] = useState(false);
   const [modalIsOpenFilter, setIsOpenFilter] = useState(false);
   const [search, setSearch] = useState("");
+
+  //hooks
   const { transactions } = useTransactions();
   const { plannings, deletePlanning, editPlanning } = usePlanning();
 
-  type Categories = {
-    name: string;
-    type: string;
-    color: string;
-    icon: string;
-    id: string;
-  };
-
-  interface PlanType {
-    category: Categories[];
-    createdAt: string;
-    amount: number;
-  }
-
+  //summary data
   const { total, income, expenses } = getSummary(transactions);
 
+  //set new planning modal true
   function handleNewPlanning() {
     setIsOpenAdd(true);
   }
+
+  //set the planning to be updated and open edit modal
   function handleEditPlanning(id: string) {
     editPlanning(id);
     setIsOpenEdit(true);
   }
 
+  //close add new modal
   function closeModalAdd() {
     setIsOpenAdd(false);
   }
 
+  //close edit  modal
   function closeModalEdit() {
     setIsOpenEdit(false);
   }
 
+  //open filter by month modal
   function handleFilterPlanning() {
     setIsOpenFilter(true);
   }
 
+  //close filter by month modal
   function closeModalFilter() {
     setIsOpenFilter(false);
   }
 
+  //handle search input text
   function handleSearchPlanning(event: ChangeEvent<HTMLInputElement>) {
     setSearch(event.target.value);
   }
 
+  //filter just t plans the contain search input text
   const searched = plannings.filter((plan) =>
     plan.category[0].name.toLowerCase().includes(search.toLocaleLowerCase())
   );
 
+  //progress bar
   function progressBar(plan: PlanType) {
+    //get the amount of a specified category
     const filterAmount = filterCategoryAmount(
       plan.category[0].name,
       transactions
     );
 
+    // percentage of amount
     const filteredAmount = Math.round((filterAmount * 100) / plan.amount);
-    /*
-    if (!("Notification" in window)) {
-      alert("This browser does not support desktop notification");
-    }
 
-    // Let's check whether notification permissions have already been granted
-    else if (Notification.permission === "granted") {
-      // If it's okay let's create a notification
-      var notification = new Notification("Hi there!", {
-        body: "Have a good day",
-        icon: "./img/goodday.png",
-      });
-    }
-
-    // Otherwise, we need to ask the user for permission
-    else if (Notification.permission !== "denied") {
-      Notification.requestPermission().then(function (permission) {
-        // If the user accepts, let's create a notification
-        if (permission === "granted") {
-          var notification = new Notification("Hi there!", {
-            body: "Have a good day",
-            icon: "./img/goodday.png",
-          });
-        }
-      });
-    }
-*/
+    //css styles
     let styles = {
       width: `${filteredAmount}%`,
       backgroundColor: filteredAmount > 65 ? "#DE5A5A" : "#5386E9",
@@ -122,6 +115,7 @@ const Planning = () => {
     };
     return styles;
   }
+
   return (
     <>
       <div className={styles.planning}>

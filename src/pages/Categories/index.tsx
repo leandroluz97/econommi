@@ -1,38 +1,47 @@
-import React, { useEffect, useState } from "react";
-import RoundedButton from "../../components/RoundedButton";
+import { useEffect, useState } from "react";
+
 import styles from "./styles.module.scss";
 import plusImg from "../../assets/plusComponent.svg";
-import filterImg from "../../assets/filter.svg";
-import { useTransactions } from "../../hooks/useTransactions";
-import { useCategories } from "../../hooks/useCategories";
-import NewCategoryModal from "../../components/NewCategoryModal";
 import edit from "../../assets/Edit.svg";
+
+import NewCategoryModal from "../../components/NewCategoryModal";
+import RoundedButton from "../../components/RoundedButton";
 import EditCategoryModal from "../../components/EditCategoryModal";
 
+import { useCategories } from "../../hooks/useCategories";
+
 const Categories = () => {
+  //Ui states
   const [modalIsOpenAdd, setIsOpenAdd] = useState(false);
   const [modalIsOpenEdit, setIsOpenEdit] = useState(false);
-  const { transactions, deleteTransaction, editTransaction } =
-    useTransactions();
+
+  //hooks
   const { categories, getAllCategories, editCategories } = useCategories();
 
   useEffect(() => {
     (async function () {
+      //Load all categories from firestore
       await getAllCategories();
     })();
   }, []);
 
+  //Open new category modal when plus button clicked
   function handleNewCategory() {
     setIsOpenAdd(true);
   }
+
+  //set  the category to be updated and open edit modal
   function handleEditCategory(id: string) {
     editCategories(id);
     setIsOpenEdit(true);
   }
 
+  //close new category modal
   function closeModalAdd() {
     setIsOpenAdd(false);
   }
+
+  //close edit category modal
   function closeModalEdit() {
     setIsOpenEdit(false);
   }

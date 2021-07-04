@@ -1,21 +1,27 @@
-import React, { useEffect, useState } from "react";
+import { useState } from "react";
 import styles from "./styles.module.scss";
-import RoundedButton from "../../components/RoundedButton";
+
 import edit from "../../assets/editBig.svg";
-import { useAuth } from "../../hooks/useAuth";
 import perfil from "../../assets/Perfil.svg";
+
+import RoundedButton from "../../components/RoundedButton";
 import EditSettingsModal from "../../components/EditSettingModal";
 
+import { useAuth } from "../../hooks/useAuth";
+
 const Settings = () => {
+  //ui state
   const [modalIsOpenEdit, setIsOpenEdit] = useState(false);
 
+  //hooks
   const { currentUser } = useAuth();
 
+  //open edit modal
   function handleEditSettings() {
-    //editPlanning(id);
     setIsOpenEdit(true);
   }
 
+  //close edit modal
   function closeModalEdit() {
     setIsOpenEdit(false);
   }

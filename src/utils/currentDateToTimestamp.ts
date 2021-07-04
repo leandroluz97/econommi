@@ -3,7 +3,7 @@ import firebase from "../config/firebase-config";
 export default function currentDateToTimestamp() {
   //get atual date
   const date = new Date();
-  const day = date.getDate();
+  //const day = date.getDate();
   const year = date.getFullYear();
   let month = date.getMonth() + 1;
 

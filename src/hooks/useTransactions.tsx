@@ -1,4 +1,3 @@
-import { type } from "os";
 import {
   createContext,
   ReactNode,
@@ -11,6 +10,7 @@ import "react-toastify/dist/ReactToastify.css";
 import getMonthWithAlgorism from "../utils/getMonthWith";
 
 import firebase from "../config/firebase-config";
+import currentDateToTimestamp from "../utils/currentDateToTimestamp";
 
 interface TransactionsProviderType {
   children: ReactNode;
@@ -108,31 +108,9 @@ export const TransactionsProvider = ({
 
   useEffect(() => {
     (async function () {
-      const date = new Date();
-      const day = date.getDate();
-      const year = date.getFullYear();
-      let month = date.getMonth() + 1;
-
-      const totalDayOfMonth = new Date(year, month + 1, 0).getDate();
-
-      //check if localstorage doesn't have any dated
-      //code here
-      const storagedDate = localStorage.getItem("@econommi:currentMonthId");
-      if (storagedDate) {
-        month = Number(JSON.parse(storagedDate));
-      }
-
-      const startOfMonth = `${year}-${month}-${1}`;
-      const endOfMonth = `${year}-${month}-${totalDayOfMonth}`;
-      //const startOfMonth = `${year}-${month + 1}-${21}`;
-      //const endOfMonth = `${totalDayOfMonth}-${monthId}-${year}`;
-
-      const timestampStartOfMonth = firebase.firestore.Timestamp.fromDate(
-        new Date(startOfMonth)
-      );
-      const timestampEndOfMonth = firebase.firestore.Timestamp.fromDate(
-        new Date(endOfMonth)
-      );
+      //get current date in firestore timestamp
+      const { timestampStartOfMonth, timestampEndOfMonth } =
+        currentDateToTimestamp();
 
       await getAllTransactions({ timestampStartOfMonth, timestampEndOfMonth });
     })();

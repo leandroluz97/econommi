@@ -1,8 +1,9 @@
-import React from "react"
-import Signin from "../../components/Signin"
-import styles from "./styles.module.scss"
-import money from "../../assets/money.png"
-import econommi from "../../assets/econommi.svg"
+import styles from "./styles.module.scss";
+
+import money from "../../assets/money.png";
+import econommi from "../../assets/econommi.svg";
+
+import Signin from "../../components/Signin";
 
 const SignIn = () => {
   return (
@@ -12,7 +13,7 @@ const SignIn = () => {
           <Signin />
           <div className={styles.signin__content}>
             <div className={styles.signin__title}>
-              <img src={econommi} alt='Econommi logo' />
+              <img src={econommi} alt="Econommi logo" />
               <p>
                 A platform where you can manage and keep <br /> track of your
                 income and outcome <br /> to have you{" "}
@@ -20,7 +21,7 @@ const SignIn = () => {
               </p>
             </div>
 
-            <img src={money} alt='money' />
+            <img src={money} alt="money" />
             <div className={styles.signin__quote}>
               <p>
                 “Nobody spends somebody else's money <br />
@@ -34,7 +35,7 @@ const SignIn = () => {
         </div>
       </div>
     </>
-  )
-}
+  );
+};
 
-export default SignIn
+export default SignIn;

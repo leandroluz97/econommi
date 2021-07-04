@@ -42,8 +42,12 @@ export default function lineGraphData({
     "December",
   ];
 
+  //iterate the month and return an array of amount of each month
   const lineGraphArr = labels.map((month) => {
+    //return amount  of each month
     return transactions.reduce((acc, transaction) => {
+      //get the each month
+
       const date = new Date(
         transaction.timestamp?.toDate().getTime() as number
       ).getMonth();

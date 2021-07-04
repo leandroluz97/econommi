@@ -317,6 +317,7 @@ export const CategoriesProvider = ({ children }: CategoriesProviderType) => {
   );
 };
 
+//custom user
 export function useCategories() {
   const context = useContext(CategoriesContext);
 

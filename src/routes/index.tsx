@@ -1,24 +1,28 @@
-import React from "react";
 import { Switch, Route, Redirect } from "react-router-dom";
+
+import styles from "./styles.module.scss";
+
 import Dashboard from "../pages/Dashboard";
 import Signup from "../pages/Signup";
 import ForgotPassword from "../pages/ForgotPassword";
 import Signin from "../pages/SignIn";
-import Menu from "../components/Menu";
-import styles from "./styles.module.scss";
-import MobileMenu from "../components/MobileMenu";
-import User from "../components/User";
-import { useAuth } from "../hooks/useAuth";
-import { ToastContainer } from "react-toastify";
-import Transactions from "../pages/Transactions";
-import Categories from "../pages/Categories";
 import Settings from "../pages/Settings";
 import Share from "../pages/Share";
-import { useUI } from "../hooks/useUi";
+import Transactions from "../pages/Transactions";
+import Categories from "../pages/Categories";
+import Planning from "../pages/Planning";
+
+import Menu from "../components/Menu";
+import MobileMenu from "../components/MobileMenu";
+import User from "../components/User";
+import NewTransactionModal from "../components/NewTransactionModal";
+
+import { ToastContainer } from "react-toastify";
+
 import { TransactionsProvider } from "../hooks/useTransactions";
 import { PlanningProvider } from "../hooks/usePlanning";
-import Planning from "../pages/Planning";
-import NewTransactionModal from "../components/NewTransactionModal";
+import { useAuth } from "../hooks/useAuth";
+import { useUI } from "../hooks/useUi";
 
 const Routes = () => {
   const { currentUser } = useAuth();
@@ -29,7 +33,7 @@ const Routes = () => {
     setIsOpenAdd(false);
   }
 
-  //
+  //sidebar styles
   const sideBarLayoutStyle = openMenu
     ? `${styles.layout__sidebarExpand}`
     : `${styles.layout__sidebar}`;

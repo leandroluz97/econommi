@@ -9,11 +9,11 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 import firebase from "../config/firebase-config";
-import Categories from "../pages/Categories";
 
 interface AuthProviderType {
   children: ReactNode;
 }
+
 interface User {
   displayName: string;
   photoURL: string;
@@ -22,6 +22,7 @@ interface User {
   firstName?: string | null;
   lastName?: string | null;
 }
+
 interface EditSettingsTypes {
   displayname: string;
   firstname: string;
@@ -71,6 +72,7 @@ export const AuthProvider = ({ children }: AuthProviderType) => {
       let docRef = db.collection("users").doc(user?.uid);
       const doc = await docRef.get();
 
+      //get all categories
       let catRef = await db
         .collection("categories")
         .where("color", "!=", null)
@@ -96,6 +98,7 @@ export const AuthProvider = ({ children }: AuthProviderType) => {
           ref.doc(user?.uid).collection("categories").add(category.data());
         });
 
+        //set current user
         setCurrentUser(userData);
       }
     } catch (error) {
@@ -116,7 +119,10 @@ export const AuthProvider = ({ children }: AuthProviderType) => {
     let db = firebase.firestore();
 
     try {
-      let docRef = db.collection("users").doc(email);
+      //get user
+      let docRef = db.collection("users").where("email", "==", email);
+
+      //get all categories
       let catRef = await db
         .collection("categories")
         .where("color", "!=", null)
@@ -127,9 +133,11 @@ export const AuthProvider = ({ children }: AuthProviderType) => {
         .createUserWithEmailAndPassword(email, password);
       const userCredential = user.credential;
 
+      //get user with signup email
       const doc = await docRef.get();
 
-      if (!doc.exists) {
+      //is user doesn't exists create user
+      if (doc.empty) {
         // doc.data() will be undefined in this case
 
         const ref = db.collection("users");
@@ -153,8 +161,6 @@ export const AuthProvider = ({ children }: AuthProviderType) => {
         setCurrentUser(userData);
       }
     } catch (error) {
-      console.log(error);
-
       toast.error(error.message, {
         bodyClassName: "toastify__error",
         className: "toastify",
@@ -198,12 +204,15 @@ export const AuthProvider = ({ children }: AuthProviderType) => {
   }, []);
 
   async function updateSettings(data: EditSettingsTypes) {
+    //initialize firestore
     let db = firebase.firestore();
 
     try {
+      //current user
       const user = firebase.auth().currentUser;
       const email = user?.email as string;
 
+      //updated user data
       const updatedUserData = {
         displayName: data.displayname,
         photoURL: data.profileImage,
@@ -213,8 +222,7 @@ export const AuthProvider = ({ children }: AuthProviderType) => {
         lastName: data.lastname,
       };
 
-      console.log(currentUser);
-
+      //set new user information in firestore
       let docRef = await db
         .collection("users")
         .doc(user?.uid)
@@ -222,8 +230,6 @@ export const AuthProvider = ({ children }: AuthProviderType) => {
 
       setCurrentUser(updatedUserData);
     } catch (error) {
-      console.log(error.message);
-
       toast.error(error.message, {
         bodyClassName: "toastify__error",
         className: "toastify",
@@ -233,9 +239,8 @@ export const AuthProvider = ({ children }: AuthProviderType) => {
 
   async function resetPassword(email: string) {
     try {
+      //send reset email to user
       const auth = await firebase.auth().sendPasswordResetEmail(email);
-
-      const passwordReseted = await auth;
 
       toast.success("Resete Email link sended! 😉", {
         bodyClassName: "toastify",
@@ -267,6 +272,7 @@ export const AuthProvider = ({ children }: AuthProviderType) => {
   );
 };
 
+//custom  useAuth hook
 export function useAuth() {
   const context = useContext(AuthContext);
 
