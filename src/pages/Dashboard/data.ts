@@ -20,6 +20,11 @@ export function lineGraph({ montlyIncome, montlyExpenses }: lineGraphProps) {
         display: true,
         position: "right",
       },
+      scales: {
+        y: {
+          beginAtZero: true,
+        },
+      },
       resposive: true,
     },
 
