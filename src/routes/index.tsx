@@ -29,7 +29,6 @@ import { useAuth } from "../hooks/useAuth";
 import { useUI } from "../hooks/useUi";
 
 const Dashboard = React.lazy(() => import("../pages/Dashboard"));
-
 const Settings = React.lazy(() => import("../pages/Settings"));
 const Share = React.lazy(() => import("../pages/Share"));
 const Transactions = React.lazy(() => import("../pages/Transactions"));

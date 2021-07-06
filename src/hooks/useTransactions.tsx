@@ -66,6 +66,8 @@ interface ContextProps {
   setChosenMonth: (data: string) => void;
   openedTransaction: Transaction;
   setOpenedTransaction: (tran: Transaction) => void;
+  currentBalance: number;
+  getCurrentBalance: () => Promise<void>;
 }
 
 //Context
@@ -83,6 +85,7 @@ export const TransactionsProvider = ({
   const [openedTransaction, setOpenedTransaction] = useState<Transaction>(
     {} as Transaction
   );
+  const [currentBalance, setCurrentBalance] = useState(0);
   const [chosenMonth, setChosenMonth] = useState(() => {
     //get month from localstorage
     const storagedDate = localStorage.getItem("@econommi:currentMonthName");
@@ -114,6 +117,7 @@ export const TransactionsProvider = ({
       const { timestampStartOfMonth, timestampEndOfMonth } =
         currentDateToTimestamp();
 
+      await getCurrentBalance();
       await getAllTransactions({ timestampStartOfMonth, timestampEndOfMonth });
     })();
   }, []);
@@ -173,6 +177,45 @@ export const TransactionsProvider = ({
       });
 
       setTransactions(transactionsArray);
+    } catch (error) {
+      toast.error(error.message, {
+        bodyClassName: "toastify__error",
+        className: "toastify",
+      });
+    }
+  }
+
+  async function getCurrentBalance() {
+    // inicialize firebase firestore
+    let db = firebase.firestore();
+
+    try {
+      //get the authenticate user
+      const user = firebase.auth().currentUser;
+
+      //get all user transactions within timestamp and ordered by date
+      let userTransactions = await db
+        .collection("users")
+        .doc(user?.uid)
+        .collection("transactions")
+        .get();
+
+      let income = 0;
+      let expenses = 0;
+
+      //get all income and expenses
+      userTransactions.forEach((trans) => {
+        if (trans.data().type === "expenses") {
+          expenses += trans.data().amount;
+        } else {
+          income += trans.data().amount;
+        }
+      });
+
+      //get current balance
+      const total = income - expenses;
+
+      setCurrentBalance(total);
     } catch (error) {
       toast.error(error.message, {
         bodyClassName: "toastify__error",
@@ -447,6 +490,8 @@ export const TransactionsProvider = ({
         setChosenMonth,
         openedTransaction,
         setOpenedTransaction,
+        currentBalance,
+        getCurrentBalance,
       }}
     >
       {children}

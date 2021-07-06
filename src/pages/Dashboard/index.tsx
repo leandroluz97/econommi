@@ -17,10 +17,10 @@ import { useTransactions } from "../../hooks/useTransactions";
 
 const Dashboard = () => {
   //hooks
-  const { transactions } = useTransactions();
+  const { transactions, currentBalance } = useTransactions();
 
   //summary data for circular graph
-  const { total, income, expenses } = getSummary(transactions);
+  const { income, expenses } = getSummary(transactions);
 
   //montly data for line graph
   const montlyExpenses = lineGraphData({ transactions, type: "expenses" });
@@ -38,7 +38,7 @@ const Dashboard = () => {
 
         <AmountCard
           type="Current Balance"
-          amount={total}
+          amount={currentBalance}
           img={currentImg}
           cardTitle="Total current amount that you have."
         />
@@ -46,13 +46,13 @@ const Dashboard = () => {
           type="Income"
           amount={income}
           img={revenueImg}
-          cardTitle="Total amount of income submitted."
+          cardTitle="Total amount of income submitted this month."
         />
         <AmountCard
           type="Expenses"
           amount={expenses}
           img={expensesImg}
-          cardTitle="Total amount of expenses submitted."
+          cardTitle="Total amount of expenses submitted this month."
         />
       </div>
 

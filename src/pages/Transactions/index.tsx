@@ -211,9 +211,24 @@ const Transactions = () => {
           )}
           {transactions.length >= 1 && (
             <div className={styles.transactions__cards}>
-              <AmountCard type="Current Balance" amount={total} img={current} />
-              <AmountCard type="Income" amount={income} img={revenue} />
-              <AmountCard type="Expenses" amount={expenses} img={expensesImg} />
+              <AmountCard
+                type="Current Balance"
+                amount={total}
+                img={current}
+                cardTitle="Current balance of this month."
+              />
+              <AmountCard
+                type="Income"
+                amount={income}
+                img={revenue}
+                cardTitle="Total amount of income submitted this month."
+              />
+              <AmountCard
+                type="Expenses"
+                amount={expenses}
+                img={expensesImg}
+                cardTitle="Total amount of expenses submitted this month."
+              />
             </div>
           )}
         </div>
