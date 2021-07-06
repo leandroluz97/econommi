@@ -75,6 +75,7 @@ const TransactionsContext = createContext<ContextProps>({} as ContextProps);
 export const TransactionsProvider = ({
   children,
 }: TransactionsProviderType) => {
+  //Global State
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [editStorage, setEditStorage] = useState<Transaction>(
     {} as Transaction
@@ -83,9 +84,10 @@ export const TransactionsProvider = ({
     {} as Transaction
   );
   const [chosenMonth, setChosenMonth] = useState(() => {
-    // const storagedCart = Buscar dados do localStorage
+    //get month from localstorage
     const storagedDate = localStorage.getItem("@econommi:currentMonthName");
 
+    //check if date in localstorage exists return date
     if (storagedDate) {
       return JSON.parse(storagedDate);
     }
@@ -120,11 +122,14 @@ export const TransactionsProvider = ({
     timestampStartOfMonth,
     timestampEndOfMonth,
   }: filterTransactionsByMonthType) {
+    // inicialize firebase firestore
     let db = firebase.firestore();
-    try {
-      const user = firebase.auth().currentUser;
-      const email = user?.email as string;
 
+    try {
+      //get the authenticate user
+      const user = firebase.auth().currentUser;
+
+      //get all user categories
       let userCategories = await db
         .collection("users")
         .doc(user?.uid)
@@ -132,10 +137,12 @@ export const TransactionsProvider = ({
         .get();
 
       const allCategories: any = {};
+      //get all user categories inside an object with id as a key
       userCategories.forEach((snap) => {
         allCategories[snap.id] = { ...snap.data(), id: snap.id };
       });
 
+      //get all user transactions within timestamp and ordered by date
       let userTransactions = await db
         .collection("users")
         .doc(user?.uid)
@@ -147,13 +154,15 @@ export const TransactionsProvider = ({
 
       let transactionsArray = [] as Transaction[];
       userTransactions.forEach((snap) => {
-        //const date = snap.data().createdAt.toDate().getTime();
+        //Firestore timestamp to js date
         const date = new Date(snap.data().createdAt.toDate().getTime());
 
+        //get date
         const day = date.getDate();
         const month = date.getMonth();
         const year = date.getFullYear();
 
+        //set all transaction to an array of object
         transactionsArray.push({
           ...snap.data(),
           id: snap.id,
@@ -165,8 +174,6 @@ export const TransactionsProvider = ({
 
       setTransactions(transactionsArray);
     } catch (error) {
-      console.log(error.message);
-
       toast.error(error.message, {
         bodyClassName: "toastify__error",
         className: "toastify",
@@ -178,11 +185,13 @@ export const TransactionsProvider = ({
     timestampStartOfMonth,
     timestampEndOfMonth,
   }: filterTransactionsByMonthType) {
+    // inicialize firebase firestore
     let db = firebase.firestore();
     try {
+      //get the authenticate user
       const user = firebase.auth().currentUser;
-      const email = user?.email as string;
 
+      //get all user categories
       let userCategories = await db
         .collection("users")
         .doc(user?.uid)
@@ -191,6 +200,7 @@ export const TransactionsProvider = ({
 
       const allCategories: any = {};
       userCategories.forEach((snap) => {
+        //get all user categories inside an object with id as a key
         allCategories[snap.id] = { ...snap.data(), id: snap.id };
       });
 
@@ -205,13 +215,15 @@ export const TransactionsProvider = ({
 
       let transactionsArray = [] as Transaction[];
       userTransactions.forEach((snap) => {
-        //const date = snap.data().createdAt.toDate().getTime();
+        //Firestore timestamp to js date
         const date = new Date(snap.data().createdAt.toDate().getTime());
 
+        //get date
         const day = date.getDate();
         const month = date.getMonth();
         const year = date.getFullYear();
 
+        //set all transaction to an array of object
         transactionsArray.push({
           ...snap.data(),
           id: snap.id,
@@ -219,13 +231,10 @@ export const TransactionsProvider = ({
           timestamp: snap.data().createdAt,
           category: [allCategories[snap.data().category.id]],
         } as Transaction);
-        // category: [snap.data().category],
       });
 
       setTransactions(transactionsArray);
     } catch (error) {
-      console.log(error.message);
-
       toast.error(error.message, {
         bodyClassName: "toastify__error",
         className: "toastify",
@@ -238,9 +247,11 @@ export const TransactionsProvider = ({
 
     try {
       const user = firebase.auth().currentUser;
-      const email = user?.email as string;
 
+      //get current user from firestore
       let docRef = db.collection("users").doc(user?.uid);
+
+      //create firebase timestamp from js date
       const timestamp = firebase.firestore.Timestamp.fromDate(
         new Date(data.createdAt)
       );
@@ -253,26 +264,32 @@ export const TransactionsProvider = ({
         .doc(data.category[0].id)
         .get();
 
+      //creact new Transaction data with category as a reference
       const newData = {
         ...data,
         createdAt: timestamp,
         category: docRef.collection("categories").doc(data.category[0].id),
       };
 
+      //add new transaction to firebase
       const newTransaction = await docRef
         .collection("transactions")
         .add(newData);
 
+      //new transaction return from firestore
       const newTransactionId = await newTransaction.get();
 
+      //new date from firestore timestamp
       const date = new Date(
         newTransactionId.data()?.createdAt.toDate().getTime()
       );
 
+      //get all date
       const day = date.getDate();
       const month = date.getMonth();
       const year = date.getFullYear();
 
+      //new transaction to state
       let transaction = {
         ...newTransactionId.data(),
         id: newTransactionId.id,
@@ -299,8 +316,6 @@ export const TransactionsProvider = ({
         className: "toastify__success",
       });
     } catch (error) {
-      console.log(error);
-
       toast.error(error.message, {
         bodyClassName: "toastify__error",
         className: "toastify",
@@ -313,19 +328,22 @@ export const TransactionsProvider = ({
 
     try {
       const user = firebase.auth().currentUser;
-      const email = user?.email as string;
 
+      //get current user from firestore by uid
       let docRef = db.collection("users").doc(user?.uid);
 
+      //delete transaction in firestore
       const deleteTransaction = await docRef
         .collection("transactions")
         .doc(id)
         .delete();
 
+      //delete transaction in state
       const allTransaction = transactions.filter(
         (transaction) => transaction.id !== id
       );
 
+      //set updated transactions
       setTransactions(allTransaction);
 
       toast.success("Transaction deleted 😉", {
@@ -333,8 +351,6 @@ export const TransactionsProvider = ({
         className: "toastify__success",
       });
     } catch (error) {
-      console.log(error);
-
       toast.error(error.message, {
         bodyClassName: "toastify__error",
         className: "toastify",
@@ -343,21 +359,27 @@ export const TransactionsProvider = ({
   }
 
   function editTransaction(id: string) {
+    //find transaction to update in state
     const editTransaction = transactions.find(
       (transaction) => transaction.id === id
     );
+
+    //if transaction exist set it to edit transaction storage state
+    //other wise do nothing
     if (editTransaction) {
       setEditStorage(editTransaction);
     }
   }
 
   async function updateTransaction(data: TransactionAdd) {
+    //initialize firebase firestore
     let db = firebase.firestore();
 
     try {
+      //get the authenticate user
       const user = firebase.auth().currentUser;
-      const email = user?.email as string;
 
+      //get user document from firestore by uid
       let docRef = db.collection("users").doc(user?.uid);
 
       //get user category by reference
@@ -368,6 +390,7 @@ export const TransactionsProvider = ({
         .doc(editStorage.category[0].id)
         .get();
 
+      //create transaction with category reference
       const updatedData = {
         amount: data.amount,
         category: docRef.collection("categories").doc(data.category[0].id),
@@ -376,11 +399,13 @@ export const TransactionsProvider = ({
         type: data.type,
       };
 
+      //set updated transaction in firestore
       const updatedTransaction = await docRef
         .collection("transactions")
         .doc(editStorage.id)
         .set(updatedData);
 
+      //update transaction in state
       let allTransaction = transactions.map((trans) => {
         if (trans.id === editStorage.id) {
           return {
@@ -429,6 +454,7 @@ export const TransactionsProvider = ({
   );
 };
 
+//Custom hook
 export function useTransactions() {
   const context = useContext(TransactionsContext);
 

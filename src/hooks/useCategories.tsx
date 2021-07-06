@@ -88,13 +88,14 @@ export const CategoriesProvider = ({ children }: CategoriesProviderType) => {
   }, []);
 
   async function getAllCategories() {
+    //initialize firebase firestore
     let db = firebase.firestore();
+
     try {
+      //get the authenticate user
       const user = firebase.auth().currentUser;
-      const email = user?.email as string;
 
-      let defaultCategory = {};
-
+      //get all user categories
       let userCategories = await db
         .collection("users")
         .doc(user?.uid)
@@ -102,14 +103,18 @@ export const CategoriesProvider = ({ children }: CategoriesProviderType) => {
         .where("color", "!=", null)
         .get();
 
+      //array of categories with an specified id
       let categoriesArray = [] as Categories[];
       userCategories.forEach((snap) => {
         categoriesArray.push({ ...snap.data(), id: snap.id } as Categories);
       });
 
+      //Get the first category as a default
+      let defaultCategory = {} as Categories;
       defaultCategory = categoriesArray[0];
 
-      setOption(defaultCategory as Categories);
+      //set default and all category
+      setOption(defaultCategory);
       setCategories(categoriesArray);
     } catch (error) {
       toast.error(error.message, {
@@ -120,10 +125,12 @@ export const CategoriesProvider = ({ children }: CategoriesProviderType) => {
   }
 
   async function getDefaultCategories() {
+    //initialize firebase firestore
     let db = firebase.firestore();
+
     try {
+      //get the authenticate user
       const user = firebase.auth().currentUser;
-      const email = user?.email as string;
 
       let defaultCategoryAsync = await db
         .collection("categories")
@@ -148,21 +155,26 @@ export const CategoriesProvider = ({ children }: CategoriesProviderType) => {
   }
 
   async function getAllCategoriesPlus(edit: boolean) {
+    //initialize firebase firestore
     let db = firebase.firestore();
-    try {
-      const user = firebase.auth().currentUser;
-      const email = user?.email as string;
 
+    try {
+      //get the authenticate user
+      const user = firebase.auth().currentUser;
+
+      //get all plus categories colors from firestore
       let categoriesColors = await db
         .collection("categoriesplus")
         .doc("colors")
         .get();
 
+      //get all plus categories icons from firestore
       let categoriesIcons = await db
         .collection("categoriesplus")
         .doc("icons")
         .get();
 
+      //normalize color inside array of object with id
       let normalizedColors = [...categoriesColors.data()?.colors].reduce(
         (acc, color) => {
           acc = [...acc, { ["color"]: color, id: color }];
@@ -172,6 +184,7 @@ export const CategoriesProvider = ({ children }: CategoriesProviderType) => {
         []
       );
 
+      //normalize color inside array of object with id
       let normalizesIcons = [...categoriesIcons.data()?.icons].reduce(
         (acc, icon) => {
           acc = [...acc, { ["icon"]: icon, id: icon.slice(-12) }];
@@ -181,8 +194,11 @@ export const CategoriesProvider = ({ children }: CategoriesProviderType) => {
         []
       );
 
+      //set plus color and icons
       setColors(normalizedColors);
       setIcons(normalizesIcons);
+
+      //if its from editin page request set the first item of array as default
       if (!edit) {
         setColorChosen(normalizedColors[0]);
         setIconChosen(normalizesIcons[0]);
@@ -196,35 +212,44 @@ export const CategoriesProvider = ({ children }: CategoriesProviderType) => {
   }
 
   async function addNewCategory(data: CategoriesAdd) {
+    //initialize firebase firestore
     let db = firebase.firestore();
 
     try {
+      //get the authenticate user
       const user = firebase.auth().currentUser;
-      const email = user?.email as string;
 
+      //get current user by uid
       let docRef = db.collection("users").doc(user?.uid);
 
+      //get cageroy with same name
       let checkCategory = await docRef
         .collection("categories")
         .where("name", "==", data.name)
         .get();
 
+      //get empty state (true or false)
       let exist = await checkCategory.empty;
 
+      //if category with that categories doesn't exist create new caregory
+      //other wise do nothing
       if (exist) {
-        console.log("check if exist: ", exist);
-
+        //add new category to firestore
         const newCategory = await docRef.collection("categories").add(data);
 
+        //get new category from firestore
         const newCategoryId = await newCategory.get();
 
+        //create category with id
         let category = {
           ...newCategoryId.data(),
           id: newCategoryId.id,
         } as Categories;
 
+        //get all categories from state and append new category
         let allCategories = [category, ...categories];
 
+        //set categories updated
         setCategories(allCategories);
 
         toast.success("Category Added! 😉", {
@@ -238,8 +263,6 @@ export const CategoriesProvider = ({ children }: CategoriesProviderType) => {
         });
       }
     } catch (error) {
-      console.log(error);
-
       toast.error(error.message, {
         bodyClassName: "toastify__error",
         className: "toastify",
@@ -248,7 +271,11 @@ export const CategoriesProvider = ({ children }: CategoriesProviderType) => {
   }
 
   function editCategories(id: string) {
+    //find category to update in state
     const editCategory = categories.find((category) => category.id === id);
+
+    //if category exist set it to edit category storage state
+    //other wise do nothing
     if (editCategory) {
       setEditCategoryStorage(editCategory);
 
@@ -261,20 +288,25 @@ export const CategoriesProvider = ({ children }: CategoriesProviderType) => {
   }
 
   async function updateCategories(data: CategoriesAdd) {
+    //initialize firebase firestore
     let db = firebase.firestore();
 
     try {
+      //get the authenticate user
       const user = firebase.auth().currentUser;
-      const email = user?.email as string;
 
+      //get user document from firestore by uid
       let docRef = db.collection("users").doc(user?.uid);
 
+      //set updated category to firestore
       const updatedCategory = await docRef
         .collection("categories")
         .doc(editCategoryStorage.id)
         .set(data);
 
+      //updated category in state
       let allCategories = categories.map((category) => {
+        //get category in state with the same id as updated category  id
         if (category.id === editCategoryStorage.id) {
           return { id: editCategoryStorage.id, ...data };
         }
@@ -317,7 +349,7 @@ export const CategoriesProvider = ({ children }: CategoriesProviderType) => {
   );
 };
 
-//custom user
+//custom hooks
 export function useCategories() {
   const context = useContext(CategoriesContext);
 

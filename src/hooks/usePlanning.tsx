@@ -1,4 +1,3 @@
-import { type } from "os";
 import {
   createContext,
   ReactNode,
@@ -83,7 +82,6 @@ export const PlanningProvider = ({ children }: PlanningProviderType) => {
     try {
       //get the authenticate user
       const user = firebase.auth().currentUser;
-      const email = user?.email as string;
 
       //get all user categories
       let userCategories = await db
@@ -93,6 +91,7 @@ export const PlanningProvider = ({ children }: PlanningProviderType) => {
         .get();
 
       const allCategories: any = {};
+      //get all user categories inside an object with id as a key
       userCategories.forEach((snap) => {
         allCategories[snap.id] = { ...snap.data(), id: snap.id };
       });
@@ -113,8 +112,9 @@ export const PlanningProvider = ({ children }: PlanningProviderType) => {
         //convert firestore time to js date
         const date = new Date(snap.data().createdAt.toDate().getTime());
 
+        //get all date
         const day = date.getDate();
-        const month = date.getMonth();
+        const month = date.getMonth(); //0-11
         const year = date.getFullYear();
 
         planningsArray.push({
@@ -146,7 +146,6 @@ export const PlanningProvider = ({ children }: PlanningProviderType) => {
     try {
       //get the authenticate user
       const user = firebase.auth().currentUser;
-      const email = user?.email as string;
 
       //get all user categories
       let userCategories = await db
@@ -157,6 +156,7 @@ export const PlanningProvider = ({ children }: PlanningProviderType) => {
 
       const allCategories: any = {};
       userCategories.forEach((snap) => {
+        //get all user categories inside an object with id as a key
         allCategories[snap.id] = { ...snap.data(), id: snap.id };
       });
 
@@ -173,12 +173,15 @@ export const PlanningProvider = ({ children }: PlanningProviderType) => {
       //iterate through the array data from firestore
       let planningsArray = [] as Planning[];
       userPlannings.forEach((snap) => {
+        //Firestore timestamp to js date
         const date = new Date(snap.data().createdAt.toDate().getTime());
 
+        //get date
         const day = date.getDate();
         const month = date.getMonth();
         const year = date.getFullYear();
 
+        //set all planning to an array of object
         planningsArray.push({
           ...snap.data(),
           id: snap.id,
