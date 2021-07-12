@@ -54,6 +54,24 @@ export const AuthProvider = ({ children }: AuthProviderType) => {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
+  useEffect(() => {
+    const unsubscribe = firebase.auth().onAuthStateChanged((user) => {
+      setCurrentUser(user as User);
+      setIsLoading(false);
+
+      (async function () {
+        let db = firebase.firestore();
+
+        let docRef = db.collection("users").doc(user?.uid);
+        const doc = await docRef.get();
+
+        setCurrentUser(doc.data() as User);
+      })();
+    });
+
+    return unsubscribe;
+  }, []);
+
   //Sign in or Sign up  with google
   async function onSubmitGmail() {
     let provider = new firebase.auth.GoogleAuthProvider();
@@ -184,24 +202,6 @@ export const AuthProvider = ({ children }: AuthProviderType) => {
       });
     }
   }
-
-  useEffect(() => {
-    const unsubscribe = firebase.auth().onAuthStateChanged((user) => {
-      setCurrentUser(user as User);
-      setIsLoading(false);
-
-      (async function () {
-        let db = firebase.firestore();
-
-        let docRef = db.collection("users").doc(user?.uid);
-        const doc = await docRef.get();
-
-        setCurrentUser(doc.data() as User);
-      })();
-    });
-
-    return unsubscribe;
-  }, []);
 
   async function updateSettings(data: EditSettingsTypes) {
     //initialize firestore

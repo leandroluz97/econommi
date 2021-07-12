@@ -8,6 +8,7 @@ import { useUI } from "../../hooks/useUi";
 import { useAuth } from "../../hooks/useAuth";
 import { useHistory } from "react-router-dom";
 import { Link } from "react-router-dom";
+import Spinner from "../Spinner";
 
 interface SigninState {
   email: string;
@@ -15,9 +16,12 @@ interface SigninState {
 }
 
 const Signin = () => {
+  const [isLoading, setIsLoading] = useState(false);
+
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm<SigninState>();
 
@@ -31,10 +35,13 @@ const Signin = () => {
   let history = useHistory();
 
   const onSubmit = async (data: SigninState) => {
+    setIsLoading(true);
     try {
       await onSigninPassword(data.email, data.password);
 
       history.push("/dashboard");
+      reset();
+      setIsLoading(false);
     } catch (error) {
       console.log(error.message);
     }
@@ -45,9 +52,7 @@ const Signin = () => {
       await onSubmitGmail();
 
       history.push("/dashboard");
-    } catch (error) {
-      console.log(error.message);
-    }
+    } catch (error) {}
   }
   return (
     <div className={styles.signin}>
@@ -84,8 +89,24 @@ const Signin = () => {
           </span>
         </div>
 
+        <div className={styles.signin__form__forgot}>
+          <p>For Testing purpose login with the following credential</p>
+          <p>
+            Email: <strong>random@user.com</strong>
+          </p>
+          <p>
+            Password: <strong>randomuser</strong>
+          </p>
+        </div>
+
         <div className={styles.signin__form__submit}>
-          <input type="submit" value="Signin!" />
+          {isLoading ? (
+            <div>
+              <Spinner />
+            </div>
+          ) : (
+            <input type="submit" value="Signin!" />
+          )}
         </div>
       </form>
 

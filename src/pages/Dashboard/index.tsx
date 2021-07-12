@@ -20,7 +20,7 @@ const Dashboard = () => {
   const { transactions, currentBalance } = useTransactions();
 
   //summary data for circular graph
-  const { income, expenses } = getSummary(transactions);
+  const { income, expenses, total } = getSummary(transactions);
 
   //montly data for line graph
   const montlyExpenses = lineGraphData({ transactions, type: "expenses" });
@@ -61,7 +61,11 @@ const Dashboard = () => {
           <Line type="line" {...lineConfig} />
         </div>
         <div className={styles.dashboard__circuleGraph}>
-          <Doughnut type="doughnut" {...circularConfig} />
+          {total ? (
+            <Doughnut type="doughnut" {...circularConfig} />
+          ) : (
+            <h3>You don't have any transactions.</h3>
+          )}
         </div>
       </div>
     </div>

@@ -36,6 +36,9 @@ const User = () => {
         history.push("/login");
       });
   }
+
+  const photoURL = currentUser?.photoURL;
+
   return (
     <div className={styles.wrapper}>
       <img src={logo} alt="logo" />
@@ -76,7 +79,7 @@ const User = () => {
         <p>{currentUser?.displayName || currentUser?.email}</p>
 
         <img
-          src={currentUser?.photoURL || perfil}
+          src={photoURL || perfil}
           alt="Profile"
           className={styles.user__photoURL}
         />

@@ -295,10 +295,12 @@ export const PlanningProvider = ({ children }: PlanningProviderType) => {
       const storagedDate = localStorage.getItem("@econommi:currentMonthName");
       const actualMonth = getMonthWithAlgorism(date.getMonth());
 
+      console.log(actualMonth !== storagedDate);
+
       if (actualMonth !== storagedDate) return;
 
       //all planning updated for ui
-      let allPlanning = [planning, ...plannings];
+      let allPlanning = [...plannings, planning];
 
       //set updated ui
       setPlannings(allPlanning);

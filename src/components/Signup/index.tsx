@@ -7,6 +7,7 @@ import { useForm } from "react-hook-form";
 import { useUI } from "../../hooks/useUi";
 import { useAuth } from "../../hooks/useAuth";
 import { useHistory } from "react-router-dom";
+import Spinner from "../Spinner";
 
 interface SignupState {
   firstName: string;
@@ -17,6 +18,7 @@ interface SignupState {
 }
 
 const Signup = () => {
+  const [isLoading, setIsLoading] = useState(false);
   const {
     register,
     handleSubmit,
@@ -36,6 +38,7 @@ const Signup = () => {
   let history = useHistory();
 
   async function onSubmit(data: SignupState) {
+    setIsLoading(true);
     try {
       const user = await onSignupPassword(
         data.email,
@@ -45,8 +48,8 @@ const Signup = () => {
       );
 
       history.push("/dashboard");
-
       reset();
+      setIsLoading(false);
     } catch (error) {
       console.log(error.message);
     }
@@ -134,7 +137,13 @@ const Signup = () => {
         </div>
 
         <div className={styles.signup__form__submit}>
-          <input type="submit" value="Signup!" />
+          {isLoading ? (
+            <div>
+              <Spinner />
+            </div>
+          ) : (
+            <input type="submit" value="Signup!" />
+          )}
         </div>
       </form>
       <button
