@@ -224,94 +224,99 @@ export const PlanningProvider = ({ children }: PlanningProviderType) => {
         .orderBy("createdAt", "desc")
         .get();
 
+      let exist = false;
+      userPlannings.forEach((snap) => {
+        if (snap.data().category.id === data.category[0].id) {
+          exist = true;
+        }
+      });
+
       //if plan already exist show error message
-      if (!userPlannings.empty) {
+      if (!exist) {
+        //convert js date to firebase timestamp date
+        const timestamp = firebase.firestore.Timestamp.fromDate(
+          new Date(data.createdAt)
+        );
+
+        //get user category by reference
+        let userCategories = await db
+          .collection("users")
+          .doc(user?.uid)
+          .collection("categories")
+          .doc(data.category[0].id)
+          .get();
+
+        //new plan with firestore timestamp date
+        const newData = {
+          ...data,
+          createdAt: timestamp,
+          category: db
+            .collection("users")
+            .doc(user?.uid)
+            .collection("categories")
+            .doc(data.category[0].id),
+        };
+
+        //add new plan to plannnig firestore
+        const newPlan = await db
+          .collection("users")
+          .doc(user?.uid)
+          .collection("plannings")
+          .add(newData);
+
+        //returned plan from firestore
+        const newPlanningData = await newPlan.get();
+
+        //firestore timestamp date to js date
+        const date = new Date(
+          newPlanningData.data()?.createdAt.toDate().getTime()
+        );
+
+        const day = date.getDate();
+        const month = date.getMonth();
+        const year = date.getFullYear();
+
+        //new planning
+        let planning = {
+          ...newPlanningData.data(),
+          id: newPlanningData.id,
+          createdAt: `${day}/${month + 1}/${year}`,
+          timestamp: newPlanningData.data()?.createdAt,
+          category: [
+            {
+              ...userCategories.data(),
+              id: userCategories.id,
+            },
+          ],
+        } as Planning;
+
+        //check if we are at the same month otherwise don't show transaction on ui
+        const storagedDate = localStorage.getItem("@econommi:currentMonthName");
+
+        const actualMonth = getMonthWithAlgorism(date.getMonth());
+        const actualMonthQuated = `"${actualMonth}"`;
+
+        if (actualMonthQuated !== storagedDate) return;
+
+        //all planning updated for ui
+        let allPlanning = [planning, ...plannings];
+
+        console.log(allPlanning);
+
+        //set updated ui
+        setPlannings(allPlanning);
+
+        toast.success("Planning Created! 😉", {
+          bodyClassName: "toastify",
+          className: "toastify__success",
+        });
+      } else {
         toast.error("Plan already exist!", {
           bodyClassName: "toastify__error",
           className: "toastify",
         });
-
-        return;
       }
-
-      //convert js date to firebase timestamp date
-      const timestamp = firebase.firestore.Timestamp.fromDate(
-        new Date(data.createdAt)
-      );
-
-      //get user category by reference
-      let userCategories = await db
-        .collection("users")
-        .doc(user?.uid)
-        .collection("categories")
-        .doc(data.category[0].id)
-        .get();
-
-      //new plan with firestore timestamp date
-      const newData = {
-        ...data,
-        createdAt: timestamp,
-        category: db
-          .collection("users")
-          .doc(user?.uid)
-          .collection("categories")
-          .doc(data.category[0].id),
-      };
-
-      //add new plan to plannnig firestore
-      const newPlan = await db
-        .collection("users")
-        .doc(user?.uid)
-        .collection("plannings")
-        .add(newData);
-
-      //returned plan from firestore
-      const newPlanningData = await newPlan.get();
-
-      //firestore timestamp date to js date
-      const date = new Date(
-        newPlanningData.data()?.createdAt.toDate().getTime()
-      );
-
-      const day = date.getDate();
-      const month = date.getMonth();
-      const year = date.getFullYear();
-
-      //new planning
-      let planning = {
-        ...newPlanningData.data(),
-        id: newPlanningData.id,
-        createdAt: `${day}/${month + 1}/${year}`,
-        timestamp: newPlanningData.data()?.createdAt,
-        category: [
-          {
-            ...userCategories.data(),
-            id: userCategories.id,
-          },
-        ],
-      } as Planning;
-
-      //check if we are at the same month otherwise don't show transaction on ui
-      const storagedDate = localStorage.getItem("@econommi:currentMonthName");
-      const actualMonth = getMonthWithAlgorism(date.getMonth());
-
-      console.log(actualMonth !== storagedDate);
-
-      if (actualMonth !== storagedDate) return;
-
-      //all planning updated for ui
-      let allPlanning = [...plannings, planning];
-
-      //set updated ui
-      setPlannings(allPlanning);
-
-      toast.success("Planning Created! 😉", {
-        bodyClassName: "toastify",
-        className: "toastify__success",
-      });
     } catch (error) {
-      console.log(error);
-
       toast.error(error.message, {
         bodyClassName: "toastify__error",
         className: "toastify",
