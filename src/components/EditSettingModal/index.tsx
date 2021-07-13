@@ -109,7 +109,7 @@ const EditSettingsModal = ({
           property={register("firstname", {
             required: "Invalid First Name",
             minLength: {
-              value: 1,
+              value: 3,
               message: "Entre a valid First Name",
             },
           })}
@@ -122,7 +122,7 @@ const EditSettingsModal = ({
           property={register("lastname", {
             required: "Invalid Last Name",
             minLength: {
-              value: 1,
+              value: 3,
               message: "Entre a valid Last Name",
             },
           })}
@@ -135,14 +135,11 @@ const EditSettingsModal = ({
         <Input
           property={register("profileImage", {
             required: "Invalid url image",
-            minLength: {
-              value: 1,
-              message: "Entre a valid url",
-            },
+            pattern: /^((ftp|http|https):\/\/)/i,
           })}
           label="Profile Image Url"
           type="text"
-          error={errors.displayname}
+          error={errors.profileImage}
           name="profileImage"
         />
 

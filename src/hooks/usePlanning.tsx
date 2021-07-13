@@ -301,8 +301,6 @@ export const PlanningProvider = ({ children }: PlanningProviderType) => {
         //all planning updated for ui
         let allPlanning = [planning, ...plannings];
 
-        console.log(allPlanning);
-
         //set updated ui
         setPlannings(allPlanning);
 

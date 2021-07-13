@@ -28,9 +28,10 @@ const Share = () => {
         <ul className={styles.share__icons}>
           <li>
             <FacebookShareButton
-              url={"www.econommi-app.com"}
+              url={"www.econommi-app.firebaseapp.com"}
               quote="A platform where you can manage and keep track of your
-                income and outcome to have you!"
+              Income and Expenses to achieve your
+              financial freedom."
               hashtag="#econommi #finances"
             >
               <img src={facebook} alt="facebook" />
@@ -41,7 +42,7 @@ const Share = () => {
 
           <li>
             <EmailShareButton
-              url="www.econommi-app.com"
+              url="www.econommi-app.firebaseapp.com"
               subject="hello"
               body="leandrodaluz97@gmail.com"
             >
@@ -55,7 +56,8 @@ const Share = () => {
               url="https://www.linkedin.com/in/leandro-luz/"
               title="Econommi App"
               summary="A platform where you can manage and keep track of your
-                income and outcome to have you!"
+              Income and Expenses to achieve your
+              financial freedom."
               source="https://www.linkedin.com/in/leandro-luz/"
             >
               <img src={linkedin} alt="linkedin" />
@@ -65,7 +67,7 @@ const Share = () => {
 
           <li>
             <TwitterShareButton
-              url="www.econommi-app.com"
+              url="www.econommi-app.firebaseapp.com"
               title="Econommi App"
               hashtags={["#econommi", "#finances"]}
             >
@@ -76,7 +78,7 @@ const Share = () => {
 
           <li>
             <WhatsappShareButton
-              url="www.econommi-app.com"
+              url="www.econommi-app.firebaseapp.com"
               title="Econommi App"
             >
               <img src={whatsapp} alt="whatsapp" />
@@ -87,7 +89,7 @@ const Share = () => {
           <li>
             <FacebookMessengerShareButton
               appId="fndbdcb"
-              url="www.econommi-app.com"
+              url="www.econommi-app.firebaseapp.com"
               title="Econommi App"
             >
               <img src={messenger} alt="messenger" />
@@ -97,7 +99,7 @@ const Share = () => {
 
           <li>
             <TelegramShareButton
-              url="www.econommi-app.com"
+              url="www.econommi-app.firebaseapp.com"
               title="Econommi App"
             >
               <img src={telegram} alt="telegram" />
@@ -107,7 +109,10 @@ const Share = () => {
           </li>
 
           <li>
-            <ViberShareButton url="www.econommi-app.com" title="Econommi App">
+            <ViberShareButton
+              url="econommi-app.firebaseapp.com"
+              title="Econommi App"
+            >
               <img src={viber} alt="viber" />
             </ViberShareButton>
             <span>Viber</span>

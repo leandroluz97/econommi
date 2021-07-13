@@ -37,7 +37,8 @@ const User = () => {
       });
   }
 
-  const photoURL = currentUser?.photoURL;
+  let photoURL = currentUser?.photoURL;
+  const photo = photoURL === "null" ? null : photoURL;
 
   return (
     <div className={styles.wrapper}>
@@ -65,11 +66,11 @@ const User = () => {
                 <span>Dark Mode</span>
               </button>
               <Link to="/share" onClick={closeModal}>
-                <img src={shareIcon} alt="my profile icon" />
+                <img src={shareIcon} alt="Share it" />
                 <span>Envite Friends</span>
               </Link>
               <button onClick={handleLogout}>
-                <img src={logoutIcon} alt="my profile icon" />
+                <img src={logoutIcon} alt="logout button" />
                 <span>Logout</span>
               </button>
             </div>
@@ -79,7 +80,7 @@ const User = () => {
         <p>{currentUser?.displayName || currentUser?.email}</p>
 
         <img
-          src={photoURL || perfil}
+          src={photo || perfil}
           alt="Profile"
           className={styles.user__photoURL}
         />

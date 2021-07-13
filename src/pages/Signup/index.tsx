@@ -15,8 +15,8 @@ const index = () => {
             <img src={econommi} alt="Econommi logo" />
             <p>
               A platform where you can manage and keep <br /> track of your
-              income and outcome <br /> to have you <span>finance freedom</span>
-              .
+              Income and Expenses <br /> to achieve your
+              <span> financial freedom</span>.
             </p>
           </div>
 

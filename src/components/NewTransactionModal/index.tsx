@@ -153,7 +153,7 @@ const NewTransactionModal = ({
             }
             onClick={() => setType("expenses")}
           >
-            <span>Outcome</span>
+            <span>Expenses</span>
             <img src={outcomeImg} alt="expenses" />
           </div>
         </div>
