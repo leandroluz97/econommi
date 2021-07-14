@@ -1,0 +1,50 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+   match /users/{userId} {
+      
+        // Applies to single document read requests
+      allow get: if request.auth.uid != null;
+
+      // Applies to queries and collection read requests
+      allow list: if request.auth.uid != null;
+   
+    }
+    match /users/{userId} {
+     
+      // Applies to writes to nonexistent documents
+      allow create: if request.auth.uid != null;
+
+      // Applies to writes to existing documents
+      allow update: if request.auth.uid != null;
+
+      // Applies to delete operations
+      allow delete: if false;
+    
+    }
+    
+    match /users/{userId}/categories/{document=**} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+    
+     match /users/{userId}/transactions/{document=**} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+    
+     match /users/{userId}/plannings/{document=**} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+    
+  
+    
+     match /categories/{document=**} {
+      allow read: if true;
+      allow write: if false
+    }
+    
+    match /categoriesplus/{document=**} {
+      allow read: if true;
+      allow write: if false
+    }
+  }
+}

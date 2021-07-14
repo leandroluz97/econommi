@@ -1,40 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import Modal from "react-modal";
-import Input from "../Input";
 import styles from "./styles.module.scss";
 import closeImg from "../../assets/close.svg";
-import incomeImg from "../../assets/income.svg";
-import outcomeImg from "../../assets/outcome.svg";
-import SelectOptions from "../SelectOptions/";
+
 import { useTransactions } from "../../hooks/useTransactions";
-import { useCategories } from "../../hooks/useCategories";
-import Spinner from "../../components/Spinner";
-import firebase from "../../config/firebase-config";
+
 import currency from "../../utils/currency";
-
-interface NewTransationTypes {
-  amount: string;
-  category: string;
-  type: string;
-  description: string;
-}
-
-type Categories = {
-  name: string;
-  type: string;
-  color: string;
-  icon: string;
-  id: string;
-};
-
-interface TransactionAdd {
-  category: Categories[];
-  type: string;
-  createdAt: string;
-  amount: number;
-  description: string;
-}
 
 interface NewTransactionModalProps {
   modalIsOpen: boolean;
@@ -65,7 +37,7 @@ const OpenTransaction = ({
           onClick={() => closeModal()}
         />
 
-        <h2>New Transaction</h2>
+        <h2>{openedTransaction.createdAt}Transaction</h2>
 
         <table>
           <thead>
