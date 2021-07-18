@@ -25,10 +25,6 @@ const Signin = () => {
     formState: { errors },
   } = useForm<SigninState>();
 
-  useEffect(() => {
-    console.log("signin");
-  }, []);
-
   const { passwordEye } = useUI();
   const { onSubmitGmail, onSigninPassword } = useAuth();
 

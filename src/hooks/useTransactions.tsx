@@ -97,16 +97,14 @@ export const TransactionsProvider = ({
 
     // get atual date
     const date = new Date();
+    const monthId = date.getMonth() + 1;
     const month = getMonthWithAlgorism(date.getMonth());
 
     //set name of month in localstorage
     localStorage.setItem("@econommi:currentMonthName", JSON.stringify(month));
 
-    //set number of month 0-11
-    localStorage.setItem(
-      "@econommi:currentMonthId",
-      JSON.stringify(date.getMonth() + 1)
-    );
+    //set number of month 1-12
+    localStorage.setItem("@econommi:currentMonthId", JSON.stringify(monthId));
 
     return month;
   });

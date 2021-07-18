@@ -37,8 +37,6 @@ const Calendar = ({ closeCalendar }: CalendarModalProps) => {
     useTransactions();
   const { filterPlanningByMonth } = usePlanning();
 
-  console.log(chosenMonth);
-
   function handleFilterByMonth({
     monthId,
     monthName,
