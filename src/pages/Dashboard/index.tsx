@@ -14,11 +14,20 @@ import lineGraphData from "../../utils/lineGraphData";
 import { circularGraph, lineGraph } from "./data";
 
 import { useTransactions } from "../../hooks/useTransactions";
+import { useEffect } from "react";
 
 const Dashboard = () => {
   //hooks
-  const { transactions, currentBalance } = useTransactions();
-
+  const { transactions, currentBalance, getAllTransactions } =
+    useTransactions();
+  /*
+  useEffect(() => {
+   
+    (async function (p) {
+      await getAllTransactions()
+    })()
+  }, [])
+*/
   //summary data for circular graph
   const { income, expenses, total } = getSummary(transactions);
 

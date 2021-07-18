@@ -105,7 +105,7 @@ export const TransactionsProvider = ({
     //set number of month 0-11
     localStorage.setItem(
       "@econommi:currentMonthId",
-      JSON.stringify(date.getMonth())
+      JSON.stringify(date.getMonth() + 1)
     );
 
     return month;
